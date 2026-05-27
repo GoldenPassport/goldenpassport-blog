@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllPosts, getPostSlugs } from "@/lib/posts";
-import { CategoryBadge, TagList } from "@/components/PostCard";
+import { CategoryBadge, SeriesBadge, TagList } from "@/components/PostCard";
 import { MdxImage } from "@/components/MdxImage";
 import { CodeBlock } from "@/components/CodeBlock";
 import { MarkAsRead } from "@/components/MarkAsRead";
@@ -129,8 +129,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       ) : null}
 
       <header className="mt-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center flex-wrap gap-3">
           <CategoryBadge category={post.category} />
+          {post.series ? <SeriesBadge name={post.series} /> : null}
           <span className="text-xs text-ink-mute">
             {post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : ""}
             {post.readingTime ? ` · ${post.readingTime}` : ""}

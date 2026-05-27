@@ -36,6 +36,38 @@ export function ReadIndicator() {
   );
 }
 
+/**
+ * Series marker. Shown alongside the category badge to signal "this post
+ * is part of an ongoing series" (e.g. "Automation Review"). Visually
+ * distinct from category: outlined, ink-toned, not a solid pill.
+ */
+export function SeriesBadge({ name }: { name: string }) {
+  return (
+    <span
+      title={`Part of the ${name} series`}
+      className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] uppercase px-2 py-1 border border-ink/25 text-ink-soft bg-cream-50 rounded-full"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="9"
+        height="9"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        {/* Three small stacked horizontal lines hinting at a series / chapters. */}
+        <line x1="4" y1="6" x2="20" y2="6" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="18" x2="20" y2="18" />
+      </svg>
+      {name}
+    </span>
+  );
+}
+
 export function PinnedBadge() {
   return (
     <span
@@ -178,9 +210,10 @@ export function PostCard({ post, read = false }: { post: PostMeta; read?: boolea
   return (
     <article className="group">
       <Link href={`/blog/${post.slug}`} className="block py-6 border-b border-gold/15">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center flex-wrap gap-3 mb-3">
           {showPinned ? <PinnedBadge /> : null}
           <CategoryBadge category={post.category} />
+          {post.series ? <SeriesBadge name={post.series} /> : null}
           <span className="text-xs text-ink-mute">
             {post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : ""}
             {post.readingTime ? ` · ${post.readingTime}` : ""}

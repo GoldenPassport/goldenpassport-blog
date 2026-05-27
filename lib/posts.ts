@@ -20,6 +20,11 @@ export type PostMeta = {
   /** When true, sorts ahead of all non-pinned posts everywhere they're listed. */
   pinned?: boolean;
   /**
+   * Optional series the post belongs to (e.g. "Automation Review").
+   * Renders a small series badge next to the category on cards and post pages.
+   */
+  series?: string;
+  /**
    * Publish state:
    * - undefined / false: standard, listed everywhere.
    * - `unlisted: true`: route still resolves at `/blog/<slug>` but the post is
@@ -63,6 +68,7 @@ export function getAllPosts(): PostMeta[] {
     const pinned = data.pinned === true;
     const unlisted = data.unlisted === true;
     const draft = data.draft === true;
+    const series = typeof data.series === "string" ? data.series : undefined;
 
     return {
       slug,
@@ -75,6 +81,7 @@ export function getAllPosts(): PostMeta[] {
       hero,
       heroAlt,
       pinned,
+      series,
       unlisted,
       draft,
       readingTime: estimateReadingTime(content),

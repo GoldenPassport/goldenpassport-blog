@@ -31,6 +31,7 @@ canonical: "https://example.com/original"   # optional; use when republishing
 hero: "/posts/my-slug/hero.png"             # optional; main image at the top
 heroAlt: "Descriptive alt text"             # optional; falls back to title
 pinned: true                                # optional; sorts ahead of dated posts
+series: "Automation Review"                 # optional; renders a series badge on cards + post
 unlisted: true                              # optional; URL works, hidden from lists
 draft: true                                 # optional; route 404s, file kept
 ---

@@ -1,0 +1,234 @@
+---
+title: "Automation Review: LangGraph.js"
+date: "2026-05-27"
+category: "Tech"
+series: "Automation Review"
+excerpt: "Two and a half years after launch, LangGraph.js is the quiet workhorse of TypeScript agent orchestration. A balanced look at what it actually does, where it earns its keep, and where the gaps are."
+tags:
+  - Agentic AI
+  - LangGraph
+  - TypeScript
+  - Process Automation
+  - Tooling
+  - Open Source
+draft: true
+# Drop the hero image at the path below and uncomment to enable.
+# hero: "/posts/automation-review-langgraph-js/hero.png"
+# heroAlt: "LangGraph.js StateGraph diagram"
+---
+
+{/* Hero placeholder. A clean StateGraph diagram (nodes + edges) or a Storybook-style
+    screenshot of LangGraph Studio would both work. */}
+<figure className="not-prose my-8 p-8 border-2 border-dashed border-gold/30 rounded-lg bg-cream-50 text-center">
+  <p className="text-xs tracking-[0.18em] uppercase text-gold-deep mb-2">Hero image to be added</p>
+  <p className="font-serif text-base text-ink-soft italic">A LangGraph StateGraph diagram or LangGraph Studio screenshot</p>
+</figure>
+
+This is the first piece in a new series called **Automation Review**. The brief: take an automation tool or concept, dig into it the way a journalist would, and ship a hands-on build alongside the words. What it does, the problem it solves, where it came from, who it is for, how it is being adopted, and what working with it actually feels like.
+
+First up: [LangGraph.js](https://github.com/langchain-ai/langgraphjs), the JavaScript / TypeScript companion to the increasingly hard-to-ignore LangGraph framework from the LangChain team.
+
+## At a glance
+
+<aside className="not-prose my-6 p-5 rounded-lg border border-gold/30 bg-cream-50 text-sm">
+  <p className="text-xs tracking-[0.22em] uppercase text-gold-deep mb-3">Snapshot</p>
+  <ul className="space-y-1 text-ink-soft">
+    <li><strong>Project:</strong> @langchain/langgraph (JavaScript / TypeScript)</li>
+    <li><strong>Maintainer:</strong> LangChain Inc.</li>
+    <li><strong>Licence:</strong> MIT</li>
+    <li><strong>First published:</strong> 18 January 2024 (v0.0.1)</li>
+    <li><strong>Latest version:</strong> 1.3.2 (19 May 2026)</li>
+    <li><strong>Weekly npm downloads:</strong> ~2.3M</li>
+    <li><strong>GitHub stars:</strong> ~3,000 on the JS repo, with the Python sibling several multiples ahead</li>
+    <li><strong>Production users named in the README:</strong> Replit, Uber, LinkedIn, GitLab, Klarna, Elastic</li>
+    <li><strong>One-line pitch:</strong> a low-level orchestration framework for building controllable agents</li>
+  </ul>
+</aside>
+
+## What it does
+
+LangGraph.js is an orchestration library for building agents and multi-step LLM workflows in TypeScript. Its central abstraction is the **StateGraph**: a directed graph where each node is a function that reads from and writes to a shared, typed state object, and each edge controls what runs next, optionally conditionally.
+
+If you have ever found yourself writing a sequence of LLM calls glued together with `if (toolName === "search") ...` branches and then graduating that into something you actually need to maintain, LangGraph is the layer you reach for. It replaces the ad-hoc switch statements with an explicit graph that you can reason about, test, persist, and visualise.
+
+What makes it interesting compared with the dozen other "agent framework" libraries is that it does not pretend the agent is intelligent enough to find its own way through the graph. You declare the graph. The LLM decides which branch to take at conditional edges. Everything is observable. Nothing is hidden behind a "magical" autonomous loop.
+
+## The problem it solves
+
+LLM applications get complicated quickly. The naive shape is a single prompt with a tool list and a `while` loop that keeps calling the model until it stops asking for tools. That works for a demo. It breaks down the moment you need any of the following:
+
+- **Determinism in production.** Stakeholders want to know what an agent will do, not just see a transcript of what it did last time.
+- **Long-running workflows.** Some steps require human approval. Others span hours. The agent has to be able to checkpoint, sleep, and resume.
+- **Branching and looping with auditability.** The agent should follow a documented flow, not improvise. When something goes wrong, you should be able to point at the exact node that failed and replay it.
+- **Streaming and partial results.** Users want progress, not silence followed by a wall of text.
+
+Before LangGraph, the TypeScript answer to these problems was either bare LangChain chains plus a lot of bespoke glue, or hand-rolled state machines plus prompt templating. LangGraph is what happens when you take state-machine thinking and stitch it directly into an LLM orchestration framework with first-class support for tool calls, persistence, streaming, and human-in-the-loop pauses.
+
+The closest comparison from outside the LangChain ecosystem is something like Microsoft's AutoGen or Vercel's AI SDK with its tool-calling agents. LangGraph sits closer to AutoGen in ambition, and closer to AI SDK in ergonomics. The honest difference is that LangGraph is opinionated about *graphs first*, with the LLM in service of the graph, rather than agents-first with structure bolted on.
+
+## A short history
+
+The library has only been around for **about two and a half years** at the time of writing. From the npm timeline:
+
+- **January 2024:** v0.0.1 ships. Earliest releases are spartan: `StateGraph`, a handful of node helpers, integration with the existing LangChain ecosystem for prompts and tools.
+- **Mid-2024:** Stream support, conditional edges, and the first usable checkpointing layer land. LangGraph starts showing up in serious production case studies.
+- **Late 2024 to early 2025:** Persistence backends (in-memory, then Postgres, then SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio (a visual debugger).
+- **2025 to today:** The 1.x stabilisation arc. v1.0 in mid-2025 codifies the API; v1.3.2 (May 2026) is the current release. The breaking-change cadence slows. The TypeScript types get markedly better.
+
+The Python version is older, larger, and has more documentation. The JavaScript port is now mature enough to use in production but still trails in places. More on that below.
+
+## Who it is for
+
+LangGraph.js is for you if:
+
+- You are building **stateful, multi-step LLM features** inside a TypeScript or Node application.
+- You want **deterministic structure** around non-deterministic model calls.
+- You need **production concerns** (persistence, streaming, human approval, observability) handled by the framework rather than something you have to invent.
+- You already use the LangChain ecosystem (or are happy to). The library does not force this, but the gravity is real: `@langchain/core`, `@langchain/openai` and similar peer packages are how you do model calls and tool definitions inside the graph.
+
+It is probably not for you if:
+
+- You are building a **single-prompt, single-call** feature. LangGraph is overkill.
+- You want **agent-decides-everything** autonomy. Frameworks like AutoGen lean further into that shape.
+- You are allergic to the LangChain stack. The peer-dep gravity is hard to escape without forking primitives.
+
+## Market reach
+
+Adoption is the thing that has shifted hardest in the last eighteen months. The numbers as of this week:
+
+- **~2.3 million weekly downloads** of `@langchain/langgraph` on npm.
+- **~9.7 million downloads in the last 30 days.**
+- The GitHub README names **Replit, Uber, LinkedIn, GitLab, Klarna, and Elastic** as production users. Each has a public case study.
+- The Python sibling has more stars and more visible enterprise adoption, but the JS side has caught up in the use cases that matter for web product teams (chat features, internal copilots, customer support routing).
+
+Two and a half years is a short life for a library that has reached this level of adoption. The signal it sends is that the underlying primitive (a typed StateGraph the LLM walks through) is the right level of abstraction for what people actually want to build right now.
+
+## Hands-on: a document-intake triage agent
+
+The most common shape I see in business-centric automation work is a **document-intake triage flow**. Something arrives (an email, a form submission, a scanned claim), and a sequence of decisions has to happen before it lands in front of a human. This is exactly the shape that exposes LangGraph's strengths.
+
+The example below is the skeleton of one. A real implementation would swap the mocked tools for actual model calls, but the structure stays the same.
+
+### Step 1. Define the shared state
+
+The state is what flows through the graph. Every node reads from it, every node can return updates to it.
+
+```ts
+import { Annotation, StateGraph, START, END } from "@langchain/langgraph";
+
+const TriageState = Annotation.Root({
+  inputText: Annotation<string>(),
+  category: Annotation<"claim" | "query" | "complaint" | "unknown">(),
+  extracted: Annotation<Record<string, string>>({
+    reducer: (a, b) => ({ ...a, ...b }),
+    default: () => ({}),
+  }),
+  validationErrors: Annotation<string[]>({
+    reducer: (a, b) => [...a, ...b],
+    default: () => [],
+  }),
+  decision: Annotation<"auto-process" | "human-review" | "reject">(),
+});
+```
+
+A few things worth noticing in that snippet. The `Annotation` API is how LangGraph 1.x defines typed state. The reducers (`(a, b) => ...`) are how concurrent or sequential writes merge, controlling whether a node "replaces" or "appends" to a field. The Python ergonomics here are slightly tidier; the TypeScript version is a little more verbose but type-safe end to end.
+
+### Step 2. Write the nodes
+
+Each node is just a function from `state` to `Partial<state>`. The body can call any model, any tool, any external API.
+
+```ts
+async function classify(state: typeof TriageState.State) {
+  // In a real implementation this is a model call with a structured-output schema.
+  // Mocked here for clarity.
+  const category = mockClassifier(state.inputText);
+  return { category };
+}
+
+async function extract(state: typeof TriageState.State) {
+  const fields = mockExtractor(state.inputText, state.category);
+  return { extracted: fields };
+}
+
+async function validate(state: typeof TriageState.State) {
+  const errors = mockValidator(state.extracted, state.category);
+  return { validationErrors: errors };
+}
+
+async function decide(state: typeof TriageState.State) {
+  if (state.validationErrors.length > 0) return { decision: "human-review" as const };
+  if (state.category === "claim") return { decision: "auto-process" as const };
+  return { decision: "human-review" as const };
+}
+```
+
+### Step 3. Wire the graph
+
+This is where LangGraph earns its keep. The shape of the workflow lives in one place, separate from the node implementations:
+
+```ts
+const graph = new StateGraph(TriageState)
+  .addNode("classify", classify)
+  .addNode("extract", extract)
+  .addNode("validate", validate)
+  .addNode("decide", decide)
+  .addEdge(START, "classify")
+  .addEdge("classify", "extract")
+  .addEdge("extract", "validate")
+  .addEdge("validate", "decide")
+  .addEdge("decide", END)
+  .compile();
+```
+
+What that buys you, almost for free:
+
+- A **typed runner**: `graph.invoke({ inputText })` returns a fully-typed final state.
+- A **stream**: `graph.stream(...)` emits state diffs as each node completes. Plug straight into a UI for live progress.
+- A **checkpoint hook**: pass a `checkpointer` to `.compile()` and the graph can pause, persist, and resume across processes.
+- A **visualisation**: LangGraph Studio renders the graph above as a real, clickable diagram. For an audience that has to explain the flow to non-engineers, that alone justifies the dependency.
+
+### Step 4. Add the human-in-the-loop branch
+
+The reason to use LangGraph rather than a `for` loop is the moment you need to bring a human in. Replace the last edge with a conditional:
+
+```ts
+.addConditionalEdges("decide", (state) => state.decision, {
+  "auto-process": "execute",
+  "human-review": "queueForReview",
+  "reject": END,
+})
+```
+
+`queueForReview` can be a node that calls an `interrupt()` and waits for a real human to weigh in. The graph pauses, the state persists, and execution resumes from the same point when a reviewer clicks Approve. None of that machinery has to live in your application code.
+
+## What is good
+
+- **The right primitive at the right level.** A typed StateGraph is not a magical abstraction. It is what you would have built yourself with worse types and worse tests. Having it as a library means you do not have to.
+- **First-class streaming, checkpointing, and human-in-the-loop.** These are the things that separate a prototype from a production system, and LangGraph treats them as core, not optional add-ons.
+- **LangGraph Studio.** A visual debugger that lets you see the graph and the state moving through it. For BPM-adjacent teams used to ARIS-style process diagrams, this is the bridge between two worlds.
+- **Honest typing.** v1.x has worked hard on TypeScript ergonomics. State, node outputs, and conditional edges are all inferable.
+- **Vendor neutrality at the model layer.** Tools and models plug in through the broader LangChain ecosystem, so you can swap OpenAI for Anthropic for a self-hosted model with one line.
+
+## Where the gaps are
+
+The balanced part of this review.
+
+- **Documentation lags the Python version.** The TypeScript docs site is good and improving, but Python examples still cover more edge cases. Translating a Python sample to TypeScript is sometimes a five-minute job, sometimes a half-day puzzle.
+- **The LangChain peer-dep gravity is real.** You can use LangGraph without the rest of LangChain, but the path of least resistance pulls you in. If your team has a strong preference for thinner deps, plan that boundary deliberately.
+- **Conditional-edge ergonomics are still a little verbose** compared with what you might write by hand. The library trades off some terseness for explicitness, which is the right call for production code, but reads as ceremonial on first encounter.
+- **The Studio is closed-source.** The visual debugger is excellent but is not OSS. For teams with strict supply-chain policies, this matters.
+- **Versioning has been spiky.** Pre-1.0 releases moved fast. The 1.x line is stabilising, but if your project is still on 0.2.x or earlier, expect to budget time for an upgrade pass.
+
+## Verdict
+
+If you are building **production agents in TypeScript**, LangGraph.js has crossed the line from "interesting library worth watching" to "default choice unless you have a specific reason to pick something else." Two and a half years from launch, ~2.3 million weekly downloads, named production users in finance, ridesharing, social, and developer tools, and a 1.x line that has stopped breaking the API every other release.
+
+The reasons to choose it: you want **explicit structure**, you need the **production extras** (streaming, persistence, human-in-the-loop) without rebuilding them, and you are comfortable with the LangChain ecosystem.
+
+The reasons to pass: you only need a single LLM call, you want a framework that decides everything autonomously, or you are committed to staying outside the LangChain dependency tree.
+
+For business-centric automation work, the kind where a process orchestrator is going to live next to compliance, audit, and human approval, LangGraph.js is a better starting point than any of the autonomous-agent frameworks. It bends in the direction of the things regulated teams actually need.
+
+---
+
+**A note on the series.** Code from these reviews will live in a separate repo at [github.com/GoldenPassport/automation-review-examples](https://github.com/GoldenPassport/automation-review-examples), with one folder per review and runnable examples. The repo will appear alongside the second review. If there is a tool or concept you would like me to review, [drop me a message](/contact).
