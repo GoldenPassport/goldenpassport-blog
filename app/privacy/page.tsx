@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 const description =
-  "Privacy and cookies policy for the Golden Passport blog. No third-party trackers, no advertising cookies, no profiling. Just the consent preference and standard hosting logs.";
+  "Privacy and cookies policy for the Golden Passport blog. No advertising, no profiling. Privacy-friendly Vercel Analytics, only loaded after you opt in.";
 
 export const metadata = {
   title: "Privacy",
@@ -17,14 +17,15 @@ export default function PrivacyPage() {
     <section className="mx-auto max-w-3xl px-6 pt-16 pb-20">
       <p className="text-xs tracking-[0.22em] uppercase text-gold-deep">Privacy</p>
       <h1 className="mt-4 font-serif text-5xl text-ink">Privacy & cookies</h1>
-      <p className="mt-4 text-sm text-ink-mute">Last updated: 26 May 2026</p>
+      <p className="mt-4 text-sm text-ink-mute">Last updated: 27 May 2026</p>
 
       <div className="prose prose-lg max-w-prose font-serif mt-8">
         <h2>The short version</h2>
         <p>
-          This is a personal blog run by Luke Audie. It collects as little as possible. There are
-          no third-party trackers, no advertising cookies, and no profiling. If that ever changes,
-          this page will say so before anything is enabled.
+          This is a personal blog run by Luke Audie. It collects as little as possible. The only
+          analytics in use is Vercel Web Analytics, which is cookieless and does not collect
+          personal data, and it is only loaded after you accept the consent banner. There is no
+          advertising, no profiling, and no third-party tracker.
         </p>
 
         <h2>What gets stored</h2>
@@ -49,19 +50,49 @@ export default function PrivacyPage() {
           </li>
         </ul>
 
+        <h2>Analytics: Vercel Web Analytics (only with consent)</h2>
+        <p>
+          If you click <strong>Accept</strong> on the consent banner, the site loads{" "}
+          <a
+            href="https://vercel.com/docs/analytics"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-gold-deep underline underline-offset-2 decoration-gold/60 hover:decoration-gold-deep"
+          >
+            Vercel Web Analytics
+          </a>
+          . It is privacy-friendly by design:
+        </p>
+        <ul>
+          <li>
+            <strong>No cookies.</strong> Vercel Analytics does not set any cookies on your device.
+          </li>
+          <li>
+            <strong>No personal data.</strong> It does not collect IP addresses, usernames, or any
+            identifier that could link a visit to you specifically.
+          </li>
+          <li>
+            <strong>No cross-site tracking.</strong> It does not follow you across the web, and it
+            does not share data with any advertising network.
+          </li>
+          <li>
+            <strong>Aggregate page views only.</strong> It records anonymous page-view counts
+            (which posts get read, on which day, from which country) so I can see what readers
+            actually find useful.
+          </li>
+        </ul>
+        <p>
+          If you click <strong>Decline</strong> or do not respond to the consent banner, no
+          analytics is loaded at all. The component that loads Vercel Analytics literally renders
+          nothing until consent is accepted, and stops loading the moment you revoke it.
+        </p>
+
         <h2>What does not get stored</h2>
         <ul>
-          <li>No analytics or tracking cookies are set today.</li>
-          <li>No advertising or marketing cookies are set, ever.</li>
+          <li>No advertising or marketing cookies are ever set.</li>
           <li>No profile is built about you across sessions or sites.</li>
+          <li>No identifiable visitor data is collected, with or without consent.</li>
         </ul>
-
-        <h2>If analytics is added later</h2>
-        <p>
-          If a privacy-respecting analytics tool is ever added (for example, a self-hosted Plausible
-          or Vercel Web Analytics), it will only be loaded after you have accepted the consent
-          banner. The default state is no tracking.
-        </p>
 
         <h2>Changing your mind</h2>
         <p>

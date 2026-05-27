@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ConsentedAnalytics } from "@/components/ConsentedAnalytics";
 import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main-content" className="flex-1">{children}</main>
         <Footer />
         <CookieConsent />
+        <ConsentedAnalytics />
       </body>
     </html>
   );
