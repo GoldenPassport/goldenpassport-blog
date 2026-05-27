@@ -84,6 +84,7 @@ Push to the connected GitHub repo; Vercel builds on every push to `main`.
 | Name | Required | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | yes (prod) | Canonical site origin. In production this is `https://goldenpassport.blog`. Used by every page's metadata, the sitemap, the robots policy, the JSON-LD, and all canonical / og:image / og:url tags. Without this, everything resolves against `http://localhost:3000`. Set it on Vercel under Project Settings → Environment Variables → Production. |
+| `NEXT_TELEMETRY_DISABLED` | already set | Public opt-out from Next.js anonymous telemetry. Committed in `.env` so every environment (local, preview, prod) inherits it. No action needed. |
 
 A `.env.example` template at the repo root shows the expected shape.
 

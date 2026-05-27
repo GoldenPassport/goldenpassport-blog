@@ -33,8 +33,12 @@ next-env.d.ts
 
 
 # --- Environment & secrets ---------------------------------------------------
-# Ignore EVERY .env file by default; commit only .env.example as a template.
-.env
+# Commit:
+#   .env          → public, non-secret defaults that should apply everywhere
+#                   (e.g. NEXT_TELEMETRY_DISABLED=1)
+#   .env.example  → template for the values a contributor needs to fill in
+# Ignore everything else (.env.local, .env.production, .env.development.local,
+# etc.) — that's where real secrets and per-env overrides live.
 .env.*
 !.env.example
 # Other secrets a stray script or AI might create.
