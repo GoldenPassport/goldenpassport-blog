@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: "Cormorant Garamond", "Source Serif Pro", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: theme("colors.cream.DEFAULT");
+  color: theme("colors.ink.DEFAULT");
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: theme("colors.gold.light");
+  color: theme("colors.ink.DEFAULT");
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, theme("colors.gold.DEFAULT"), transparent);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Accessibility: brand-coherent focus ring for keyboard users.                */
+/*                                                                            */
+/* Applies to native interactive elements and anything ARIA-promoted to one.  */
+/* `:focus-visible` keeps the ring off mouse clicks, on for keyboard / a11y.  */
+/* Components that want a tailored ring (e.g. tag chips with rounded rings)   */
+/* override this with their own `focus-visible:*` Tailwind utilities.         */
+/* -------------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid theme("colors.gold.deep");
+  outline-offset: 2px;
+}
+
+/* Respect users who have asked their OS to reduce motion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

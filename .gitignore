@@ -1,0 +1,143 @@
+# =============================================================================
+# Golden Passport blog — .gitignore
+#
+# Repo is public, so this list errs on the safe side. Anything that could
+# carry a secret, a local override, or an IDE/OS artefact stays out.
+# Add new patterns to the relevant section below.
+# =============================================================================
+
+
+# --- Dependencies ------------------------------------------------------------
+node_modules
+.pnp
+.pnp.*
+.yarn/install-state.gz
+.yarn/cache
+.yarn/build-state.yml
+
+
+# --- Build outputs -----------------------------------------------------------
+.next
+out
+dist
+build
+.turbo
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+
+# --- Hosting / deploy --------------------------------------------------------
+.vercel
+.netlify
+
+
+# --- Environment & secrets ---------------------------------------------------
+# Ignore EVERY .env file by default; commit only .env.example as a template.
+.env
+.env.*
+!.env.example
+# Other secrets a stray script or AI might create.
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+credentials.json
+auth.json
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+.npmrc
+.yarnrc
+
+
+# --- Logs --------------------------------------------------------------------
+*.log
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+
+# --- Test / coverage ---------------------------------------------------------
+coverage
+.nyc_output
+.jest-cache
+*.lcov
+
+
+# --- Editors / IDEs ----------------------------------------------------------
+.vscode
+.idea
+*.iml
+*.swp
+*.swo
+*.swn
+*~
+#*#
+.#*
+.history
+
+
+# --- AI tooling / local overrides --------------------------------------------
+# Claude Code project memory and transcripts live in ~/.claude/projects
+# (outside the repo), so nothing to ignore there. The patterns below cover any
+# project-local Claude Code overrides + the generic "local" filename convention.
+.claude/settings.local.json
+.claude/transcripts
+settings.local.json
+*.local.json
+*.local.ts
+*.local.js
+
+
+# --- OS noise ----------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+
+# --- Working files / drafts kept out of the public repo ----------------------
+# `tmp/` is for source material drops (resumes, PDFs, downloaded LinkedIn
+# exports, draft text). Everything in here stays local-only.
+tmp
+.scratch
+.notes
+draft
+drafts
+*.bak
+*.old
+
+
+
+# --- Storybook + Vitest + Playwright caches/outputs --------------------------
+# Storybook static build, log files, and the test runner caches that get
+# created the first time you run `pnpm storybook` or its Vitest tests.
+*storybook.log
+storybook-static
+.vite
+.vitest-cache
+playwright-report
+test-results
+playwright/.cache
+
+
+# --- Next.js extras ----------------------------------------------------------
+# SWC compiler cache (not always present, but cheap to ignore in advance).
+.swc
+
+
+# --- Chromatic (visual-regression service used by @chromatic-com/storybook) --
+chromatic-build-*
+.chromatic
+build-storybook.log

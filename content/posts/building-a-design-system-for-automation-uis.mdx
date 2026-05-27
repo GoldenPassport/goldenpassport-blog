@@ -1,0 +1,158 @@
+---
+title: "Building a Design System for Automation UIs"
+date: "2026-05-27"
+category: "Tech"
+excerpt: "Why I built @golden-passport/ds-patternfly: an open-source accelerator for automation and workflow projects, sized to the shape of real business-centric work. Brandable, accessible-by-default, built on PatternFly 6."
+tags:
+  - Design System
+  - PatternFly
+  - React
+  - BPM
+  - KIE
+  - Accessibility
+  - i18n
+  - Open Source
+hero: "/posts/building-a-design-system-for-automation-uis/hero.png"
+heroAlt: "ds-patternfly: an open-source React design system built on PatternFly 6, sized for business-centric automation UIs"
+---
+
+If you have ever built a UI for a business-centric automation engine, you know the shape of the friction. The engine itself is rigorous: KIE, jBPM, the rules layer, the workflow layer. The data model is rich. The runtime is battle-tested. And then somebody asks for a screen, and you find yourself rebuilding the same five things you rebuilt on the last project.
+
+The same modeller pane. The same task inbox. The same primary-detail layout with a list on the left and a form on the right. The same brand override of a vendor design system, where you spend a week persuading two colour variables to be different shades of the same blue. The same accessibility checks that get sidelined under deadline pressure. The same English-only buttons that need to ship in five languages by Q3.
+
+I have done this enough times now to know it is not a one-off problem. It is the shape of the work.
+
+That recurring friction is why I started [`@golden-passport/ds-patternfly`](https://github.com/GoldenPassport/ds-patternfly): an open-source accelerator for automation and workflow projects that require human interactions. A small, opinionated React design system built on PatternFly 6, sized specifically to the way business-centric automation UIs actually want to be built. This post is half the *why*, half the *how*. If you build automation interfaces for a living, the patterns here are probably the ones you already wish you had.
+
+## A quick word on PatternFly (and why it matters)
+
+If you have not come across it before: PatternFly is Red Hat's open-source design system for enterprise software. The same way Tailwind is a default reach for utility-first CSS, or shadcn for composable React components, PatternFly is a default reach for the enterprise-application end of the React spectrum. It is what you pick when the people using your UI are doing serious work: configuring workflows, approving compliance flows, monitoring infrastructure.
+
+A few things set it apart in a crowded design-system landscape:
+
+- **Fully open-source, no paywall.** Every component, every variant, every accessibility primitive. There is no "PatternFly Pro" tier you discover halfway through your project. The kitchen sink is in the kitchen, free.
+- **A serious enterprise backer who uses it themselves.** Red Hat ships PatternFly inside their own products (OpenShift, Ansible Automation Platform, the KIE workbench, and more). That is a different funding model from a hobby project or a venture-backed startup looking for a monetisation moment: PatternFly has a multi-year roadmap because Red Hat needs it to.
+- **A mature ecosystem.** Years of accessibility work, a documented design language, hundreds of stories, public Figma assets, and a working community. You start from a place where the hard problems are already solved.
+- **Visual continuity by default.** If your automation UI sits next to a KIE workbench, an OpenShift console, or any other Red Hat surface in the same workflow, your users see a coherent design language across all of them. They do not have to learn three different button styles to do their job.
+
+That last point is worth lingering on for an automation audience. The React design-system conversation in 2026 is loud. shadcn, Radix, Mantine, MUI, Chakra, the next thing. Lots of strong options. PatternFly is the quiet, less-fashionable answer that happens to fit this domain perfectly, because the rest of the platform is already speaking the same language.
+
+There is a price, and it is honest to name it. PatternFly is opinionated about its visual identity, so out of the box your product looks like Red Hat's product. Branding it well, without breaking accessibility or quietly reinventing buttons in three places, takes more discipline than most product teams have time for.
+
+So I leaned in. `ds-patternfly` is PatternFly 6 underneath. It does not try to replace it, and it does not try to extend it sideways. What it adds is three patterns that PatternFly itself, deliberately, leaves open.
+
+## Pattern 1: Branding as a typed token contract
+
+The first job is making PatternFly look like *your* product, not Red Hat's. PatternFly already exposes its design tokens as CSS custom properties. The hard part is doing the override safely, in a way a designer can hand a developer without anyone having to grep through Sass files.
+
+In `ds-patternfly`, a brand is a TypeScript object that overrides specific PatternFly variables. You import it once at the root of the app, and the whole tree picks it up.
+
+```tsx
+import "@patternfly/react-core/dist/styles/base.css";
+import "@golden-passport/ds-patternfly/styles";
+
+import {
+  ThemeProvider,
+  AppShell,
+  goldenPassport,
+  appShellEnLabels,
+} from "@golden-passport/ds-patternfly";
+
+export default function App() {
+  return (
+    <ThemeProvider brand={goldenPassport}>
+      <AppShell labels={appShellEnLabels} brandLogo={<img src="/logo.svg" alt="" />}>
+        {/* your screens */}
+      </AppShell>
+    </ThemeProvider>
+  );
+}
+```
+
+Want a different brand? Define another `BrandTokens` object, pass it to the same `ThemeProvider`, ship. The components do not change. There is no parallel theming system fighting PatternFly's CSS variables. The override is the variables.
+
+A few things this buys you:
+
+- **Designers stay in design-token land.** The brand object is a flat, typed list of colour, spacing, and radius values. It is what a designer expects to hand over: a set of values, not a Sass partial.
+- **Multi-brand is a `prop` change.** If you build automation UIs for multiple clients or multiple internal product lines, swapping brands at the root is a one-line change.
+- **Contrast is enforced.** Brand colour contrast is validated by tests (more on this in a moment). You cannot ship a brand that quietly fails WCAG without the test suite telling you.
+- **No Tailwind.** Deliberate. PatternFly already has its own design language and its own CSS scope. Layering Tailwind on top creates two competing systems and twice as much footgun.
+
+## Pattern 2: Accessibility as a CI gate, not an afterthought
+
+Enterprise software is used by all kinds of people, with all kinds of abilities. Operations teams. Compliance officers. Auditors. Field workers using a tablet in poor light. People who navigate exclusively by keyboard. People who rely on screen readers. The applications that run a regulated business are not a niche audience that anyone can opt out of supporting, and accessibility is not an afterthought.
+
+Every team I have worked with intends to be accessible. Most teams I have worked with do not have automated infrastructure that proves it. Accessibility ends up being a thing somebody does manually before launch, and then somebody else regresses three weeks later when a new variant of a button ships.
+
+`ds-patternfly` treats accessibility the same way most teams treat type-checking: it is a CI gate, and the build fails if you break it.
+
+The way this works is worth a closer look, because it is the kind of setup most projects could adopt today without rewriting anything.
+
+- Every component has at least one **Storybook story** covering its primary states.
+- Storybook is wired to **Vitest** via `@storybook/addon-vitest`, which renders every story in headless Chromium during the test run.
+- Each rendered story is scanned by **axe-core**, via `@storybook/addon-a11y`'s Vitest integration.
+- Any WCAG 2.0 / 2.1 / 2.2 AA violation fails the run. The same results show up live in the Storybook UI's Tests pane during local development.
+
+The CI-facing entry point is one command:
+
+```sh
+pnpm test:storybook
+```
+
+This runs `vitest run --project=storybook`, which is the axe-only subset. The full `pnpm test` adds Node-mode unit tests. First-time setup needs Playwright's Chromium, which Storybook orchestrates under the hood:
+
+```sh
+npx playwright install chromium
+```
+
+The shift this represents is small in code and large in posture. Accessibility is no longer "we should test that." It is "the build is red, somebody go look." Every PR that adds a new component or a new state of an existing component automatically scans it. New developers cannot ship code that fails AA without the system flagging it. Designers can also see the same results in Storybook locally, which makes the conversation about a contrast fail or a missing label something both sides of the desk can act on.
+
+WCAG 2.2 AA is the target. Beyond catching obvious mistakes (missing labels, contrast failures, focus traps), it pushes the library design toward components that *cannot* be misused in inaccessible ways. Required ARIA props become required TypeScript props. The compiler enforces what axe would catch.
+
+## Pattern 3: i18n by props, not by bundling
+
+The third pattern is the one that surprises people. Most React design systems ship with built-in localisation: a runtime, a locale switcher, sometimes a JSON file per language baked into the bundle. The intent is good. The consequence is that every consuming app inherits that translation pipeline whether they want it or not. That works fine for the rare case where the library author is also the translation owner. It works badly for everyone else.
+
+`ds-patternfly` does the opposite. Every user-facing string in the library is a prop. The library ships with English defaults as opt-in objects, and you pass them in:
+
+```tsx
+import { PrimaryDetailLayout, primaryDetailLayoutEnLabels } from "@golden-passport/ds-patternfly";
+
+<PrimaryDetailLayout
+  items={items}
+  selectedId={selectedId}
+  onSelect={setSelectedId}
+  renderListItem={(i) => i.name}
+  renderDetail={(i) => <div>{i.description}</div>}
+  labels={primaryDetailLayoutEnLabels}
+/>
+```
+
+If you have an existing i18n setup, you wire your translated strings into the same shape and pass them in. The library does not ship any localisation runtime. It does not assume your translation tool. It does not bundle locales you do not want. It does not need to know whether you are using `react-intl`, `i18next`, lingui, or a single TypeScript object you maintain by hand.
+
+For automation teams shipping to clients in regulated industries, this is the right shape. Translation is owned by the product team, the SDK gets out of the way, and the type system makes sure you do not forget to translate something. If a label prop is required, the compiler will tell you when a new release adds one.
+
+## What this is not
+
+I want to be honest about scope, because design systems are easy to overpromise.
+
+This is not a replacement for PatternFly. PatternFly is the primitives library. `ds-patternfly` is the opinionated layer on top, specifically shaped for the automation-UI domain. Anything PatternFly offers, you can still use directly.
+
+It is not a kitchen-sink component set. It contains the patterns I keep rebuilding: an app shell with brand slots, a primary-detail layout, the theme provider, the brand token contract, and the testing scaffolding. Not every component you could imagine.
+
+It is not a CSS framework. There is no utility class system. There is no atomic styling. Component styling lives inside the components, against PatternFly's variables.
+
+It is also not a finished product. The repo is a v0 line of work in the open. The interfaces will move. Storybook is the primary surface and is the right place to evaluate it.
+
+## Where it goes from here
+
+The roadmap, in rough priority order:
+
+- **More layout components.** A wizard, a task inbox, a process-instance detail view. The handful of patterns that come up on every automation UI engagement.
+- **A brand kit cookbook.** Three to five worked-example brands so a team can see what discipline looks like in practice, not just what the contract allows.
+- **Documentation site.** Storybook is the dev surface. A static docs site, generated from the same stories, is the next obvious thing.
+- **Token validation.** Static checks that a brand satisfies the contrast contract before it reaches the runtime, so the failure is at build time, not at axe time.
+
+If you build automation UIs and any of this sounds like the conversation you are also having with yourself, I would genuinely like to hear from you. Use the issues tab on the [repo](https://github.com/GoldenPassport/ds-patternfly), or [drop me a message](/contact).
+
+The friction with automation UIs is real, the patterns above keep recurring, and the more of us comparing notes in the open, the faster we converge on the parts of the work that should not have to be rebuilt every time.
