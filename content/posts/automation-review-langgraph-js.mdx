@@ -33,14 +33,16 @@ First up: [LangGraph.js](https://github.com/langchain-ai/langgraphjs), the JavaS
 <aside className="not-prose my-6 p-5 rounded-lg border border-gold/30 bg-cream-50 text-sm">
   <p className="text-xs tracking-[0.22em] uppercase text-gold-deep mb-3">Snapshot</p>
   <ul className="space-y-1 text-ink-soft">
-    <li><strong>Project:</strong> @langchain/langgraph (JavaScript / TypeScript)</li>
+    <li><strong>Project:</strong> LangGraph (cross-runtime: Python, JavaScript / TypeScript, Java in preview)</li>
+    <li><strong>This review focuses on:</strong> @langchain/langgraph (the JS / TS package)</li>
     <li><strong>Maintainer:</strong> LangChain Inc.</li>
     <li><strong>Licence:</strong> MIT</li>
-    <li><strong>First published:</strong> 18 January 2024 (v0.0.1)</li>
-    <li><strong>Latest version:</strong> 1.3.2 (19 May 2026)</li>
-    <li><strong>Weekly npm downloads:</strong> ~2.3M</li>
-    <li><strong>GitHub stars:</strong> ~3,000 on the JS repo, with the Python sibling several multiples ahead</li>
+    <li><strong>First published (JS):</strong> 18 January 2024 (v0.0.1)</li>
+    <li><strong>First published (Python):</strong> 9 January 2024 (v0.0.10 was the first public release)</li>
+    <li><strong>Latest versions:</strong> JS 1.3.2, Python 1.2.2 (May 2026)</li>
+    <li><strong>Downloads in the last 30 days:</strong> Python ~52.3M, JS ~9.7M, ~62M combined across the ecosystem</li>
     <li><strong>Production users named in the README:</strong> Replit, Uber, LinkedIn, GitLab, Klarna, Elastic</li>
+    <li><strong>Acknowledged inspirations:</strong> Pregel (Google), Apache Beam, NetworkX</li>
     <li><strong>One-line pitch:</strong> a low-level orchestration framework for building controllable agents</li>
   </ul>
 </aside>
@@ -94,14 +96,41 @@ It is probably not for you if:
 
 ## Market reach
 
-Adoption is the thing that has shifted hardest in the last eighteen months. The numbers as of this week:
+Adoption is the thing that has shifted hardest in the last eighteen months. Looking at the LangGraph ecosystem as a whole (not just the JS package) tells the more honest story:
 
-- **~2.3 million weekly downloads** of `@langchain/langgraph` on npm.
-- **~9.7 million downloads in the last 30 days.**
-- The GitHub README names **Replit, Uber, LinkedIn, GitLab, Klarna, and Elastic** as production users. Each has a public case study.
-- The Python sibling has more stars and more visible enterprise adoption, but the JS side has caught up in the use cases that matter for web product teams (chat features, internal copilots, customer support routing).
+- **Python `langgraph` on PyPI**: ~52.3 million downloads in the last 30 days, and over 326 million all-time.
+- **JS `@langchain/langgraph` on npm**: ~9.7 million in the last 30 days, ~2.3 million weekly.
+- **Combined: ~62 million downloads in the last 30 days** across the LangGraph ecosystem.
+
+Python dominates the install base, as you would expect for a framework that grew out of LangChain. The JavaScript port is about 15% of the total volume, which is meaningful for a JS-first stack but not the centre of gravity. If your team is on the fence about runtime choice, the Python side has a longer trail of documentation and battle-tested patterns.
+
+On the recognition side, the GitHub README names **Replit, Uber, LinkedIn, GitLab, Klarna, and Elastic** as production users. Each has a public case study to look up if you want detail on how the framework holds up at scale.
 
 Two and a half years is a short life for a library that has reached this level of adoption. The signal it sends is that the underlying primitive (a typed StateGraph the LLM walks through) is the right level of abstraction for what people actually want to build right now.
+
+## Where the design comes from
+
+LangGraph's README acknowledges three intellectual debts. They are worth knowing about, because each one explains a design choice that might otherwise read as quirky.
+
+### Pregel (Google, 2009)
+
+[Pregel](https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing-2/) was Google's solution to a problem MapReduce did not fit: large-scale graph computation. Algorithms like PageRank, shortest-path, and connected components do not decompose elegantly into key-value pairs. Pregel introduced a **vertex-centric Bulk Synchronous Parallel (BSP)** model: every vertex runs a function that reads its current state and incoming messages, optionally emits new messages, and then the whole graph synchronises at a "superstep" boundary before the next round begins.
+
+That is, structurally, exactly what LangGraph's nodes do. Each node computes against the current state, emits an update, and the framework synchronises before the next node runs. The Pregel lineage explains why LangGraph feels deterministic and easy to checkpoint: it is not running a free-form async event loop, it is stepping through synchronous supersteps.
+
+### Apache Beam (Google → Apache, 2016)
+
+[Apache Beam](https://beam.apache.org/about/) emerged from Google's Dataflow SDK donation to the Apache Software Foundation in 2016. The problem Beam solved was a different one: every batch and stream framework before it locked you to a specific engine. If you wrote your pipeline for Spark, you could not move it to Flink without rewriting. Beam introduced a *unified* programming model: pipelines, transforms, and the concept of **runners** that execute the same pipeline against different engines (Flink, Spark, Google Dataflow, AWS Kinesis).
+
+LangGraph borrows the runner idea. The same `StateGraph` compiles to a runnable that you can `invoke()` locally, `stream()` over HTTP, persist with an in-memory checkpointer in tests, or run on LangGraph Cloud with Postgres-backed durability. The graph definition does not change; the runtime context does. That separation is straight out of Beam's playbook.
+
+### NetworkX (since 2004)
+
+[NetworkX](https://networkx.org/documentation/stable/) is the Python library for graph creation and analysis that researchers in mathematics, biology, and social network analysis have been using for two decades. Its contribution to LangGraph is the API ergonomics: `G = Graph(); G.add_node(...); G.add_edge(...)`. Anyone who has touched graphs in Python has internalised this shape.
+
+LangGraph's JS API is a direct lineage: `new StateGraph(...).addNode("classify", classify).addEdge("classify", "extract")`. The naming is deliberate. A developer arriving from data-science Python can write LangGraph code with very little ramp-up because the builder pattern is the one they already use.
+
+The three together explain a lot. The deterministic superstep execution comes from Pregel. The compile-once-run-many-runtimes model comes from Beam. The ergonomic graph builder comes from NetworkX. None of those choices are accidents.
 
 ## Hands-on: a document-intake triage agent
 
