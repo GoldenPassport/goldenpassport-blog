@@ -3,7 +3,7 @@ title: "Automation Review: LangGraph"
 date: "2026-05-27"
 category: "Tech"
 series: "Automation Review"
-excerpt: "Two and a half years on, LangGraph has gone from interesting library to the default low-level orchestration framework for agentic AI. A balanced look at what it actually is, where it earns its keep, and where the gaps are."
+excerpt: "Just over two years after launch, LangGraph is among the most-adopted orchestration frameworks for agentic AI, but it is not unchallenged. A balanced look at what it actually is, where it earns its keep, and where the gaps are."
 tags:
   - Agentic AI
   - LangGraph
@@ -12,261 +12,492 @@ tags:
   - Orchestration
   - Tooling
   - Open Source
-draft: true
+unlisted: true
+group: "automation-review-langgraph"
+groupLabel: "Article"
+groupOrder: 1
 # Drop the hero image at the path below and uncomment to enable.
 # hero: "/posts/automation-review-langgraph/hero.png"
 # heroAlt: "LangGraph StateGraph diagram"
 ---
 
-{/* Hero placeholder. A clean StateGraph diagram (nodes + edges) or a LangGraph
-    Studio screenshot would both work as the hero image. */}
-<figure className="not-prose my-8 p-8 border-2 border-dashed border-gold/30 rounded-lg bg-cream-50 text-center">
-  <p className="text-xs tracking-[0.18em] uppercase text-gold-deep mb-2">Hero image to be added</p>
-  <p className="font-serif text-base text-ink-soft italic">A LangGraph StateGraph diagram or a LangGraph Studio screenshot</p>
-</figure>
+{/* Hero dashboard. Executive summary of the review at a glance: identity,
+    the problem it solves, market reach, pros / cons. Mirrors the deeper
+    sections of the article. */}
+<ReviewDashboard
+  name="LangGraph"
+  kicker="Verdict · The first framework to evaluate for graph-shaped agent orchestration"
+  pitch="A low-level orchestration framework for building controllable agents."
+  meta={[
+    { label: "Licence", value: "MIT" },
+    { label: "Vendor", value: "Agnostic" },
+  ]}
+  problems={[
+    { icon: "state", title: "Typed state across LLM calls" },
+    { icon: "clock", title: "Long-running, pausable workflows" },
+    { icon: "branch", title: "Branching with auditability" },
+    { icon: "stream", title: "Streaming and partial results" },
+    { icon: "group", title: "Sub-agent composition" },
+  ]}
+  reach={{
+    primary: "~62M",
+    primaryLabel: "monthly downloads (Py + JS)",
+  }}
+  pros={[
+    "Right primitive at the right level (typed StateGraph)",
+    "Production extras free: streaming, checkpointing, human-in-the-loop",
+    "Cross-runtime API parity (Python + JS, community JVM)",
+    "Vendor-neutral models via the LangChain ecosystem",
+  ]}
+  cons={[
+    "Security posture needs active management (2025 CVEs in checkpointers)",
+    "Docs uneven across runtimes; Python deeper than JS",
+    "LangChain peer-dependency gravity is real",
+    "Conditional-edge ergonomics are verbose",
+    "Pre-1.0 versioning was spiky; 1.x stabilising",
+  ]}
+/>
 
-This is the first piece in a new series called **Automation Review**. The brief: take an automation tool or concept, dig into it the way a journalist would, and ship a hands-on build alongside the words. What it does, the problem it solves, where it came from, who it is for, how it is being adopted, and what working with it actually feels like.
+First piece in a new series called **Automation Review**. Every review treats two axes as first-class: whether the tool is genuinely open source, and whether it ties you to one AI vendor. The series has a deliberate bias toward open-source-powered automation.
 
-First up: [LangGraph](https://www.langchain.com/langgraph), LangChain's low-level orchestration framework for agentic systems. It ships in Python, JavaScript / TypeScript, and Java (in preview), and at the time of writing sits behind production agents at companies including Klarna, Lyft, LinkedIn, Cloudflare, Workday, Nvidia, and Coinbase.
+<TldrCard>
 
-## At a glance
+Pick LangGraph when you need stateful, multi-step LLM features with explicit structure around model calls. Pydantic AI is the closest peer if you want lighter ceremony; the OpenAI Agents SDK is the choice if you are committed to OpenAI and want fewer moving parts. Skip the whole category if a single LLM call is enough.
 
-<aside className="not-prose my-6 p-5 rounded-lg border border-gold/30 bg-cream-50 text-sm">
-  <p className="text-xs tracking-[0.22em] uppercase text-gold-deep mb-3">Snapshot</p>
-  <ul className="space-y-1 text-ink-soft">
-    <li><strong>Project:</strong> LangGraph (cross-runtime: Python, JS / TS, Java in preview)</li>
-    <li><strong>Maintainer:</strong> LangChain Inc.</li>
-    <li><strong>Licence:</strong> MIT (the framework is open source; LangSmith and LangGraph Platform are separate commercial products)</li>
-    <li><strong>First public release:</strong> 9 January 2024 (Python), 18 January 2024 (JS)</li>
-    <li><strong>Latest versions:</strong> Python 1.2.2, JS 1.3.2 (May 2026)</li>
-    <li><strong>Downloads in the last 30 days:</strong> Python ~52.3M, JS ~9.7M, ~62M combined</li>
-    <li><strong>All-time Python downloads:</strong> over 326 million</li>
-    <li><strong>Production users named on the product page:</strong> Klarna, Vanta, Lyft, Gong, Harvey, Cloudflare, Home Depot, Workday, Nvidia, LinkedIn, Coinbase, and more</li>
-    <li><strong>Acknowledged inspirations:</strong> Pregel (Google), Apache Beam, NetworkX</li>
-    <li><strong>One-line pitch:</strong> a low-level orchestration framework for building controllable agents</li>
-  </ul>
-</aside>
+</TldrCard>
+
+The subject: [LangGraph](https://www.langchain.com/langgraph). Official runtimes in Python and JavaScript / TypeScript; community-maintained Java port [LangGraph4j](https://github.com/langgraph4j/langgraph4j). Production users and adoption numbers are in **Market reach** below.
+
+Every review also ships with a **full hands-on demo** in our companion repo: [`GoldenPassport/automation-review-examples`](https://github.com/GoldenPassport/automation-review-examples). This page is the analysis; the **Demo** tab above has the code.
+
+<a
+  href="/blog/automation-review-langgraph-demo"
+  className="not-prose inline-flex items-center gap-2 px-5 py-2.5 mt-2 rounded-full bg-ink text-cream font-medium no-underline hover:bg-gold-deep transition-colors"
+>
+  Go to the demo
+  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+</a>
+
+Plain-English definitions for any unfamiliar vocabulary are in the **Terms** reference at the bottom.
 
 ## What it actually is
 
-LangGraph is a library for declaring **how an agent moves through work**, not for declaring what the agent should think. Its central abstraction is the **StateGraph**: a directed graph where each node is a function that reads from and writes to a shared, typed state object, and each edge controls what runs next, optionally conditionally.
+LangGraph is a library for declaring **how an agent moves through work**, not what it should think. Its central abstraction is the **StateGraph**: a directed graph where each node reads from and writes to a shared, typed state object, and each edge controls what runs next, optionally conditionally.
 
-The LangChain team's own framing on the product page is honest: an "agent runtime and low-level orchestration framework" that lets developers "balance agent control with agency." That is the unusual position LangGraph occupies. Most agent frameworks tilt toward autonomy ("let the model decide"); LangGraph tilts toward explicit structure ("you decide; the model fills in the gaps inside the structure you set"). It is the framework you reach for when an autonomous loop is too brittle and a fixed pipeline is too rigid.
+The LangChain team's own framing is honest: an "agent runtime and low-level orchestration framework" that lets developers "balance agent control with agency." Most agent frameworks tilt toward autonomy ("let the model decide"); LangGraph tilts toward explicit structure ("you decide; the model fills in the gaps inside the structure you set"). It is the framework you reach for when an autonomous loop is too brittle and a fixed pipeline is too rigid.
 
-The framework is open source. Around it, LangChain Inc. has built a commercial platform (LangSmith for observability and evaluation, LangGraph Platform for deployment, persistence, and human review) that you can adopt or ignore. The framework runs perfectly well without any of the commercial pieces.
+The framework is open source. Around it, LangChain Inc. has built a commercial platform (LangSmith for observability, LangGraph Platform for deployment) that you can adopt or ignore. The framework runs end-to-end without it.
 
 ## The problem it solves
 
-LLM applications get complicated quickly. The naive shape is a single prompt with a tool list and a `while` loop that keeps calling the model until it stops asking for tools. That works for a demo. It breaks down the moment you need any of the following:
+LLM applications get complicated quickly. The naive shape is a single prompt with a tool list and a `while` loop that keeps calling the model until it stops asking for tools. That works for a demo. It breaks down the moment you need any of:
 
-- **Determinism in production.** Stakeholders want to know what an agent will do, not just see a transcript of what it did last time.
-- **Long-running workflows.** Some steps require human approval. Others span hours. The agent has to be able to checkpoint, sleep, and resume.
-- **Branching and looping with auditability.** The agent should follow a documented flow, not improvise. When something goes wrong, you should be able to point at the exact node that failed and replay it.
-- **Streaming and partial results.** Users want progress, not silence followed by a wall of text.
-- **Sub-agent composition.** A real system has specialists. The orchestrator coordinates them; each one focuses on a narrow capability.
+<NumberedList>
 
-Before LangGraph, teams either rolled their own state machine alongside LangChain chains, or stitched together prompt templating with custom orchestration code that did not survive the third feature request. LangGraph is what happens when you take state-machine thinking and embed it directly into an LLM orchestration framework with first-class support for tool calls, persistence, streaming, human-in-the-loop pauses, and sub-graph composition.
+<NumberedItem>
 
-The closest comparison from outside the LangChain ecosystem is Microsoft's AutoGen. The honest difference is that LangGraph is opinionated about *graphs first*, with the LLM in service of the graph, rather than agents-first with structure bolted on. That positioning is the through-line of every LangGraph design choice.
+**Determinism in production.** Stakeholders want to know what an agent will do, not just see a transcript of what it did last time.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**Long-running workflows.** Some steps require human approval; others span hours. The agent has to checkpoint, sleep, and resume.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**Branching and looping with auditability.** The agent should follow a documented flow, not improvise. When something goes wrong, you should be able to point at the exact node that failed and replay it.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**Streaming and partial results.** Users want progress, not silence followed by a wall of text.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**Sub-agent composition.** A real system has specialists. The orchestrator coordinates them; each one focuses on a narrow capability.
+
+</NumberedItem>
+
+</NumberedList>
+
+Before LangGraph, teams rolled their own state machine alongside LangChain chains, or stitched together orchestration code that did not survive the third feature request. LangGraph is state-machine thinking embedded directly into an LLM orchestration framework, with first-class support for tool calls, persistence, streaming, human-in-the-loop pauses, and sub-graph composition.
 
 ## A short history
 
-LangGraph has only been around for **about two and a half years** at the time of writing.
+LangGraph has only been around for **just over two years** at the time of writing.
 
-- **January 2024:** Public launch. The Python package shipped first (v0.0.10 on 9 January), with JavaScript following nine days later (v0.0.1 on 18 January). Both releases were spartan: `StateGraph`, a handful of node helpers, integration with the existing LangChain ecosystem for prompts and tools.
-- **Mid-2024:** Stream support, conditional edges, the first usable checkpointing layer. LangGraph starts showing up in serious production case studies.
-- **Late 2024 to early 2025:** Persistence backends (in-memory, then Postgres, then SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio (a visual debugger). The Python side gets a meaningful adoption push from the LangChain v0.3 release that aligned the two ecosystems.
-- **2025 to today:** The 1.x stabilisation arc. v1.0 in mid-2025 codifies the API; v1.2.2 (Python) and v1.3.2 (JS) are the current releases. The breaking-change cadence slows. The TypeScript types get markedly better. LangGraph Platform and LangSmith mature in parallel.
+<Timeline>
 
-The Python version is older, larger, and has more documentation. The JavaScript port is now mature enough for production but still trails Python in places. Java is in preview.
+<TimelineEntry date="January 2024">
 
-## Where the design comes from
+Public launch. Python v0.0.10 on 9 January, JS v0.0.1 on 18 January, formal announcement on 22 January. Both releases were spartan: `StateGraph`, a handful of node helpers, integration with the existing LangChain ecosystem for prompts and tools.
 
-LangGraph's own documentation acknowledges three intellectual debts. They are worth knowing about, because each one explains a design choice that might otherwise read as quirky.
+</TimelineEntry>
 
-### Pregel (Google, 2009)
+<TimelineEntry date="Mid 2024">
 
-[Pregel](https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing-2/) was Google's solution to a problem MapReduce did not fit: large-scale graph computation. Algorithms like PageRank, shortest-path, and connected components do not decompose elegantly into key-value pairs. Pregel introduced a **vertex-centric Bulk Synchronous Parallel (BSP)** model: every vertex runs a function that reads its current state and incoming messages, optionally emits new messages, and then the whole graph synchronises at a "superstep" boundary before the next round begins.
+Stream support, conditional edges, the first usable checkpointing layer. LangGraph starts showing up in serious production case studies.
 
-That is, structurally, exactly what LangGraph's nodes do. Each node computes against the current state, emits an update, and the framework synchronises before the next node runs. The Pregel lineage explains why LangGraph feels deterministic and easy to checkpoint: it is not running a free-form async event loop, it is stepping through synchronous supersteps.
+</TimelineEntry>
 
-### Apache Beam (Google → Apache, 2016)
+<TimelineEntry date="Late 2024 to early 2025">
 
-[Apache Beam](https://beam.apache.org/about/) emerged from Google's Dataflow SDK donation to the Apache Software Foundation in 2016. The problem Beam solved was a different one: every batch and stream framework before it locked you to a specific engine. If you wrote your pipeline for Spark, you could not move it to Flink without rewriting. Beam introduced a *unified* programming model: pipelines, transforms, and the concept of **runners** that execute the same pipeline against different engines (Flink, Spark, Google Dataflow, AWS Kinesis).
+Persistence backends (in-memory, Postgres, SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio. The Python side gets an adoption push from the LangChain v0.3 release that aligned the two ecosystems.
 
-LangGraph borrows the runner idea. The same `StateGraph` compiles to a runnable that you can `invoke()` locally, `stream()` over HTTP, persist with an in-memory checkpointer in tests, or run on LangGraph Platform with Postgres-backed durability. The graph definition does not change; the runtime context does. That separation is straight out of Beam's playbook.
+</TimelineEntry>
 
-### NetworkX (since 2004)
+<TimelineEntry date="Late 2025">
 
-[NetworkX](https://networkx.org/documentation/stable/) is the Python library for graph creation and analysis that researchers in mathematics, biology, and social network analysis have been using for two decades. Its contribution to LangGraph is the API ergonomics: `G = Graph(); G.add_node(...); G.add_edge(...)`. Anyone who has touched graphs in Python has internalised this shape.
+The 1.0 line. v1.0 alpha in September; v1.0 GA on 22 October 2025. The API stabilises; the TypeScript types get markedly better. The commercial deployment product has been renamed twice: launched as **LangGraph Cloud** (June 2024), rebranded to **LangGraph Platform** (October 2024) when self-hosted and bring-your-own-cloud landed, then renamed to **LangSmith Deployment** (October 2025) as part of a broader product-naming cleanup.
 
-LangGraph's API (in both Python and JS) is a direct lineage: `graph.add_node("classify", classify).add_edge("classify", "extract")`. The naming is deliberate. A developer arriving from data-science Python can write LangGraph code with very little ramp-up because the builder pattern is the one they already use.
+</TimelineEntry>
 
-The three together explain a lot. The deterministic superstep execution comes from Pregel. The compile-once-run-many-runtimes model comes from Beam. The ergonomic graph builder comes from NetworkX. None of those choices are accidents.
+<TimelineEntry date="Today" current>
+
+v1.2.2 (Python) and v1.3.2 (JS) are the current releases.
+
+</TimelineEntry>
+
+</Timeline>
+
+## Architectural inspirations
+
+LangGraph's own documentation acknowledges three intellectual debts. Each one explains a design choice that might otherwise read as quirky.
+
+<DesignCardGrid>
+
+<DesignCard
+  title="Pregel"
+  source="Google, 2009"
+  tagline="Vertex-centric Bulk Synchronous Parallel"
+  link="https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing-2/"
+  linkLabel="Pregel paper"
+>
+
+Google's answer to a problem MapReduce did not fit: graph algorithms like PageRank or shortest-path do not decompose into key-value pairs.
+
+<DesignCardMore>
+
+Pregel introduced the BSP model: every vertex runs a function that reads its state and any incoming messages, optionally emits new ones, then the whole graph synchronises at a "superstep" boundary before the next round.
+
+Structurally that is what LangGraph's nodes do. The Pregel lineage is why LangGraph feels deterministic and easy to checkpoint: it is not a free-form async event loop, it is stepping through synchronous supersteps.
+
+</DesignCardMore>
+
+</DesignCard>
+
+<DesignCard
+  title="Apache Beam"
+  source="Google → Apache, 2016"
+  tagline="Compile once, run on many engines"
+  link="https://beam.apache.org/about/"
+  linkLabel="Beam overview"
+>
+
+Came from Google's Dataflow SDK donation to Apache. Before Beam, batch and stream frameworks locked you to a specific engine: write for Spark, rewrite for Flink.
+
+<DesignCardMore>
+
+Beam introduced a unified programming model with **runners** that execute the same pipeline against different engines (Flink, Spark, Dataflow, others).
+
+LangGraph follows the same pattern. The same `StateGraph` compiles to a runnable you can `invoke()` locally, `stream()` over HTTP, back with an in-memory checkpointer in tests, or run on LangSmith Deployment with Postgres-backed durability. The graph does not change; the runtime context does.
+
+</DesignCardMore>
+
+</DesignCard>
+
+<DesignCard
+  title="NetworkX"
+  source="Since 2004"
+  tagline="The graph builder Python already knows"
+  link="https://networkx.org/documentation/stable/"
+  linkLabel="NetworkX docs"
+>
+
+The Python graph library researchers in mathematics, biology, and social network analysis have used for two decades. Its contribution to LangGraph is API ergonomics.
+
+<DesignCardMore>
+
+The NetworkX pattern is `G = Graph(); G.add_node(...); G.add_edge(...)`. LangGraph's API in both Python and JS is a direct lineage: `graph.add_node("classify", classify).add_edge("classify", "extract")`. The naming is deliberate, and the ramp-up is short for anyone arriving from data-science Python.
+
+</DesignCardMore>
+
+</DesignCard>
+
+</DesignCardGrid>
+
+Deterministic supersteps from Pregel, compile-once-run-many-runtimes from Beam, the graph builder from NetworkX. None of those choices are accidents.
 
 ## Who it is for
 
-LangGraph is for you if:
+<div className="[&_table]:table-fixed [&_table]:w-full [&_th]:w-1/2 [&_th]:align-top [&_td]:align-top">
 
-- You are building **stateful, multi-step LLM features** in either Python or TypeScript.
-- You want **deterministic structure** around non-deterministic model calls.
-- You need **production concerns** (persistence, streaming, human approval, observability) handled by the framework rather than something you have to invent.
-- You already use the LangChain ecosystem (or are happy to). The framework does not force this, but the gravity is real: `langchain_core` (Python) or `@langchain/core` (JS), plus model and tool packages, are how you do model calls and tool definitions inside the graph.
+| Pick LangGraph if… | Pick something else if… |
+| --- | --- |
+| You are building **stateful, multi-step LLM features** in Python or TypeScript. | You are building a **single-prompt, single-call** feature. LangGraph is overkill. |
+| You want **deterministic structure** around non-deterministic model calls. | You want **agent-decides-everything** autonomy. AutoGen leans further that way. |
+| You need the production-concern surface (persistence, streaming, human approval, observability) provided by the framework rather than reinvented. | You will not tolerate the LangChain peer-dep gravity. |
+| You already use the LangChain ecosystem, or are happy to. | You are in a **heavily regulated industry** (banking, insurance, healthcare, pharma) under frameworks like SR 11-7, the EU AI Act, or GxP that demand deterministic, audit-proof steps. The LLM call inside any node is not deterministic, so the auditable spine belongs in a BPM or durable workflow engine (Flowable, jBPM, Temporal). |
 
-It is probably not for you if:
-
-- You are building a **single-prompt, single-call** feature. LangGraph is overkill.
-- You want **agent-decides-everything** autonomy. Frameworks like AutoGen lean further into that shape.
-- You are allergic to the LangChain stack. The peer-dep gravity is hard to escape without forking primitives.
+</div>
 
 ## Market reach
 
-Adoption is the thing that has shifted hardest in the last eighteen months. The ecosystem footprint, as of this week:
+Adoption has shifted hardest in the last eighteen months. The ecosystem footprint, as of this week:
 
-- **Python `langgraph` on PyPI:** ~52.3 million downloads in the last 30 days, over 326 million all-time.
-- **JS `@langchain/langgraph` on npm:** ~9.7 million in the last 30 days, ~2.3 million weekly.
-- **Combined: ~62 million downloads in the last 30 days** across the LangGraph ecosystem.
+<DownloadsChart
+  title="LangGraph downloads, last 30 days"
+  total="~62M"
+  totalLabel="combined"
+  slices={[
+    { label: "Python (PyPI)", value: 52.3, suffix: "M", colour: "gold" },
+    { label: "JavaScript (npm)", value: 9.7, suffix: "M", colour: "ink" },
+  ]}
+  footnote="Python ~326M all-time on PyPI; JavaScript ~2.3M weekly on npm."
+/>
 
-Python dominates the install base (~85% of volume), which is what you would expect for a framework that grew out of LangChain. The JavaScript port matters disproportionately for product teams shipping user-facing web apps, but the framework's centre of gravity is Python.
+Python dominates the install base, which you would expect for a framework that grew out of LangChain. The JS port matters disproportionately for teams shipping user-facing web apps, but the centre of gravity is Python.
 
-The product-page customer list is the one to look at if you want to gauge enterprise adoption. LangChain currently names twenty-five-plus companies using LangGraph in production, including:
+The named production users on the LangGraph product page (Klarna, Lyft, Cloudflare, The Home Depot, Workday, Nvidia, LinkedIn, Coinbase, others) span buy-now-pay-later, ridesharing, retail, infrastructure, and developer tools. LangChain's 1.0 announcement separately headlines Uber, LinkedIn, and Klarna.
 
-- **Financial services:** Klarna, Coinbase
-- **Travel and logistics:** Lyft, Home Depot
-- **Enterprise SaaS:** Workday, Vanta, Gong
-- **Developer tools and infrastructure:** Cloudflare, LinkedIn, Nvidia
-- **AI and legal tech:** Harvey
+## Where it sits in the landscape
 
-Each case study describes a real production deployment, not a pilot. The pattern across them is consistent: a team that needed structured agents and ended up at LangGraph after spending time on something less opinionated.
+LangGraph leads its specific category (typed, graph-based, stateful orchestration with first-class persistence and human-in-the-loop), but the broader agent-framework space is competitive. Most of these tools solve adjacent but distinct problems, so the shape of each alternative matters more than raw download numbers.
 
-Two and a half years is a short life for a framework that has reached this level of adoption. The signal it sends is that the underlying primitive (a typed StateGraph the LLM walks through) is the right level of abstraction for what people actually want to build right now.
+Start with the raw adoption picture. Combined Python + JS downloads where applicable, last 30 days:
 
-## Hands-on: a document-intake triage agent
+<BarChart
+  title="Monthly downloads, agentic / agent-adjacent frameworks"
+  bars={[
+    { label: "LangGraph", value: 62, suffix: "M", highlight: true },
+    { label: "Vercel AI SDK", value: 55.4, suffix: "M", note: "different scope" },
+    { label: "Pydantic AI", value: 41, suffix: "M" },
+    { label: "OpenAI Agents SDK", value: 35.5, suffix: "M" },
+    { label: "CrewAI", value: 12.3, suffix: "M" },
+    { label: "Mastra", value: 3.9, suffix: "M" },
+    { label: "AutoGen", value: 0.9, suffix: "M" },
+  ]}
+  footnote="Sources: PyPI and npm 30-day download counts. LangGraph and OpenAI Agents SDK are combined Python + JS; the rest are single-runtime."
+/>
 
-The most common shape I see in business-centric automation work is a **document-intake triage flow**. Something arrives (an email, a form submission, a scanned claim) and a sequence of decisions has to happen before it lands in front of a human. This is exactly the shape that exposes LangGraph's strengths.
+Now the shape of each, side by side:
 
-I am using the JavaScript / TypeScript package for this walkthrough because the Automation Review series leans toward the JS-first stack that web product teams ship with. The same code translates almost line-for-line to Python; if Python is your runtime, swap `@langchain/langgraph` for `langgraph` and the API surface is essentially identical.
+| Framework | What it actually is |
+| --- | --- |
+| **LangGraph** | Stateful graph orchestration; explicit structure with LLM-decided branches |
+| **Pydantic AI** | Type-first agent loop; lighter ceremony, less graph structure |
+| **OpenAI Agents SDK** | Vendor-official; leans toward autonomous loops and tool use |
+| **CrewAI** | Higher-level "crew of role-playing agents" abstraction |
+| **Mastra** | TS-native, similar graph shape, smaller ecosystem |
+| **AutoGen** (Microsoft) | Multi-agent conversation framework, research lineage |
+| **Vercel AI SDK** (`ai`) | Different scope: streaming + UI + lightweight agent calls |
 
-### Step 1. Define the shared state
+Two patterns before the takeaways:
 
-The state is what flows through the graph. Every node reads from it, every node can return updates to it.
+- **The whole landscape is open source.** Every framework above is MIT or Apache 2.0. Where licences differ is in the *platform* around the framework: LangGraph Platform, LangSmith, and similar commercial offerings are separate paid products. Adopting a framework does not commit you to its parent's paid plan.
+- **Almost all are AI-vendor agnostic.** The exception is the **OpenAI Agents SDK**, which is OpenAI-first by design. You can use it with "OpenAI-compatible" endpoints, but the defaults and examples assume OpenAI. If keeping the model vendor open matters, that pulls you toward any of the other six.
 
-```ts
-import { Annotation, StateGraph, START, END } from "@langchain/langgraph";
+A few takeaways:
 
-const TriageState = Annotation.Root({
-  inputText: Annotation<string>(),
-  category: Annotation<"claim" | "query" | "complaint" | "unknown">(),
-  extracted: Annotation<Record<string, string>>({
-    reducer: (a, b) => ({ ...a, ...b }),
-    default: () => ({}),
-  }),
-  validationErrors: Annotation<string[]>({
-    reducer: (a, b) => [...a, ...b],
-    default: () => [],
-  }),
-  decision: Annotation<"auto-process" | "human-review" | "reject">(),
-});
-```
-
-A few things worth noticing. The `Annotation` API is how LangGraph 1.x defines typed state. The reducers (`(a, b) => ...`) are how concurrent or sequential writes merge, controlling whether a node "replaces" or "appends" to a field. The Python ergonomics here are slightly tidier; the TypeScript version is a little more verbose but type-safe end to end.
-
-### Step 2. Write the nodes
-
-Each node is just a function from `state` to `Partial<state>`. The body can call any model, any tool, any external API.
-
-```ts
-async function classify(state: typeof TriageState.State) {
-  // In a real implementation this is a model call with a structured-output schema.
-  // Mocked here for clarity.
-  const category = mockClassifier(state.inputText);
-  return { category };
-}
-
-async function extract(state: typeof TriageState.State) {
-  const fields = mockExtractor(state.inputText, state.category);
-  return { extracted: fields };
-}
-
-async function validate(state: typeof TriageState.State) {
-  const errors = mockValidator(state.extracted, state.category);
-  return { validationErrors: errors };
-}
-
-async function decide(state: typeof TriageState.State) {
-  if (state.validationErrors.length > 0) return { decision: "human-review" as const };
-  if (state.category === "claim") return { decision: "auto-process" as const };
-  return { decision: "human-review" as const };
-}
-```
-
-### Step 3. Wire the graph
-
-This is where LangGraph earns its keep. The shape of the workflow lives in one place, separate from the node implementations:
-
-```ts
-const graph = new StateGraph(TriageState)
-  .addNode("classify", classify)
-  .addNode("extract", extract)
-  .addNode("validate", validate)
-  .addNode("decide", decide)
-  .addEdge(START, "classify")
-  .addEdge("classify", "extract")
-  .addEdge("extract", "validate")
-  .addEdge("validate", "decide")
-  .addEdge("decide", END)
-  .compile();
-```
-
-What that buys you, almost for free:
-
-- A **typed runner**: `graph.invoke({ inputText })` returns a fully-typed final state.
-- A **stream**: `graph.stream(...)` emits state diffs as each node completes. Plug straight into a UI for live progress.
-- A **checkpoint hook**: pass a `checkpointer` to `.compile()` and the graph can pause, persist, and resume across processes.
-- A **visualisation**: LangGraph Studio renders the graph above as a real, clickable diagram. For an audience that has to explain the flow to non-engineers, that alone justifies the dependency.
-
-### Step 4. Add the human-in-the-loop branch
-
-The reason to use LangGraph rather than a `for` loop is the moment you need to bring a human in. Replace the last edge with a conditional:
-
-```ts
-.addConditionalEdges("decide", (state) => state.decision, {
-  "auto-process": "execute",
-  "human-review": "queueForReview",
-  "reject": END,
-})
-```
-
-`queueForReview` can be a node that calls an `interrupt()` and waits for a real human to weigh in. The graph pauses, the state persists, and execution resumes from the same point when a reviewer clicks Approve. None of that machinery has to live in your application code.
+- **Pydantic AI is the closest peer in scope**, doing about 80% of LangGraph's Python volume. If you prefer typed Python ergonomics and a lighter abstraction, it is a genuine alternative, not a long shot.
+- **The OpenAI Agents SDK is the official-from-the-model-vendor option.** If you are OpenAI-only and want the fewest moving parts, it is hard to argue against. Trade-off: more autonomous loops, less explicit structure.
+- **Vercel AI SDK's ~55M monthly JS downloads** mostly go to a different job (streaming chat UIs, simple tool-use). Most teams that adopt LangGraph use Vercel AI SDK at the edge, not instead of it.
+- **AutoGen has a strong research reputation but limited production volume.** More common in research labs than product engineering.
+- **CrewAI is a higher-level abstraction.** Want the framework to do more of the thinking about agent roles and delegation, you trade some of the explicit control LangGraph gives.
 
 ## What is good
 
-- **The right primitive at the right level.** A typed StateGraph is not a magical abstraction. It is what you would have built yourself with worse types and worse tests. Having it as a library means you do not have to.
-- **First-class streaming, checkpointing, and human-in-the-loop.** These are the things that separate a prototype from a production system, and LangGraph treats them as core, not optional add-ons.
-- **LangGraph Studio.** A visual debugger that lets you see the graph and the state moving through it. For BPM-adjacent teams used to ARIS-style process diagrams, this is the bridge between two worlds.
-- **Cross-runtime API parity.** A Python team and a JS team can collaborate on the same graph design, because the abstractions match. The Java preview hints at where this is going.
-- **Vendor neutrality at the model layer.** Tools and models plug in through the broader LangChain ecosystem, so you can swap OpenAI for Anthropic for a self-hosted model with one line.
+<TickList>
+
+<TickItem>
+
+**The right primitive at the right level.** A typed StateGraph is not a magical abstraction. It is what you would have built yourself with worse types and worse tests. Having it as a library means you do not have to.
+
+</TickItem>
+
+<TickItem>
+
+**The production extras are first-class and free.** Streaming, checkpointing, and human-in-the-loop are not paid add-ons. They live in the MIT-licensed framework alongside the StateGraph primitives, with self-hostable checkpointers (in-memory, SQLite, Postgres) for persistence. You can run the whole stack end-to-end without touching any commercial LangChain product.
+
+</TickItem>
+
+<TickItem>
+
+**Cross-runtime API parity.** A Python team and a JS team can collaborate on the same graph design because the abstractions match. The community LangGraph4j project carries the same shape to the JVM for teams that need it, also open source.
+
+</TickItem>
+
+<TickItem>
+
+**Vendor neutrality at the model layer.** Tools and models plug in through the broader LangChain ecosystem, so you can swap OpenAI for Anthropic for a self-hosted model with one line. The framework itself takes no opinion on which provider you use.
+
+</TickItem>
+
+</TickList>
 
 ## Where the gaps are
 
 The balanced part of this review.
 
-- **Documentation has caught up but is not uniform.** The Python docs are deeper; JavaScript docs are good and improving; Java in preview is sparse. Translating a Python sample to JS is sometimes a five-minute job, sometimes a half-day puzzle.
-- **The LangChain peer-dep gravity is real.** You can use LangGraph without the rest of LangChain, but the path of least resistance pulls you in. If your team has a strong preference for thinner deps, plan that boundary deliberately.
-- **Conditional-edge ergonomics are still a little verbose** compared with what you might write by hand. The library trades off some terseness for explicitness, which is the right call for production code, but reads as ceremonial on first encounter.
-- **LangGraph Studio is not open source.** The visual debugger is excellent but the surrounding LangGraph Platform is commercial. For teams with strict supply-chain or self-hosting requirements, this matters even though the framework itself is MIT.
-- **Versioning has been spiky.** Pre-1.0 releases moved fast. The 1.x line is stabilising, but if your project is still on 0.2.x or earlier, expect to budget time for an upgrade pass.
+<CrossList>
 
-## Verdict
+<CrossItem>
 
-If you are building **production agents** in any of LangGraph's supported runtimes, the framework has crossed the line from "interesting library worth watching" to "default choice unless you have a specific reason to pick something else." Two and a half years from launch, ~62 million combined monthly downloads, named production users in finance, ridesharing, social, developer tools, AI, and legal tech, and a 1.x line that has stopped breaking the API every other release.
+**Security posture needs active management.** 2025 and early 2026 saw multiple disclosed vulnerabilities affecting LangGraph itself, including a high-severity RCE in `langgraph-checkpoint` ([CVE-2025-64439](https://nvd.nist.gov/vuln/detail/CVE-2025-64439)) and a SQL-injection in the SQLite checkpoint backend ([CVE-2025-67644](https://nvd.nist.gov/vuln/detail/CVE-2025-67644)), alongside related LangChain core issues. Fixes shipped quickly, but the pattern is what any sufficiently broad framework produces: many checkpointers, many model clients, many tool connectors. Production teams should pin versions, subscribe to security advisories, treat tool inputs and outputs as untrusted, and be deliberate about filesystem, database, and checkpoint access.
 
-The reasons to choose it: you want **explicit structure**, you need the **production extras** (streaming, persistence, human-in-the-loop) without rebuilding them, and you are comfortable with the LangChain ecosystem.
+</CrossItem>
+
+<CrossItem>
+
+**Documentation has caught up but is not uniform.** Python docs are deeper, JS is good and improving, LangGraph4j has its own (sparser) docs. Translating a Python sample to JS is sometimes a five-minute job, sometimes a half-day puzzle.
+
+</CrossItem>
+
+<CrossItem>
+
+**The LangChain peer-dependency gravity is real.** ("Peer dependencies" are packages a library expects you to install alongside it.) You can use LangGraph without the rest of LangChain, but the path of least resistance pulls you in. If you prefer thinner installs, plan that boundary deliberately.
+
+</CrossItem>
+
+<CrossItem>
+
+**Conditional-edge ergonomics are a little verbose** compared with what you would write by hand. The library trades terseness for explicitness, which is right for production but reads as ceremonial on first encounter.
+
+</CrossItem>
+
+<CrossItem>
+
+**Versioning has been spiky.** Pre-1.0 moved fast. The 1.x line is stabilising, but projects on 0.2.x or earlier should budget time for an upgrade pass.
+
+</CrossItem>
+
+</CrossList>
+
+<VerdictCard>
+
+A few things the poster cannot carry, but the verdict should.
+
+The same pace that delivers feature velocity also produces a steady trickle of security disclosures, including the 2025 issues flagged above. That is normal for a framework of this scope, but it does mean LangGraph is not a "set it up and forget it" dependency. Plan for ongoing patch hygiene the way you would for any other production-critical library.
+
+The reasons to choose it: you want **explicit structure**, you need the **production extras** (streaming, checkpoints, human-in-the-loop) without rebuilding them, and you are comfortable with the LangChain ecosystem.
 
 The reasons to pass: you only need a single LLM call, you want a framework that decides everything autonomously, or you are committed to staying outside the LangChain dependency tree.
 
-For business-centric automation work, the kind where a process orchestrator is going to live next to compliance, audit, and human approval, LangGraph is a better starting point than any of the autonomous-agent frameworks. It bends in the direction of the things regulated teams actually need.
+For business-centric automation work that needs explicit structure next to human-approval gates, LangGraph is a better starting point than any of the autonomous-agent frameworks. The deepest regulated work is the exception flagged in "Who it is for".
 
----
+Want to see the framework in code?
 
-**A note on the series.** Code from these reviews will live in a separate repo at [github.com/GoldenPassport/automation-review-examples](https://github.com/GoldenPassport/automation-review-examples), with one folder per review and runnable examples. The repo will appear alongside the second review. If there is a tool or concept you would like me to review, [drop me a message](/contact).
+<a
+  href="/blog/automation-review-langgraph-demo"
+  className="not-prose inline-flex items-center gap-2 px-5 py-2.5 mt-2 rounded-full bg-ink text-cream font-medium no-underline hover:bg-gold-deep transition-colors"
+>
+  Go to the demo
+  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+</a>
+
+</VerdictCard>
+
+<CtaCard label="Suggest a review">
+
+If there is a tool or concept you would like reviewed next in this format, [drop me a message](/contact). The series runs on what readers actually want covered.
+
+</CtaCard>
+
+<div className="gold-rule mt-16 mb-8" aria-hidden />
+
+<Accordion title="Terms">
+
+Plain-English definitions for the agentic-AI and graph vocabulary used in this review, listed alphabetically.
+
+**Agent.** An LLM-powered program that reads context, decides what to do next, and can call external tools (search, code, APIs) on its own. Distinct from a static chatbot that just answers questions.
+
+**Agentic AI.** The category of software where the agent above is the central control flow. Also called "AI agents". The "agentic" qualifier just means "behaving like an agent".
+
+**BPM (Business Process Management).** A long-standing category of software for modelling, executing, and auditing business processes step-by-step. Open-source BPM tools (Flowable, jBPM, Camunda 7) predate agentic AI by two decades and are what most regulated organisations already use for workflows that need compliance sign-off. Referenced in "Who it is for" as the auditable spine for heavily regulated work.
+
+**Checkpoint / checkpointer.** A snapshot of the graph's state at a particular superstep. The checkpointer persists state to memory, SQLite, or Postgres, so a paused or crashed graph can resume from where it stopped without restarting.
+
+**Conditional edge.** An edge whose target depends on the current state. Used to route a workflow into different paths at runtime, for example: valid claim goes to auto-process, malformed claim goes to human review.
+
+**"Crew" (CrewAI).** CrewAI's term for a group of agents that play distinct roles (Researcher, Writer, Reviewer) and delegate work to each other. A higher-level abstraction than "set of nodes in a graph".
+
+**Edge.** A connection between two nodes that says "after this node finishes, the next one runs". Edges can be fixed (always go from A to B) or conditional (pick the next node based on the current state).
+
+**Graph.** In computing, a structure made of **nodes** (the formal graph-theory term is "vertex"; LangGraph and most everyday usage say "node") connected by **edges**. Each edge represents a possible step or relationship between two nodes. LangGraph uses graphs to describe the shape of agent workflows: nodes do the work, edges decide what runs next.
+
+**Human-in-the-loop.** A workflow that pauses for a real person to approve, reject, or correct something before continuing. The framework has to be able to persist its state and resume after the pause.
+
+**MapReduce.** Google's earlier framework for processing huge datasets by splitting work into many small "map" tasks that emit key-value pairs, then "reduce" tasks that combine them. The thing Pregel was designed *not* to be.
+
+**Node.** A single unit of work in a graph. In LangGraph, a node is a function that reads from and writes to the shared state. Each node typically does one thing well (classify the input, extract fields, validate against rules, decide what to do next).
+
+**Peer dependencies.** Packages a library expects you to install alongside it, separate from its own bundled dependencies. LangGraph expects `@langchain/core` (or its Python equivalent) as a peer.
+
+**Pregel.** Google's 2009 graph-processing system. Introduced the vertex-centric Bulk Synchronous Parallel model that LangGraph applies for its deterministic superstep execution.
+
+**State.** The shared data structure that flows through every node in the graph. In LangGraph the state is typed; every node receives it as input and returns a partial update. The framework merges updates between **supersteps** (defined under Pregel above).
+
+**StateGraph.** LangGraph's central abstraction: a typed graph where nodes are functions that operate on the shared state and edges (including conditional ones) define the flow.
+
+**Streaming.** The model emits tokens as it generates them, rather than waiting until the full answer is ready. Users see progress; UIs feel responsive.
+
+**Tool use / tool calling.** When the LLM decides which function to call from a list you provide, and with what arguments. The function runs, the result goes back to the model, the loop continues. Tools are how an agent does anything beyond producing text.
+
+**Type-first (Pydantic AI).** Frameworks that lean on the language's type system (Pydantic in Python; TypeScript types in JS) to validate inputs and outputs of model calls automatically. Less ceremony, fewer runtime surprises.
+
+**Vendor-official.** A framework published by the organisation that makes the underlying model, e.g. OpenAI's Agents SDK for OpenAI models. Easy to start with; tighter coupling to one vendor.
+
+</Accordion>
+
+<Accordion title="References">
+
+External links cited in this review, grouped for easy lookup.
+
+**LangGraph itself**
+
+- [LangGraph product page (langchain.com)](https://www.langchain.com/langgraph)
+- [LangGraph launch announcement (LangChain changelog, week of 22 January 2024)](https://changelog.langchain.com/announcements/week-of-1-22-24-langchain-release-notes)
+- [LangGraph Python repo on GitHub](https://github.com/langchain-ai/langgraph)
+- [LangGraph JavaScript / TypeScript repo on GitHub](https://github.com/langchain-ai/langgraphjs)
+- [`@langchain/langgraph` on npm](https://www.npmjs.com/package/@langchain/langgraph)
+- [`langgraph` on PyPI](https://pypi.org/project/langgraph/)
+- [LangGraph Studio (now branded LangSmith Studio in the docs; visual debugger, desktop app, not open source)](https://docs.langchain.com/langsmith/studio)
+- [LangGraph4j (community Java port, separate GitHub organisation)](https://github.com/langgraph4j/langgraph4j)
+
+**Design inspirations**
+
+- [Pregel: A System for Large-Scale Graph Processing (Google research, 2009)](https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing-2/)
+- [Apache Beam: about / overview](https://beam.apache.org/about/)
+- [NetworkX documentation](https://networkx.org/documentation/stable/)
+
+**Notable alternatives discussed in the landscape section**
+
+- [Pydantic AI](https://github.com/pydantic/pydantic-ai)
+- [OpenAI Agents SDK (Python)](https://github.com/openai/openai-agents-python)
+- [CrewAI](https://github.com/crewAIInc/crewAI)
+- [AutoGen (Microsoft)](https://github.com/microsoft/autogen)
+- [Mastra](https://github.com/mastra-ai/mastra)
+- [Vercel AI SDK](https://github.com/vercel/ai)
+
+**Security disclosures referenced**
+
+- [CVE-2025-64439](https://nvd.nist.gov/vuln/detail/CVE-2025-64439): remote-code-execution in `langgraph-checkpoint`'s JsonPlusSerializer "json" mode, disclosed 5 November 2025
+- [CVE-2025-67644](https://nvd.nist.gov/vuln/detail/CVE-2025-67644): SQL-injection in the LangGraph SQLite checkpoint backend
+
+**Companion demo**
+
+- [GoldenPassport/automation-review-examples](https://github.com/GoldenPassport/automation-review-examples) (runnable hands-on code for every review in the series)
+
+</Accordion>

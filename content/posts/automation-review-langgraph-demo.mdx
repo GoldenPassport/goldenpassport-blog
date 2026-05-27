@@ -1,0 +1,166 @@
+---
+title: "Automation Review: LangGraph"
+date: "2026-05-27"
+category: "Tech"
+series: "Automation Review"
+excerpt: "Hands-on demo for the LangGraph Automation Review: a document-intake triage agent built on LangGraph's StateGraph, plus a link to the full runnable repo."
+tags:
+  - Agentic AI
+  - LangGraph
+  - LangChain
+  - Process Automation
+  - Orchestration
+  - Tooling
+  - Open Source
+unlisted: true
+group: "automation-review-langgraph"
+groupLabel: "Demo"
+groupOrder: 2
+---
+
+> **Reading the Article tab first?** Switch back if you haven't yet, this page assumes you know what LangGraph is and why you would pick it. The Article tab covers positioning, the competitive landscape, what is good, and where the gaps are. This page is the hands-on.
+
+## Hands-on: a document-intake triage agent
+
+The most common shape I see in business-centric automation work is a **document-intake triage flow**. Something arrives (an email, a form submission, a scanned claim) and a sequence of decisions has to happen before it lands in front of a human. This is exactly the shape that exposes LangGraph's strengths.
+
+I am using the JavaScript / TypeScript package for this walkthrough because the Automation Review series leans toward the JS-first stack that web product teams ship with. The same code translates almost line-for-line to Python; if Python is your runtime, swap `@langchain/langgraph` for `langgraph` and the API surface is essentially identical.
+
+### Step 1. Define the shared state
+
+The state is what flows through the graph. Every node reads from it, every node can return updates to it.
+
+```ts
+import { Annotation, StateGraph, START, END } from "@langchain/langgraph";
+
+const TriageState = Annotation.Root({
+  inputText: Annotation<string>(),
+  category: Annotation<"claim" | "query" | "complaint" | "unknown">(),
+  extracted: Annotation<Record<string, string>>({
+    reducer: (a, b) => ({ ...a, ...b }),
+    default: () => ({}),
+  }),
+  validationErrors: Annotation<string[]>({
+    reducer: (a, b) => [...a, ...b],
+    default: () => [],
+  }),
+  decision: Annotation<"auto-process" | "human-review" | "reject">(),
+});
+```
+
+A few things worth noticing. The `Annotation` API is how LangGraph 1.x defines typed state. The reducers (`(a, b) => ...`) are how concurrent or sequential writes merge, controlling whether a node "replaces" or "appends" to a field. The Python ergonomics here are slightly tidier; the TypeScript version is a little more verbose but type-safe end to end.
+
+### Step 2. Write the nodes
+
+Each node is just a function from `state` to `Partial<state>`. The body can call any model, any tool, any external API.
+
+```ts
+async function classify(state: typeof TriageState.State) {
+  // In a real implementation this is a model call with a structured-output schema.
+  // Mocked here for clarity.
+  const category = mockClassifier(state.inputText);
+  return { category };
+}
+
+async function extract(state: typeof TriageState.State) {
+  const fields = mockExtractor(state.inputText, state.category);
+  return { extracted: fields };
+}
+
+async function validate(state: typeof TriageState.State) {
+  const errors = mockValidator(state.extracted, state.category);
+  return { validationErrors: errors };
+}
+
+async function decide(state: typeof TriageState.State) {
+  if (state.validationErrors.length > 0) return { decision: "human-review" as const };
+  if (state.category === "claim") return { decision: "auto-process" as const };
+  return { decision: "human-review" as const };
+}
+```
+
+### Step 3. Wire the graph
+
+This is where LangGraph earns its keep. The shape of the workflow lives in one place, separate from the node implementations:
+
+```ts
+const graph = new StateGraph(TriageState)
+  .addNode("classify", classify)
+  .addNode("extract", extract)
+  .addNode("validate", validate)
+  .addNode("decide", decide)
+  .addEdge(START, "classify")
+  .addEdge("classify", "extract")
+  .addEdge("extract", "validate")
+  .addEdge("validate", "decide")
+  .addEdge("decide", END)
+  .compile();
+```
+
+What that buys you, almost for free:
+
+- A **typed runner**: `graph.invoke({ inputText })` returns a fully-typed final state.
+- A **stream**: `graph.stream(...)` emits state diffs as each node completes. Plug straight into a UI for live progress.
+- A **checkpoint hook**: pass a `checkpointer` to `.compile()` and the graph can pause, persist, and resume across processes.
+- A **visualisation**: LangGraph Studio renders the graph above as a real, clickable diagram. For an audience that has to explain the flow to non-engineers, that alone justifies the dependency.
+
+### Step 4. Add the human-in-the-loop branch
+
+The reason to use LangGraph rather than a `for` loop is the moment you need to bring a human in. Replace the last edge with a conditional:
+
+```ts
+.addConditionalEdges("decide", (state) => state.decision, {
+  "auto-process": "execute",
+  "human-review": "queueForReview",
+  "reject": END,
+})
+```
+
+`queueForReview` can be a node that calls an `interrupt()` and waits for a real human to weigh in. The graph pauses, the state persists, and execution resumes from the same point when a reviewer clicks Approve. None of that machinery has to live in your application code.
+
+## The full runnable repo
+
+The snippets above are trimmed for reading flow. The runnable version, with real model calls, structured-output schemas, a checkpointer, the streaming wiring, and a small CLI harness, lives in the companion repo.
+
+<aside className="not-prose my-6 p-6 rounded-lg border border-gold/30 bg-cream-50">
+  <p className="text-sm tracking-[0.22em] uppercase text-gold-deep mb-4">Demo at a glance</p>
+  <dl className="grid grid-cols-1 sm:grid-cols-[max-content_1fr] gap-x-8 gap-y-3 text-base leading-relaxed">
+    <dt className="font-semibold text-ink">Repo</dt>
+    <dd className="text-ink-soft">
+      <a href="https://github.com/GoldenPassport/automation-review-examples" target="_blank" rel="noopener noreferrer" className="font-semibold text-gold-deep underline underline-offset-2 decoration-gold/60 hover:decoration-gold-deep">
+        GoldenPassport/automation-review-examples
+      </a>
+    </dd>
+
+    <dt className="font-semibold text-ink">Folder</dt>
+    <dd className="text-ink-soft"><code>langgraph/</code></dd>
+
+    <dt className="font-semibold text-ink">Runtime</dt>
+    <dd className="text-ink-soft">Node 20+ / TypeScript</dd>
+
+    <dt className="font-semibold text-ink">Model provider</dt>
+    <dd className="text-ink-soft">OpenAI by default. Swappable to Anthropic or a local Ollama model via a one-line provider change (notes in the repo README).</dd>
+
+    <dt className="font-semibold text-ink">What you will see</dt>
+    <dd className="text-ink-soft">
+      <ul className="list-disc pl-5 space-y-1">
+        <li>The full <code>StateGraph</code> wired end to end, with the typed state, classifier, extractor, validator, and decision nodes shown above</li>
+        <li>A conditional edge that routes valid claims to auto-process and everything else to a human-review pause node</li>
+        <li>A working <code>interrupt()</code> + resume cycle so you can watch the graph stop, persist, and pick up after approval</li>
+        <li>A streaming runner that emits state diffs as each node completes, with a small CLI that prints them as a timeline</li>
+        <li>Tests against three sample inputs (clean claim, malformed claim, ambiguous query) so you can see how the graph behaves at the edges</li>
+      </ul>
+    </dd>
+
+    <dt className="font-semibold text-ink">Setup time</dt>
+    <dd className="text-ink-soft">About 5 minutes. <code>pnpm install</code>, set one env var with an API key, <code>pnpm dev</code>.</dd>
+  </dl>
+</aside>
+
+If a future LangGraph release breaks anything in the demo, the repo's CI runs against the latest published version and will catch it. Pull requests welcome.
+
+<CtaCard label="Suggest a review">
+
+If there is a tool or concept you would like reviewed next in this format, [drop me a message](/contact). The series runs on what readers actually want covered.
+
+</CtaCard>

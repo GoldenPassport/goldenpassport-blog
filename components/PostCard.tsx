@@ -213,7 +213,9 @@ export function PostCard({ post, read = false }: { post: PostMeta; read?: boolea
         <div className="flex items-center flex-wrap gap-3 mb-3">
           {showPinned ? <PinnedBadge /> : null}
           <CategoryBadge category={post.category} />
-          {post.series ? <SeriesBadge name={post.series} /> : null}
+          {/* SeriesBadge intentionally not rendered: posts in a series carry
+              the series name in their title (e.g. "Automation Review: ...")
+              so a badge here would just repeat the title. */}
           <span className="text-xs text-ink-mute">
             {post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : ""}
             {post.readingTime ? ` · ${post.readingTime}` : ""}

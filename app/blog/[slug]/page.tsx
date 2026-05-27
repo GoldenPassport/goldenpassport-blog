@@ -1,13 +1,47 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getAllPosts, getPostSlugs } from "@/lib/posts";
-import { CategoryBadge, SeriesBadge, TagList } from "@/components/PostCard";
+import { getAllPosts, getGroupSiblings, getPostSlugs } from "@/lib/posts";
+import { CategoryBadge, TagList } from "@/components/PostCard";
 import { MdxImage } from "@/components/MdxImage";
 import { CodeBlock } from "@/components/CodeBlock";
 import { MarkAsRead } from "@/components/MarkAsRead";
+import { PostTabs } from "@/components/PostTabs";
+import { TldrCard, VerdictCard, CtaCard } from "@/components/CalloutCard";
+import { Accordion } from "@/components/Accordion";
+import { Timeline, TimelineEntry } from "@/components/Timeline";
+import { DownloadsChart } from "@/components/DownloadsChart";
+import { NumberedList, NumberedItem } from "@/components/NumberedList";
+import { TickList, TickItem } from "@/components/TickList";
+import { CrossList, CrossItem } from "@/components/CrossList";
+import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
+import { BarChart } from "@/components/BarChart";
+import { ReviewDashboard } from "@/components/ReviewDashboard";
+import { PostToc } from "@/components/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 
-const mdxComponents = { img: MdxImage, MdxImage, pre: CodeBlock };
+const mdxComponents = {
+  img: MdxImage,
+  MdxImage,
+  pre: CodeBlock,
+  TldrCard,
+  VerdictCard,
+  CtaCard,
+  Accordion,
+  Timeline,
+  TimelineEntry,
+  DownloadsChart,
+  NumberedList,
+  NumberedItem,
+  TickList,
+  TickItem,
+  CrossList,
+  CrossItem,
+  DesignCardGrid,
+  DesignCard,
+  DesignCardMore,
+  BarChart,
+  ReviewDashboard,
+};
 
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
@@ -95,6 +129,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
+    <>
+    {/* PostToc is a fixed-positioned client component and only renders on
+        ≥xl viewports, so it sits as a sibling of the article rather than
+        inside it. */}
+    <PostToc />
     <article className="mx-auto max-w-3xl px-6 pt-16 pb-20">
       <script
         type="application/ld+json"
@@ -129,9 +168,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       ) : null}
 
       <header className="mt-6">
+        {/* Render tab nav if this post is part of a group (e.g. Article / Demo).
+            Returns null when there are no siblings, so single-tab posts get
+            their original layout unchanged. */}
+        <PostTabs
+          siblings={getGroupSiblings(post.group)}
+          currentSlug={post.slug}
+        />
         <div className="flex items-center flex-wrap gap-3">
           <CategoryBadge category={post.category} />
-          {post.series ? <SeriesBadge name={post.series} /> : null}
+          {/* SeriesBadge intentionally not rendered: series posts carry the
+              series name in their title, so a badge would just repeat it. */}
           <span className="text-xs text-ink-mute">
             {post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : ""}
             {post.readingTime ? ` · ${post.readingTime}` : ""}
@@ -141,7 +188,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {post.excerpt ? (
           <p className="mt-4 text-lg text-ink-soft max-w-prose">{post.excerpt}</p>
         ) : null}
-        <TagList tags={post.tags} linkable />
+        <TagList tags={post.tags} linkable truncate />
       </header>
 
       <div className="gold-rule my-10" />
@@ -150,5 +197,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <MDXContent components={mdxComponents} />
       </div>
     </article>
+    </>
   );
 }

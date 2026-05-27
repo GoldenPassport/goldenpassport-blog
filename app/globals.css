@@ -9,6 +9,11 @@
 
 html {
   scroll-behavior: smooth;
+  /* Leaves clearance for the sticky site header so anchor jumps don't land
+     the heading under it. Tuned to header height (py-5 + brand content) plus
+     a little breathing room. Applies to both JS-driven scrollIntoView and
+     native hash navigation. */
+  scroll-padding-top: 6rem;
 }
 
 body {

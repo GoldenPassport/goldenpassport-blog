@@ -25,6 +25,16 @@ export type PostMeta = {
    */
   series?: string;
   /**
+   * Optional group identifier for posts that share a tabbed UI. Posts with
+   * the same `group` value render a tab nav above the title linking to each
+   * other. Used for splitting a long post into "Article" + "Demo" or similar.
+   */
+  group?: string;
+  /** Label shown in the tab when this post is part of a group. */
+  groupLabel?: string;
+  /** Sort order within the group. Lower numbers come first. */
+  groupOrder?: number;
+  /**
    * Publish state:
    * - undefined / false: standard, listed everywhere.
    * - `unlisted: true`: route still resolves at `/blog/<slug>` but the post is
@@ -69,6 +79,9 @@ export function getAllPosts(): PostMeta[] {
     const unlisted = data.unlisted === true;
     const draft = data.draft === true;
     const series = typeof data.series === "string" ? data.series : undefined;
+    const group = typeof data.group === "string" ? data.group : undefined;
+    const groupLabel = typeof data.groupLabel === "string" ? data.groupLabel : undefined;
+    const groupOrder = typeof data.groupOrder === "number" ? data.groupOrder : undefined;
 
     return {
       slug,
@@ -82,6 +95,9 @@ export function getAllPosts(): PostMeta[] {
       heroAlt,
       pinned,
       series,
+      group,
+      groupLabel,
+      groupOrder,
       unlisted,
       draft,
       readingTime: estimateReadingTime(content),
@@ -105,6 +121,19 @@ export function getAllPosts(): PostMeta[] {
  */
 export function getListedPosts(): PostMeta[] {
   return getAllPosts().filter((p) => !p.unlisted);
+}
+
+/**
+ * Sibling posts within a `group` (for tabbed UI). Returns all non-draft posts
+ * with the same `group` value, sorted by `groupOrder` ascending. Used by the
+ * PostTabs component to render "Article / Demo" style navigation above the
+ * title of any post in a group.
+ */
+export function getGroupSiblings(group: string | undefined): PostMeta[] {
+  if (!group) return [];
+  return getAllPosts()
+    .filter((p) => p.group === group)
+    .sort((a, b) => (a.groupOrder ?? 999) - (b.groupOrder ?? 999));
 }
 
 /**
