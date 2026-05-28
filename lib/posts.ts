@@ -13,10 +13,16 @@ export type PostMeta = {
   tags: string[];
   /** Canonical URL when a post is republished from an external source (e.g. LinkedIn). */
   canonical?: string;
-  /** Path to the hero image, e.g. /posts/<slug>/hero.png. */
+  /** Path to the hero image, e.g. /posts/<slug>/hero.png. Rendered at the top
+   *  of the post AND used as the OG / Twitter card image. */
   hero?: string;
   /** Alt text for the hero image. Falls back to the post title if not set. */
   heroAlt?: string;
+  /** Path to a social-card image used ONLY for OG / Twitter metadata, never
+   *  rendered in the page body. Use when the post already has a visual hero
+   *  (e.g. a live component) but still needs a static image for link unfurls.
+   *  Takes precedence over `hero` for metadata when both are set. */
+  ogImage?: string;
   /** When true, sorts ahead of all non-pinned posts everywhere they're listed. */
   pinned?: boolean;
   /**
@@ -75,6 +81,7 @@ export function getAllPosts(): PostMeta[] {
     const canonical = typeof data.canonical === "string" ? data.canonical : undefined;
     const hero = typeof data.hero === "string" ? data.hero : undefined;
     const heroAlt = typeof data.heroAlt === "string" ? data.heroAlt : undefined;
+    const ogImage = typeof data.ogImage === "string" ? data.ogImage : undefined;
     const pinned = data.pinned === true;
     const unlisted = data.unlisted === true;
     const draft = data.draft === true;
@@ -93,6 +100,7 @@ export function getAllPosts(): PostMeta[] {
       canonical,
       hero,
       heroAlt,
+      ogImage,
       pinned,
       series,
       group,

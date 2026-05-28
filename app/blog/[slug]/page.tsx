@@ -63,7 +63,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // Canonical: republished posts point at their original (LinkedIn etc.);
   // native posts canonicalise to themselves.
   const canonical = post.canonical ?? url;
-  const images = post.hero ? [{ url: post.hero, alt: post.heroAlt ?? post.title }] : undefined;
+  // Social-card image: prefer an explicit ogImage (used when the post has a
+  // live HTML hero and the static image is for link unfurls only), else fall
+  // back to the displayed hero. Absolute URL so crawlers resolve it.
+  const ogImagePath = post.ogImage ?? post.hero;
+  const ogImageUrl = ogImagePath ? `${SITE_URL}${ogImagePath}` : undefined;
+  const images = ogImageUrl
+    ? [{ url: ogImageUrl, alt: post.heroAlt ?? post.title }]
+    : undefined;
 
   return {
     title: post.title,
@@ -87,7 +94,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      ...(post.hero ? { images: [post.hero] } : {}),
+      ...(ogImageUrl ? { images: [ogImageUrl] } : {}),
     },
   };
 }
@@ -109,6 +116,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   }
 
   const postUrl = `${SITE_URL}/blog/${slug}`;
+  // Same precedence as generateMetadata: ogImage wins over hero for the
+  // structured-data image.
+  const ldImagePath = post.ogImage ?? post.hero;
   const articleLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -131,7 +141,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       url: SITE_URL,
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
-    ...(post.hero ? { image: [`${SITE_URL}${post.hero}`] } : {}),
+    ...(ldImagePath ? { image: [`${SITE_URL}${ldImagePath}`] } : {}),
     ...(post.canonical ? { isBasedOn: post.canonical } : {}),
   };
 
