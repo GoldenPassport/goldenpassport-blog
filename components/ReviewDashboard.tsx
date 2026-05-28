@@ -38,13 +38,29 @@ type ProblemIcon =
   | "shield"
   | "bolt";
 
+type ReachBar = {
+  /** Row label, e.g. "LangGraph". */
+  label: string;
+  /** Numeric value, used to size the bar relative to the largest. */
+  value: number;
+  /** Rendered value text, e.g. "62M". */
+  display: string;
+  /** Highlight this bar (the review subject) in gold; others render muted. */
+  highlight?: boolean;
+};
+
 type Reach = {
-  /** Big number, e.g. "~62M". */
-  primary: string;
-  /** Caption under the big number, e.g. "monthly downloads". */
-  primaryLabel: string;
-  /** Up to four small label/value pairs rendered as a stats strip. */
-  secondary?: Meta[];
+  /** Section label. Defaults to "Market reach". */
+  label?: string;
+  /** When set, the label becomes a link (e.g. to "#references"). */
+  labelHref?: string;
+  /** Big number fallback (e.g. "~62M") used when no bars are provided. */
+  primary?: string;
+  /** Caption under the big number. */
+  primaryLabel?: string;
+  /** When present, the reach block renders a mini horizontal bar chart
+   *  instead of the single big number. */
+  bars?: ReachBar[];
 };
 
 type Props = {
@@ -58,6 +74,39 @@ type Props = {
   pros: string[];
   cons: string[];
 };
+
+/** Horizontal bar chart comparing the review subject against peers.
+ *  Label + value sit above each bar so longer names fit; the highlighted
+ *  bar (the subject) is gold-deep, peers are muted. */
+function ReachBarChart({ bars }: { bars: ReachBar[] }) {
+  const max = Math.max(...bars.map((b) => b.value));
+  return (
+    <div className="w-full lg:w-72">
+      {bars.map((b, i) => (
+        <div key={i} className="mb-3 last:mb-0">
+          <div className="flex items-baseline justify-between mb-1">
+            <span
+              className={
+                b.highlight
+                  ? "text-sm font-semibold text-ink"
+                  : "text-sm text-ink-soft"
+              }
+            >
+              {b.label}
+            </span>
+            <span className="text-xs text-ink-mute tabular-nums">{b.display}</span>
+          </div>
+          <span className="block h-2.5 rounded-sm bg-ink/[0.06] relative overflow-hidden">
+            <span
+              className={`absolute inset-y-0 left-0 rounded-sm ${b.highlight ? "bg-gold-deep" : "bg-ink/30"}`}
+              style={{ width: `${(b.value / max) * 100}%` }}
+            />
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function ReviewDashboard({
   name,
@@ -79,55 +128,65 @@ export function ReviewDashboard({
         {kicker}
       </div>
 
-      {/* Hero block. Compact stacked layout:
-          - Row 1: kicker (left) and "MARKET REACH" label (right).
-          - Row 2: headline (left) and the ~62M stat (right), bottom-aligned
-            so the big number lands on the same baseline as the headline.
-          - Row 3: italic pitch.
-          - Row 4: inline meta chips. */}
+      {/* Hero block. Two columns on lg+:
+          - Col 1: kicker, headline, pitch, meta chips.
+          - Col 2: reach label + comparison bar chart.
+          Stacks to one column on mobile. */}
       <div className="p-5 sm:p-7 border-b border-gold/20 bg-gradient-to-br from-cream-50 to-cream-200/60">
-        {/* Kicker + reach label, side by side. */}
-        <div className="flex items-baseline justify-between gap-4 mb-2">
-          <p className="text-[0.625rem] tracking-[0.28em] uppercase text-gold-deep font-semibold">
-            Review Summary
-          </p>
-          <p className="text-[0.625rem] tracking-[0.22em] uppercase text-gold-deep font-semibold">
-            Market reach
-          </p>
-        </div>
-
-        {/* Headline + featured stat on the same baseline. min-w-0 protects
-            the headline from forcing the row to overflow. */}
-        <div className="flex items-end justify-between gap-6 flex-wrap">
-          <h2 className="font-serif text-4xl sm:text-5xl xl:text-6xl text-ink leading-[1] min-w-0">
-            {name}
-          </h2>
-          <div className="text-right">
-            <p className="font-serif text-3xl sm:text-4xl text-ink leading-none tabular-nums">
-              {reach.primary}
+        <div className="grid gap-6 lg:gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+          {/* Col 1: identity */}
+          <div className="min-w-0">
+            <p className="text-[0.625rem] tracking-[0.28em] uppercase text-gold-deep font-semibold mb-2">
+              Review Summary
             </p>
-            <p className="mt-1 text-xs text-ink-mute">{reach.primaryLabel}</p>
+            <h2 className="font-serif text-4xl sm:text-5xl xl:text-6xl text-ink leading-[1]">
+              {name}
+            </h2>
+            <p className="mt-3 font-serif text-base sm:text-lg text-ink-soft max-w-2xl italic">
+              {pitch}
+            </p>
+            {meta.length > 0 ? (
+              <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1">
+                {meta.map((m, i) => (
+                  <div key={i} className="flex items-baseline gap-1.5">
+                    <dt className="text-[0.6rem] tracking-[0.22em] uppercase text-ink-mute font-semibold">
+                      {m.label}
+                    </dt>
+                    <dd className="text-sm text-ink font-semibold tabular-nums">
+                      {m.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
           </div>
+
+          {/* Col 2: reach chart */}
+          {reach.bars && reach.bars.length > 0 ? (
+            <div className="lg:w-72 shrink-0">
+              <p className="text-[0.625rem] tracking-[0.22em] uppercase text-gold-deep font-semibold mb-3">
+                {reach.labelHref ? (
+                  <a href={reach.labelHref} className="hover:underline underline-offset-2 decoration-gold/60">
+                    {reach.label ?? "Market reach"}
+                  </a>
+                ) : (
+                  (reach.label ?? "Market reach")
+                )}
+              </p>
+              <ReachBarChart bars={reach.bars} />
+            </div>
+          ) : (
+            <div className="lg:text-right shrink-0">
+              <p className="text-[0.625rem] tracking-[0.22em] uppercase text-gold-deep font-semibold mb-1">
+                {reach.label ?? "Market reach"}
+              </p>
+              <p className="font-serif text-3xl sm:text-4xl text-ink leading-none tabular-nums">
+                {reach.primary}
+              </p>
+              <p className="mt-1 text-xs text-ink-mute">{reach.primaryLabel}</p>
+            </div>
+          )}
         </div>
-
-        <p className="mt-3 font-serif text-base sm:text-lg text-ink-soft max-w-2xl italic">
-          {pitch}
-        </p>
-
-        {meta.length > 0 ? (
-          <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-1">
-            {meta.map((m, i) => (
-              <div key={i} className="flex items-baseline gap-1.5">
-                <dt className="text-[0.6rem] tracking-[0.22em] uppercase text-ink-mute font-semibold">
-                  {m.label}
-                </dt>
-                <dd className="text-sm text-ink font-semibold tabular-nums">
-                  {m.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
       </div>
 
       {/* The problem it solves. Condensed horizontal row: a small caps label

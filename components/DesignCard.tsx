@@ -58,12 +58,16 @@ type CardProps = {
   link?: string;
   /** Label for the source link. Defaults to "Source". */
   linkLabel?: string;
+  /** Span the full row on the two-up (tablet) tier so an odd final card
+   *  fills the width instead of leaving an empty cell. No effect on the
+   *  three-up desktop tier, where the row is already balanced. */
+  wide?: boolean;
   children: React.ReactNode;
 };
 
-export function DesignCard({ title, source, tagline, link, linkLabel = "Source", children }: CardProps) {
+export function DesignCard({ title, source, tagline, link, linkLabel = "Source", wide = false, children }: CardProps) {
   return (
-    <article className="rounded-lg border border-gold/25 bg-cream-50 p-6 flex flex-col">
+    <article className={`rounded-lg border border-gold/25 bg-cream-50 p-6 flex flex-col${wide ? " sm:col-span-2 lg:col-span-1" : ""}`}>
       <header className="mb-4">
         <p className="text-xs tracking-[0.18em] uppercase text-gold-deep font-semibold mb-1">
           {source}

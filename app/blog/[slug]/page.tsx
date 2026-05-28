@@ -68,8 +68,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // back to the displayed hero. Absolute URL so crawlers resolve it.
   const ogImagePath = post.ogImage ?? post.hero;
   const ogImageUrl = ogImagePath ? `${SITE_URL}${ogImagePath}` : undefined;
+  // Width/height are declared so crawlers (LinkedIn especially) can render
+  // the card without fetching the image first. Post OG images are authored
+  // at the standard 1200x630.
   const images = ogImageUrl
-    ? [{ url: ogImageUrl, alt: post.heroAlt ?? post.title }]
+    ? [{ url: ogImageUrl, alt: post.heroAlt ?? post.title, width: 1200, height: 630 }]
     : undefined;
 
   return {
@@ -181,7 +184,21 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             alt={post.heroAlt ?? post.title}
             className="w-full h-auto sm:rounded-xl shadow-sm ring-1 ring-gold/10"
           />
+          {post.heroAlt ? (
+            <figcaption className="mt-3 text-sm text-ink-mute italic text-center px-6 sm:px-0">
+              {post.heroAlt}
+            </figcaption>
+          ) : null}
         </figure>
+      ) : null}
+
+      {/* Poster hero: when a post supplies `poster` in frontmatter, the
+          ReviewDashboard renders here at the top, above the title header,
+          matching how image heroes lead other articles. */}
+      {post.poster ? (
+        <div className="mt-8">
+          <ReviewDashboard {...(post.poster as React.ComponentProps<typeof ReviewDashboard>)} />
+        </div>
       ) : null}
 
       <header className="mt-6">

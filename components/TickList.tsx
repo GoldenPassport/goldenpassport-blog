@@ -62,7 +62,7 @@ export function TickItem({ children }: ItemProps) {
           <polyline points="5 12.5 10 17.5 19 7.5" />
         </svg>
       </span>
-      <div className="prose prose-base max-w-prose font-serif text-ink-soft">
+      <div className="prose prose-lg max-w-none font-serif text-ink-soft">
         {children}
       </div>
     </li>

@@ -16,49 +16,41 @@ unlisted: false
 group: "automation-review-langgraph"
 groupLabel: "Article"
 groupOrder: 1
-# Social-card image for link unfurls (LinkedIn, X, Slack, etc.). Used for OG
-# / Twitter / JSON-LD metadata only; NOT rendered in the page body, because
-# the ReviewDashboard poster is the on-page hero.
-ogImage: "/posts/automation-review-langgraph/hero.png"
-heroAlt: "Automation Review: LangGraph"
-# To render an image hero at the top of the post instead, uncomment:
-# hero: "/posts/automation-review-langgraph/hero.png"
+# OG / social-card image is auto-generated from this frontmatter by
+# app/blog/[slug]/opengraph-image.tsx. To override with a static image,
+# set `ogImage: "/posts/<slug>/card.png"`.
+# Poster hero: rendered by the post page at the top, above the title header.
+poster:
+  name: "LangGraph"
+  kicker: "Structure-first agent orchestration, open source"
+  pitch: "A low-level orchestration framework for building controllable agents."
+  meta:
+    - { label: "Stars", value: "33.2k" }
+    - { label: "Licence", value: "MIT" }
+    - { label: "LLM", value: "Agnostic" }
+  problems:
+    - { icon: "state", title: "Typed state across LLM calls" }
+    - { icon: "clock", title: "Long-running, pausable workflows" }
+    - { icon: "branch", title: "Branching with auditability" }
+  reach:
+    label: "Monthly downloads*"
+    labelHref: "#references"
+    bars:
+      - { label: "LangGraph", value: 62, display: "62M", highlight: true }
+      - { label: "Pydantic AI", value: 41, display: "41M" }
+      - { label: "CrewAI", value: 12.3, display: "12.3M" }
+  pros:
+    - "Right primitive at the right level (typed StateGraph)"
+    - "Production extras free: streaming, checkpointing, human-in-the-loop"
+    - "Cross-runtime API parity (Python + JS)"
+    - "Vendor-neutral models via the LangChain ecosystem"
+  cons:
+    - "Security posture needs active management (2025 CVEs in checkpointers)"
+    - "Docs uneven across runtimes"
+    - "LangChain peer-dependency is real"
+    - "Conditional-edge ergonomics are verbose"
+    - "Pre-1.0 versioning was spiky; 1.x stabilising"
 ---
-
-{/* Hero dashboard. Executive summary of the review at a glance: identity,
-    the problem it solves, market reach, pros / cons. Mirrors the deeper
-    sections of the article. */}
-<ReviewDashboard
-  name="LangGraph"
-  kicker="Verdict · The first framework to evaluate for graph-shaped agent orchestration"
-  pitch="A low-level orchestration framework for building controllable agents."
-  meta={[
-    { label: "Licence", value: "MIT" },
-    { label: "Vendor", value: "Agnostic" },
-  ]}
-  problems={[
-    { icon: "state", title: "Typed state across LLM calls" },
-    { icon: "clock", title: "Long-running, pausable workflows" },
-    { icon: "branch", title: "Branching with auditability" },
-  ]}
-  reach={{
-    primary: "~62M",
-    primaryLabel: "monthly downloads (Py + JS)",
-  }}
-  pros={[
-    "Right primitive at the right level (typed StateGraph)",
-    "Production extras free: streaming, checkpointing, human-in-the-loop",
-    "Cross-runtime API parity (Python + JS, community JVM)",
-    "Vendor-neutral models via the LangChain ecosystem",
-  ]}
-  cons={[
-    "Security posture needs active management (2025 CVEs in checkpointers)",
-    "Docs uneven across runtimes",
-    "LangChain peer-dependency is real",
-    "Conditional-edge ergonomics are verbose",
-    "Pre-1.0 versioning was spiky; 1.x stabilising",
-  ]}
-/>
 
 First piece in a new series called **Automation Review**. Every review treats two axes as first-class: whether the tool is genuinely open source, and whether it ties you to one AI vendor. The series has a deliberate bias toward open-source-powered automation.
 
@@ -251,6 +243,7 @@ LangGraph follows the same pattern. The same `StateGraph` compiles to a runnable
   tagline="The graph builder Python already knows"
   link="https://networkx.org/documentation/stable/"
   linkLabel="NetworkX docs"
+  wide
 >
 
 The Python graph library researchers in mathematics, biology, and social network analysis have used for two decades. Its contribution to LangGraph is API ergonomics.
@@ -269,7 +262,7 @@ Deterministic supersteps from Pregel, compile-once-run-many-runtimes from Beam, 
 
 ## Who it is for
 
-<div className="[&_table]:table-fixed [&_table]:w-full [&_th]:w-1/2 [&_th]:align-top [&_td]:align-top">
+<div className="[&_table]:table-fixed [&_table]:w-full [&_table]:my-6 [&_table]:border [&_table]:border-gold/25 [&_th]:w-1/2 [&_th]:border [&_th]:border-gold/20 [&_td]:border [&_td]:border-gold/20 [&_th]:px-4 [&_th]:py-2.5 [&_td]:px-4 [&_td]:py-2.5 [&_th]:bg-cream-200/50 [&_th]:text-left [&_th]:align-top [&_td]:align-top">
 
 | Pick LangGraph if… | Pick something else if… |
 | --- | --- |
@@ -315,11 +308,31 @@ Start with the raw adoption picture. Combined Python + JS downloads where applic
     { label: "CrewAI", value: 12.3, suffix: "M" },
     { label: "Mastra", value: 3.9, suffix: "M" },
     { label: "AutoGen", value: 0.9, suffix: "M" },
+    { label: "n8n", value: 0.36, suffix: "M", note: "npm only; mostly self-hosted via Docker" },
   ]}
-  footnote="Sources: PyPI and npm 30-day download counts. LangGraph and OpenAI Agents SDK are combined Python + JS; the rest are single-runtime."
+  footnote="Sources: PyPI and npm 30-day download counts. LangGraph and OpenAI Agents SDK are combined Python + JS; the rest are single-runtime. n8n is a workflow platform distributed mainly as a Docker image, so its npm count understates real usage by a wide margin."
+/>
+
+Downloads measure usage; GitHub stars measure mindshare, and the two rank differently. n8n and the older, research-led projects (AutoGen, CrewAI) collect far more stars than their library-download volume would suggest:
+
+<BarChart
+  title="GitHub stars"
+  bars={[
+    { label: "n8n", value: 190.1, suffix: "k", note: "different scope" },
+    { label: "AutoGen", value: 58.5, suffix: "k" },
+    { label: "CrewAI", value: 52.3, suffix: "k" },
+    { label: "LangGraph", value: 33.2, suffix: "k", highlight: true },
+    { label: "OpenAI Agents SDK", value: 26.7, suffix: "k" },
+    { label: "Vercel AI SDK", value: 24.5, suffix: "k" },
+    { label: "Mastra", value: 24.4, suffix: "k" },
+    { label: "Pydantic AI", value: 17.4, suffix: "k" },
+  ]}
+  footnote="Source: each repo's GitHub stargazer count at publication. Stars accumulate over a project's lifetime, so older and broader-scope projects (n8n, AutoGen, CrewAI) tend to lead regardless of current library usage."
 />
 
 Now the shape of each, side by side:
+
+<div className="[&_table]:w-full [&_table]:my-6 [&_table]:border [&_table]:border-gold/25 [&_th]:border [&_th]:border-gold/20 [&_td]:border [&_td]:border-gold/20 [&_th]:px-4 [&_th]:py-2.5 [&_td]:px-4 [&_td]:py-2.5 [&_th]:bg-cream-200/50 [&_th]:text-left [&_th]:align-top [&_td]:align-top">
 
 | Framework | What it actually is |
 | --- | --- |
@@ -330,11 +343,14 @@ Now the shape of each, side by side:
 | **Mastra** | TS-native, similar graph shape, smaller ecosystem |
 | **AutoGen** (Microsoft) | Multi-agent conversation framework, research lineage |
 | **Vercel AI SDK** (`ai`) | Different scope: streaming + UI + lightweight agent calls |
+| **n8n** | Different scope: a workflow-automation platform "for technical teams"; AI/agent nodes are one capability among hundreds of integrations |
+
+</div>
 
 Two patterns before the takeaways:
 
-- **The whole landscape is open source.** Every framework above is MIT or Apache 2.0. Where licences differ is in the *platform* around the framework: LangGraph Platform, LangSmith, and similar commercial offerings are separate paid products. Adopting a framework does not commit you to its parent's paid plan.
-- **Almost all are AI-vendor agnostic.** The exception is the **OpenAI Agents SDK**, which is OpenAI-first by design. You can use it with "OpenAI-compatible" endpoints, but the defaults and examples assume OpenAI. If keeping the model vendor open matters, that pulls you toward any of the other six.
+- **Almost all are true open source.** Every *framework* above is MIT or Apache 2.0, with one exception: **n8n** ships under the [Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md), a "fair-code" source-available licence. It lets you use n8n free for internal business purposes and personal projects, but bars you from reselling it as a hosted service or white-labelling it, and certain features sit behind the separate n8n Enterprise Licence. So it is free for most teams to self-host, but it is not OSI-approved open source. Where licences differ for the rest is in the *platform* around the framework: LangGraph Platform, LangSmith, and similar commercial offerings are separate paid products. Adopting a framework does not commit you to its parent's paid plan.
+- **Almost all are AI-vendor agnostic.** The exception is the **OpenAI Agents SDK**, which is OpenAI-first by design. You can use it with "OpenAI-compatible" endpoints, but the defaults and examples assume OpenAI. If keeping the model vendor open matters, that pulls you toward any of the other seven.
 
 A few takeaways:
 
@@ -343,6 +359,7 @@ A few takeaways:
 - **Vercel AI SDK's ~55M monthly JS downloads** mostly go to a different job (streaming chat UIs, simple tool-use). Most teams that adopt LangGraph use Vercel AI SDK at the edge, not instead of it.
 - **AutoGen has a strong research reputation but limited production volume.** More common in research labs than product engineering.
 - **CrewAI is a higher-level abstraction.** Want the framework to do more of the thinking about agent roles and delegation, you trade some of the explicit control LangGraph gives.
+- **n8n is the odd one out, and not really a peer.** It positions itself as "workflow automation for technical teams": a visual canvas you can drop JavaScript or Python into, self-host, and version, with AI and agent nodes as one capability among hundreds of integrations. That is a different altitude from a code-first orchestration library. n8n is where you automate a whole business process; LangGraph is where you build a single agent's control flow. The fairer comparison is to LangChain's own platform layer (LangGraph Platform, LangSmith), a deliberate and central part of its commercial story. The tiny npm figure reflects distribution (Docker and n8n Cloud, not `npm install`), not reach.
 
 ## What is good
 
@@ -449,6 +466,8 @@ If there is a tool or concept you would like reviewed next in this format, [drop
 
 <Accordion title="Terms">
 
+<div className="[&>p]:border-b [&>p]:border-gold/15 [&>p]:pb-3 [&>p:last-child]:border-0 [&>p:last-child]:pb-0">
+
 Plain-English definitions for the agentic-AI and graph vocabulary used in this review, listed alphabetically.
 
 **Agent.** An LLM-powered program that reads context, decides what to do next, and can call external tools (search, code, APIs) on its own. Distinct from a static chatbot that just answers questions.
@@ -489,9 +508,13 @@ Plain-English definitions for the agentic-AI and graph vocabulary used in this r
 
 **Vendor-official.** A framework published by the organisation that makes the underlying model, e.g. OpenAI's Agents SDK for OpenAI models. Easy to start with; tighter coupling to one vendor.
 
+</div>
+
 </Accordion>
 
-<Accordion title="References">
+<Accordion title="References" id="references">
+
+<div className="[&_li]:my-2 [&_ul]:mt-3 [&_ul]:pb-6 [&_ul]:mb-6 [&_ul]:border-b [&_ul]:border-gold/15 [&_ul:last-child]:border-b-0 [&_ul:last-child]:pb-0">
 
 External links cited in this review, grouped for easy lookup.
 
@@ -520,6 +543,40 @@ External links cited in this review, grouped for easy lookup.
 - [AutoGen (Microsoft)](https://github.com/microsoft/autogen)
 - [Mastra](https://github.com/mastra-ai/mastra)
 - [Vercel AI SDK](https://github.com/vercel/ai)
+- [n8n](https://github.com/n8n-io/n8n) ([Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md))
+
+**Download figures (poster and landscape charts)**
+
+All download numbers are **30-day rolling counts as of publication**, rounded; GitHub stars are likewise point-in-time. A framework's download total sums its Python (PyPI) and JavaScript (npm) packages where it ships both; single-runtime frameworks are counted once.
+
+<div className="[&_table]:w-full [&_table]:my-6 [&_table]:border [&_table]:border-gold/25 [&_th]:border [&_th]:border-gold/20 [&_td]:border [&_td]:border-gold/20 [&_th]:px-4 [&_th]:py-2.5 [&_td]:px-4 [&_td]:py-2.5 [&_th]:bg-cream-200/50 [&_th]:text-left [&_td:nth-child(2)]:tabular-nums [&_td:nth-child(4)]:tabular-nums [&_td]:align-top">
+
+| Framework | Downloads (30d) | How it is counted | Stars |
+| --- | --- | --- | --- |
+| **LangGraph** | ~62M | ~52.3M `langgraph` (PyPI) + ~9.7M `@langchain/langgraph` (npm) | 33.2k |
+| **Vercel AI SDK** | ~55.4M | `ai` (npm, JS only) | 24.5k |
+| **Pydantic AI** | ~41M | `pydantic-ai` (PyPI, Python only) | 17.4k |
+| **OpenAI Agents SDK** | ~35.5M | ~32.2M `openai-agents` (PyPI) + ~3.4M `@openai/agents` (npm) | 26.7k |
+| **CrewAI** | ~12.3M | `crewai` (PyPI, Python only) | 52.3k |
+| **Mastra** | ~3.9M | `@mastra/core` (npm, JS only) | 24.4k |
+| **AutoGen** | ~0.9M | `pyautogen` (PyPI, Python only) | 58.5k |
+| **n8n** | ~0.36M | `n8n` (npm, JS only) | 190.1k |
+
+</div>
+
+**n8n's download figure understates real usage heavily:** it is run mostly as a self-hosted Docker image or via n8n Cloud, neither of which shows up in npm download counts. Its star count (190.1k) is a better proxy for its reach.
+
+Sources:
+
+- [`langgraph` on pypistats.org](https://pypistats.org/packages/langgraph)
+- [`pydantic-ai` on pypistats.org](https://pypistats.org/packages/pydantic-ai)
+- [`openai-agents` on pypistats.org](https://pypistats.org/packages/openai-agents)
+- [`crewai` on pypistats.org](https://pypistats.org/packages/crewai)
+- [`pyautogen` on pypistats.org](https://pypistats.org/packages/pyautogen)
+- [`@langchain/langgraph` on npm](https://www.npmjs.com/package/@langchain/langgraph), [`ai` on npm](https://www.npmjs.com/package/ai), [`@openai/agents` on npm](https://www.npmjs.com/package/@openai/agents), [`@mastra/core` on npm](https://www.npmjs.com/package/@mastra/core), [`n8n` on npm](https://www.npmjs.com/package/n8n) (npm reports weekly downloads; the monthly figure is the npm registry's 30-day `last-month` range)
+- GitHub stars are each repo's `stargazers_count` at publication: [LangGraph](https://github.com/langchain-ai/langgraph), [Vercel AI SDK](https://github.com/vercel/ai), [Pydantic AI](https://github.com/pydantic/pydantic-ai), [OpenAI Agents SDK](https://github.com/openai/openai-agents-python), [CrewAI](https://github.com/crewAIInc/crewAI), [Mastra](https://github.com/mastra-ai/mastra), [AutoGen](https://github.com/microsoft/autogen), [n8n](https://github.com/n8n-io/n8n)
+
+Download counts and star counts move daily, so treat these as a point-in-time snapshot rather than live figures.
 
 **Security disclosures referenced**
 
@@ -529,5 +586,7 @@ External links cited in this review, grouped for easy lookup.
 **Companion demo**
 
 - [GoldenPassport/automation-review-examples](https://github.com/GoldenPassport/automation-review-examples) (runnable hands-on code for every review in the series)
+
+</div>
 
 </Accordion>

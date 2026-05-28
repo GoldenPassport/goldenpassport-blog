@@ -26,6 +26,14 @@ const withMDX = createMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  // Ensure the OG-card font (read via fs at runtime) is bundled into the
+  // serverless function for the blog post route on Vercel.
+  outputFileTracingIncludes: {
+    "/blog/[slug]": ["./assets/CormorantGaramond-600.woff"],
+    "/blog/[slug]/opengraph-image/[__metadata_id__]": [
+      "./assets/CormorantGaramond-600.woff",
+    ],
+  },
 };
 
 export default withMDX(nextConfig);

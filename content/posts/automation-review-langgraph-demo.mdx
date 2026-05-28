@@ -1,6 +1,6 @@
 ---
 title: "Automation Review: LangGraph"
-date: "2026-05-27"
+date: "2026-05-28"
 category: "Tech"
 series: "Automation Review"
 excerpt: "Follow-along LangGraph demo: build a document-intake triage agent end to end, with human-in-the-loop, from an empty folder to a working CLI in under thirty minutes."
@@ -12,13 +12,47 @@ tags:
   - Orchestration
   - Tooling
   - Open Source
-unlisted: false
+unlisted: true
 group: "automation-review-langgraph"
 groupLabel: "Demo"
 groupOrder: 2
+# OG / social-card image is auto-generated from this frontmatter by
+# app/blog/[slug]/opengraph-image.tsx.
+# Poster hero: rendered by the post page at the top, above the title header.
+# Same poster as the Article tab so both tabs lead with the review summary.
+poster:
+  name: "LangGraph"
+  kicker: "Structure-first agent orchestration, open source"
+  pitch: "A low-level orchestration framework for building controllable agents."
+  meta:
+    - { label: "Stars", value: "33.2k" }
+    - { label: "Licence", value: "MIT" }
+    - { label: "LLM", value: "Agnostic" }
+  problems:
+    - { icon: "state", title: "Typed state across LLM calls" }
+    - { icon: "clock", title: "Long-running, pausable workflows" }
+    - { icon: "branch", title: "Branching with auditability" }
+  reach:
+    label: "Monthly downloads*"
+    labelHref: "/blog/automation-review-langgraph#references"
+    bars:
+      - { label: "LangGraph", value: 62, display: "62M", highlight: true }
+      - { label: "Pydantic AI", value: 41, display: "41M" }
+      - { label: "CrewAI", value: 12.3, display: "12.3M" }
+  pros:
+    - "Right primitive at the right level (typed StateGraph)"
+    - "Production extras free: streaming, checkpointing, human-in-the-loop"
+    - "Cross-runtime API parity (Python + JS)"
+    - "Vendor-neutral models via the LangChain ecosystem"
+  cons:
+    - "Security posture needs active management (2025 CVEs in checkpointers)"
+    - "Docs uneven across runtimes"
+    - "LangChain peer-dependency is real"
+    - "Conditional-edge ergonomics are verbose"
+    - "Pre-1.0 versioning was spiky; 1.x stabilising"
 ---
 
-> **Reading the Article tab first?** Switch back if you haven't yet, this page assumes you know what LangGraph is and why you would pick it. The Article tab covers positioning, the competitive landscape, what is good, and where the gaps are. This page is the hands-on.
+> **Reading the Article tab first?** Switch back if you haven't yet; this page assumes you know what LangGraph is and why you would pick it. The Article tab covers positioning, the competitive landscape, what is good, and where the gaps are. This page is the hands-on.
 
 ## What you'll build
 
@@ -66,12 +100,16 @@ You will walk away with: a working LangGraph project, a feel for the StateGraph 
 
 Have these ready before you start:
 
+<div className="[&_table]:w-full [&_table]:border [&_table]:border-gold/25 [&_th]:border [&_th]:border-gold/20 [&_td]:border [&_td]:border-gold/20 [&_th]:px-4 [&_th]:py-2.5 [&_td]:px-4 [&_td]:py-2.5 [&_th]:bg-cream-200/50 [&_table]:mb-8">
+
 | Tool | Version | Why |
 | --- | --- | --- |
 | **Node.js** | 20 or later | LangGraph 1.x targets modern Node; older versions miss the `Annotation` types |
 | **pnpm** | 9 or later (npm / yarn also fine) | Faster installs; commands below assume pnpm but translate one-for-one |
 | **TypeScript editor** | VS Code, Cursor, WebStorm, anything | The whole walkthrough is TypeScript |
 | **Terminal** | Any | All commands below are copy-pasteable |
+
+</div>
 
 **No API keys required.** Steps 1 to 8 use deterministic mock implementations of the model calls, so the CLI runs offline. Step 9 swaps in a local [Ollama](https://ollama.com) model, also offline (a one-time install + model pull is covered there).
 
@@ -89,7 +127,12 @@ The flow is graph-shaped: classify → extract → validate → decide, with a b
 
 That is exactly the shape LangGraph is built for.
 
-<TriageGraphDiagram />
+<figure className="not-prose my-8">
+  <TriageGraphDiagram />
+  <figcaption className="mt-3 text-sm text-ink-mute italic text-center">
+    Classify → extract → validate → decide, with a conditional branch routing each claim to auto-process, human review, or reject.
+  </figcaption>
+</figure>
 
 Now build it.
 

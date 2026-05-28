@@ -22,14 +22,18 @@ type Props = {
   title: string;
   /** Open on initial render. Defaults to closed. */
   defaultOpen?: boolean;
+  /** Anchor id, so the accordion can be linked to (e.g. "#references").
+   *  Modern browsers auto-expand a <details> that is the fragment target. */
+  id?: string;
   children: React.ReactNode;
 };
 
-export function Accordion({ title, defaultOpen = false, children }: Props) {
+export function Accordion({ title, defaultOpen = false, id, children }: Props) {
   return (
     <details
+      id={id}
       open={defaultOpen}
-      className="not-prose group my-4 rounded-lg border border-gold/25 bg-cream-50 overflow-hidden"
+      className="not-prose group my-4 rounded-lg border border-gold/25 bg-cream-50 overflow-hidden scroll-mt-24"
     >
       <summary className="cursor-pointer select-none list-none flex items-center justify-between gap-4 px-6 py-4 font-serif text-lg text-ink hover:bg-cream-200/40 transition-colors">
         <span>{title}</span>

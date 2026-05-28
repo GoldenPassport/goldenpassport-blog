@@ -59,7 +59,7 @@ export function CrossItem({ children }: ItemProps) {
           <line x1="18" y1="6" x2="6" y2="18" />
         </svg>
       </span>
-      <div className="prose prose-base max-w-prose font-serif text-ink-soft">
+      <div className="prose prose-lg max-w-none font-serif text-ink-soft">
         {children}
       </div>
     </li>

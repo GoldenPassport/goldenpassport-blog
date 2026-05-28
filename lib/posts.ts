@@ -4,6 +4,24 @@ import matter from "gray-matter";
 
 export type Category = "Business" | "Tech" | "Shorts";
 
+/** Structural shape of ReviewDashboard's props, parsed from frontmatter. */
+export type PosterData = {
+  name: string;
+  kicker?: string;
+  pitch: string;
+  meta: { label: string; value: string }[];
+  problems: { icon: string; title: string }[];
+  reach: {
+    label?: string;
+    labelHref?: string;
+    primary?: string;
+    primaryLabel?: string;
+    bars?: { label: string; value: number; display: string; highlight?: boolean }[];
+  };
+  pros: string[];
+  cons: string[];
+};
+
 export type PostMeta = {
   slug: string;
   title: string;
@@ -23,6 +41,10 @@ export type PostMeta = {
    *  (e.g. a live component) but still needs a static image for link unfurls.
    *  Takes precedence over `hero` for metadata when both are set. */
   ogImage?: string;
+  /** ReviewDashboard poster data. When present, the post page renders the
+   *  poster at the top (in the hero slot, above the title header) instead of
+   *  expecting it in the MDX body. Shape matches ReviewDashboard's props. */
+  poster?: PosterData;
   /** When true, sorts ahead of all non-pinned posts everywhere they're listed. */
   pinned?: boolean;
   /**
@@ -82,6 +104,10 @@ export function getAllPosts(): PostMeta[] {
     const hero = typeof data.hero === "string" ? data.hero : undefined;
     const heroAlt = typeof data.heroAlt === "string" ? data.heroAlt : undefined;
     const ogImage = typeof data.ogImage === "string" ? data.ogImage : undefined;
+    const poster =
+      data.poster && typeof data.poster === "object"
+        ? (data.poster as PosterData)
+        : undefined;
     const pinned = data.pinned === true;
     const unlisted = data.unlisted === true;
     const draft = data.draft === true;
@@ -101,6 +127,7 @@ export function getAllPosts(): PostMeta[] {
       hero,
       heroAlt,
       ogImage,
+      poster,
       pinned,
       series,
       group,
