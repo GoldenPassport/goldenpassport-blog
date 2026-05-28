@@ -11,6 +11,9 @@ import { CrossList, CrossItem } from "@/components/CrossList";
 import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
 import { BarChart } from "@/components/BarChart";
 import { ReviewDashboard } from "@/components/ReviewDashboard";
+import { TriageGraphDiagram } from "@/components/TriageGraphDiagram";
+import { Terminal } from "@/components/Terminal";
+import { ErrorBlock } from "@/components/ErrorBlock";
 
 /**
  * Required by @next/mdx in App Router. Exports the components that MDX pages
@@ -48,5 +51,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     DesignCardMore,
     BarChart,
     ReviewDashboard,
+    TriageGraphDiagram,
+    Terminal,
+    ErrorBlock,
   };
 }

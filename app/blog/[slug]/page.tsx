@@ -16,6 +16,10 @@ import { CrossList, CrossItem } from "@/components/CrossList";
 import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
 import { BarChart } from "@/components/BarChart";
 import { ReviewDashboard } from "@/components/ReviewDashboard";
+import { TriageGraphDiagram } from "@/components/TriageGraphDiagram";
+import { Terminal } from "@/components/Terminal";
+import { ErrorBlock } from "@/components/ErrorBlock";
+import { LinkedInShare } from "@/components/LinkedInShare";
 import { PostToc } from "@/components/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 
@@ -41,6 +45,9 @@ const mdxComponents = {
   DesignCardMore,
   BarChart,
   ReviewDashboard,
+  TriageGraphDiagram,
+  Terminal,
+  ErrorBlock,
 };
 
 export function generateStaticParams() {
@@ -186,16 +193,37 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
         <h1 className="mt-3 font-serif text-4xl md:text-5xl text-ink leading-tight">{post.title}</h1>
         {post.excerpt ? (
-          <p className="mt-4 text-lg text-ink-soft max-w-prose">{post.excerpt}</p>
+          <p className="mt-4 text-lg text-ink-soft">{post.excerpt}</p>
         ) : null}
         <TagList tags={post.tags} linkable truncate />
       </header>
 
       <div className="gold-rule my-10" />
 
-      <div className="prose prose-lg max-w-prose font-serif">
+      {/* max-w-none overrides the typography plugin's default max-width: 65ch
+          so the body fills the article wrapper (max-w-3xl) and aligns with
+          the header above it. */}
+      <div className="prose prose-lg max-w-none font-serif">
         <MDXContent components={mdxComponents} />
       </div>
+
+      {/* Post footer: share + back link. The thin gold rule above mirrors
+          the rule between the header and body, bracketing the article. */}
+      <div className="gold-rule my-12" />
+      <footer className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold">
+            Found this useful?
+          </p>
+          <LinkedInShare url={postUrl} title={post.title} />
+        </div>
+        <Link
+          href="/blog"
+          className="text-sm text-ink-mute hover:text-gold-deep transition-colors"
+        >
+          ← All writing
+        </Link>
+      </footer>
     </article>
     </>
   );

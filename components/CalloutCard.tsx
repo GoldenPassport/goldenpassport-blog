@@ -44,8 +44,11 @@ export function TldrCard({ label = "TL;DR", children }: CardProps) {
 }
 
 export function VerdictCard({ label = "Verdict", children }: CardProps) {
+  // id="verdict" lets the PostToc stepper include this card as the final
+  // step. The accent-paragraph label provides the visible "VERDICT" cue;
+  // the id is the anchor target.
   return (
-    <div className="my-10 p-8 rounded-lg border-l-4 border-emerald-700 bg-emerald-50/60 ring-1 ring-emerald-700/10">
+    <div id="verdict" className="my-10 p-8 rounded-lg border-l-4 border-emerald-700 bg-emerald-50/60 ring-1 ring-emerald-700/10 scroll-mt-24">
       <p className="text-sm tracking-[0.22em] uppercase text-emerald-800 font-semibold mb-5 not-prose">
         {label}
       </p>

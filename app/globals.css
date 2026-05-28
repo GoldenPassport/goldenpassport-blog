@@ -65,3 +65,44 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Prose overrides: inline code + pre blocks.                                 */
+/*                                                                            */
+/* The typography plugin's defaults render inline <code> with surrounding     */
+/* backticks via ::before/::after and no chip background — which reads as     */
+/* "just bare monospace" rather than as a discrete code token. We strip the   */
+/* backticks and give it a proper pill treatment: cream-200 background,      */
+/* thin gold border, tight padding, ink text.                                 */
+/*                                                                            */
+/* On <pre>, we force white-space: pre + overflow-x: auto so long lines       */
+/* (URLs, long commands) scroll horizontally instead of wrapping mid-word.    */
+/* The plugin's default is correct, but a stray override in some environments */
+/* leaves <pre> wrapping; setting it explicitly is the durable fix.           */
+/* -------------------------------------------------------------------------- */
+.prose :where(code):not(:where([class~="not-prose"] *))::before,
+.prose :where(code):not(:where([class~="not-prose"] *))::after {
+  content: none;
+}
+
+.prose :where(code):not(:where(pre code, [class~="not-prose"] *)) {
+  background-color: theme("colors.cream.200");
+  border: 1px solid rgba(184, 137, 59, 0.25); /* gold @ 25% */
+  border-radius: 0.25rem;
+  padding: 0.05em 0.35em;
+  font-weight: 500;
+  font-size: 0.85em;
+  color: theme("colors.ink.DEFAULT");
+}
+
+/* Bold inline code (used as the error-block "headers" in the troubleshooting
+   accordion). Tighten the weight so the header reads as a header, not body. */
+.prose :where(strong) :where(code) {
+  font-weight: 700;
+}
+
+/* Pre blocks: preserve whitespace, scroll horizontally for long lines. */
+.prose :where(pre):not(:where([class~="not-prose"] *)) {
+  white-space: pre;
+  overflow-x: auto;
+}

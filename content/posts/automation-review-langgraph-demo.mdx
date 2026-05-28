@@ -3,7 +3,7 @@ title: "Automation Review: LangGraph"
 date: "2026-05-27"
 category: "Tech"
 series: "Automation Review"
-excerpt: "Hands-on demo for the LangGraph Automation Review: a document-intake triage agent built on LangGraph's StateGraph, plus a link to the full runnable repo."
+excerpt: "Follow-along LangGraph demo: build a document-intake triage agent end to end, with human-in-the-loop, from an empty folder to a working CLI in under thirty minutes."
 tags:
   - Agentic AI
   - LangGraph
@@ -12,7 +12,7 @@ tags:
   - Orchestration
   - Tooling
   - Open Source
-unlisted: true
+unlisted: false
 group: "automation-review-langgraph"
 groupLabel: "Demo"
 groupOrder: 2
@@ -20,144 +20,582 @@ groupOrder: 2
 
 > **Reading the Article tab first?** Switch back if you haven't yet, this page assumes you know what LangGraph is and why you would pick it. The Article tab covers positioning, the competitive landscape, what is good, and where the gaps are. This page is the hands-on.
 
-## Hands-on: a document-intake triage agent
+## What you'll build
 
-The most common shape I see in business-centric automation work is a **document-intake triage flow**. Something arrives (an email, a form submission, a scanned claim) and a sequence of decisions has to happen before it lands in front of a human. This is exactly the shape that exposes LangGraph's strengths.
+A **document-intake triage agent** built on LangGraph's `StateGraph`. By the end you'll have a runnable CLI that:
 
-I am using the JavaScript / TypeScript package for this walkthrough because the Automation Review series leans toward the JS-first stack that web product teams ship with. The same code translates almost line-for-line to Python; if Python is your runtime, swap `@langchain/langgraph` for `langgraph` and the API surface is essentially identical.
+<TickList>
 
-### Step 1. Define the shared state
+<TickItem>
 
-The state is what flows through the graph. Every node reads from it, every node can return updates to it.
+**Reads** an incoming document (text in, for the demo) and classifies it as a claim, query, complaint, or unknown.
+
+</TickItem>
+
+<TickItem>
+
+**Extracts** structured fields from the body and **validates** them against the category's rules.
+
+</TickItem>
+
+<TickItem>
+
+**Decides** whether to auto-process, queue for human review, or reject, using a typed state object that every node reads from and writes to.
+
+</TickItem>
+
+<TickItem>
+
+**Routes anything that fails validation** to a `human-review` branch (the hook a production system would wire to LangGraph's `interrupt()` + checkpointer for a real reviewer approval flow; see "Where to next" at the bottom).
+
+</TickItem>
+
+<TickItem>
+
+**Streams** state diffs to the terminal as each node completes, so you can watch the graph execute in real time.
+
+</TickItem>
+
+</TickList>
+
+You will walk away with: a working LangGraph project, a feel for the StateGraph / Annotation / addEdge API surface, and a template you can adapt to any document-intake or multi-step decision flow at work. Step 9 then puts a React UI and a real local model in front of the same graph.
+
+**Time:** around 30 minutes for the CLI walkthrough (Steps 1 to 8). Add 15 to 20 minutes for the UI extension in Step 9. Longer if you have not used Node / TypeScript before.
+
+<Accordion title="Prerequisites">
+
+Have these ready before you start:
+
+| Tool | Version | Why |
+| --- | --- | --- |
+| **Node.js** | 20 or later | LangGraph 1.x targets modern Node; older versions miss the `Annotation` types |
+| **pnpm** | 9 or later (npm / yarn also fine) | Faster installs; commands below assume pnpm but translate one-for-one |
+| **TypeScript editor** | VS Code, Cursor, WebStorm, anything | The whole walkthrough is TypeScript |
+| **Terminal** | Any | All commands below are copy-pasteable |
+
+**No API keys required.** Steps 1 to 8 use deterministic mock implementations of the model calls, so the CLI runs offline. Step 9 swaps in a local [Ollama](https://ollama.com) model, also offline (a one-time install + model pull is covered there).
+
+</Accordion>
+
+## The scenario
+
+You work for an insurance company. A shared mailbox receives a mix of incoming documents from customers: new claims, policy queries, complaints, and the occasional spam. Today, a human triages every one. You want to put a structured agent in front of the queue so:
+
+- **Clean claims** with all required fields go straight to auto-processing
+- **Anything malformed or ambiguous** lands in front of a human reviewer with the validation errors pre-attached
+- **Spam / unknown** documents are rejected with a logged reason
+
+The flow is graph-shaped: classify → extract → validate → decide, with a branch at the end. Every step writes into a shared typed state object so an auditor can read what the agent did at each node.
+
+That is exactly the shape LangGraph is built for.
+
+<TriageGraphDiagram />
+
+Now build it.
+
+## Step 1: Create the project
+
+Open a terminal in the folder you keep code in and run:
+
+```bash
+mkdir langgraph-triage-demo
+cd langgraph-triage-demo
+pnpm init
+```
+
+Accept the defaults. You should now have a folder with a `package.json`.
+
+## Step 2: Install dependencies
+
+Install the LangGraph runtime and the TypeScript tooling. `pnpm add` installs *and* registers the packages, so you do not need a separate `pnpm install`.
+
+```bash
+pnpm add @langchain/langgraph @langchain/core
+pnpm add -D typescript tsx @types/node
+```
+
+**Create a new file** at the project root called `tsconfig.json` (e.g. `touch tsconfig.json` in the terminal, or use your editor's New File command). Paste this in:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"]
+}
+```
+
+**Open the existing `package.json`** (created by `pnpm init` in Step 1) and add the `"type": "module"` line and a `scripts.dev` entry. Your file should end up looking roughly like this (other fields generated by `pnpm init` can stay):
+
+```json
+{
+  "name": "langgraph-triage-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/main.ts"
+  }
+}
+```
+
+Create the source folder where the rest of the files will live:
+
+```bash
+mkdir src
+```
+
+**Sanity check.** Your project layout should now look like this:
+
+```
+langgraph-triage-demo/
+├── node_modules/
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+└── src/             ← empty for now
+```
+
+## Step 3: Define the shared state
+
+**Create a new file** at `src/state.ts` (e.g. `touch src/state.ts`, or use your editor). The state is what flows through every node in the graph.
 
 ```ts
-import { Annotation, StateGraph, START, END } from "@langchain/langgraph";
+import { Annotation } from "@langchain/langgraph";
 
-const TriageState = Annotation.Root({
+export const TriageState = Annotation.Root({
   inputText: Annotation<string>(),
+
   category: Annotation<"claim" | "query" | "complaint" | "unknown">(),
+
   extracted: Annotation<Record<string, string>>({
     reducer: (a, b) => ({ ...a, ...b }),
     default: () => ({}),
   }),
+
   validationErrors: Annotation<string[]>({
     reducer: (a, b) => [...a, ...b],
     default: () => [],
   }),
+
   decision: Annotation<"auto-process" | "human-review" | "reject">(),
 });
+
+export type TriageStateType = typeof TriageState.State;
 ```
 
-A few things worth noticing. The `Annotation` API is how LangGraph 1.x defines typed state. The reducers (`(a, b) => ...`) are how concurrent or sequential writes merge, controlling whether a node "replaces" or "appends" to a field. The Python ergonomics here are slightly tidier; the TypeScript version is a little more verbose but type-safe end to end.
+A few things to notice:
 
-### Step 2. Write the nodes
+- **`Annotation.Root`** is LangGraph 1.x's typed-state declaration. Every field becomes a typed slot in the state object.
+- **Reducers** decide what happens when a node returns an update. `extracted` merges new fields into the existing object; `validationErrors` appends. The default reducer (used for `inputText`, `category`, `decision`) just replaces.
+- **`TriageStateType`** is the inferred TypeScript type. We'll use it in node signatures.
 
-Each node is just a function from `state` to `Partial<state>`. The body can call any model, any tool, any external API.
+## Step 4: Write the nodes
+
+**Create a new file** at `src/nodes.ts` (`touch src/nodes.ts` or use your editor). Each node is a plain async function that takes the state and returns a partial update.
+
+For the demo we use deterministic mock implementations so you can run the whole thing without an API key. Swapping in real model calls is shown later.
 
 ```ts
-async function classify(state: typeof TriageState.State) {
-  // In a real implementation this is a model call with a structured-output schema.
-  // Mocked here for clarity.
-  const category = mockClassifier(state.inputText);
+import type { TriageStateType } from "./state.js";
+
+export async function classify(state: TriageStateType) {
+  const text = state.inputText.toLowerCase();
+  let category: TriageStateType["category"] = "unknown";
+  if (text.includes("claim") || text.includes("incident")) category = "claim";
+  else if (text.includes("question") || text.includes("query")) category = "query";
+  else if (text.includes("complaint") || text.includes("disappointed")) category = "complaint";
   return { category };
 }
 
-async function extract(state: typeof TriageState.State) {
-  const fields = mockExtractor(state.inputText, state.category);
+export async function extract(state: TriageStateType) {
+  // Pretend a structured-output model pulled these out of the body.
+  const fields: Record<string, string> = {};
+  const policyMatch = state.inputText.match(/policy[:\s#]*([A-Z0-9-]+)/i);
+  if (policyMatch) fields.policyNumber = policyMatch[1];
+  const dateMatch = state.inputText.match(/\b(\d{1,2}\/\d{1,2}\/\d{2,4})\b/);
+  if (dateMatch) fields.incidentDate = dateMatch[1];
   return { extracted: fields };
 }
 
-async function validate(state: typeof TriageState.State) {
-  const errors = mockValidator(state.extracted, state.category);
+export async function validate(state: TriageStateType) {
+  const errors: string[] = [];
+  if (state.category === "claim") {
+    if (!state.extracted.policyNumber) errors.push("Missing policy number");
+    if (!state.extracted.incidentDate) errors.push("Missing incident date");
+  }
   return { validationErrors: errors };
 }
 
-async function decide(state: typeof TriageState.State) {
+export async function decide(state: TriageStateType) {
+  if (state.category === "unknown") return { decision: "reject" as const };
   if (state.validationErrors.length > 0) return { decision: "human-review" as const };
   if (state.category === "claim") return { decision: "auto-process" as const };
   return { decision: "human-review" as const };
 }
 ```
 
-### Step 3. Wire the graph
+Notice every node is testable in isolation: pass it a state, get a partial update back, no graph required.
 
-This is where LangGraph earns its keep. The shape of the workflow lives in one place, separate from the node implementations:
+## Step 5: Wire the graph
 
-```ts
-const graph = new StateGraph(TriageState)
-  .addNode("classify", classify)
-  .addNode("extract", extract)
-  .addNode("validate", validate)
-  .addNode("decide", decide)
-  .addEdge(START, "classify")
-  .addEdge("classify", "extract")
-  .addEdge("extract", "validate")
-  .addEdge("validate", "decide")
-  .addEdge("decide", END)
-  .compile();
-```
-
-What that buys you, almost for free:
-
-- A **typed runner**: `graph.invoke({ inputText })` returns a fully-typed final state.
-- A **stream**: `graph.stream(...)` emits state diffs as each node completes. Plug straight into a UI for live progress.
-- A **checkpoint hook**: pass a `checkpointer` to `.compile()` and the graph can pause, persist, and resume across processes.
-- A **visualisation**: LangGraph Studio renders the graph above as a real, clickable diagram. For an audience that has to explain the flow to non-engineers, that alone justifies the dependency.
-
-### Step 4. Add the human-in-the-loop branch
-
-The reason to use LangGraph rather than a `for` loop is the moment you need to bring a human in. Replace the last edge with a conditional:
+**Create a new file** at `src/graph.ts` (`touch src/graph.ts` or use your editor). This is where LangGraph earns its keep: the shape of the workflow lives in one place, separate from the node implementations.
 
 ```ts
-.addConditionalEdges("decide", (state) => state.decision, {
-  "auto-process": "execute",
-  "human-review": "queueForReview",
-  "reject": END,
-})
+import { StateGraph, START, END } from "@langchain/langgraph";
+import { TriageState } from "./state.js";
+import { classify, extract, validate, decide } from "./nodes.js";
+
+export function buildGraph() {
+  return new StateGraph(TriageState)
+    .addNode("classify", classify)
+    .addNode("extract", extract)
+    .addNode("validate", validate)
+    .addNode("decide", decide)
+    .addEdge(START, "classify")
+    .addEdge("classify", "extract")
+    .addEdge("extract", "validate")
+    .addEdge("validate", "decide")
+    .addEdge("decide", END)
+    .compile();
+}
 ```
 
-`queueForReview` can be a node that calls an `interrupt()` and waits for a real human to weigh in. The graph pauses, the state persists, and execution resumes from the same point when a reviewer clicks Approve. None of that machinery has to live in your application code.
+That `compile()` call returns a runnable with `invoke`, `stream`, and the rest of the LangGraph runtime surface. Nothing else needs to know about the graph's shape.
 
-## The full runnable repo
+## Step 6: Run it
 
-The snippets above are trimmed for reading flow. The runnable version, with real model calls, structured-output schemas, a checkpointer, the streaming wiring, and a small CLI harness, lives in the companion repo.
+**Create a new file** at `src/main.ts` (`touch src/main.ts` or use your editor). This is the file `pnpm dev` runs, so it must exist before the next command works. It streams state diffs to the terminal as each node finishes, so you can watch the graph execute.
 
-<aside className="not-prose my-6 p-6 rounded-lg border border-gold/30 bg-cream-50">
-  <p className="text-sm tracking-[0.22em] uppercase text-gold-deep mb-4">Demo at a glance</p>
-  <dl className="grid grid-cols-1 sm:grid-cols-[max-content_1fr] gap-x-8 gap-y-3 text-base leading-relaxed">
-    <dt className="font-semibold text-ink">Repo</dt>
-    <dd className="text-ink-soft">
-      <a href="https://github.com/GoldenPassport/automation-review-examples" target="_blank" rel="noopener noreferrer" className="font-semibold text-gold-deep underline underline-offset-2 decoration-gold/60 hover:decoration-gold-deep">
-        GoldenPassport/automation-review-examples
-      </a>
-    </dd>
+```ts
+import { buildGraph } from "./graph.js";
 
-    <dt className="font-semibold text-ink">Folder</dt>
-    <dd className="text-ink-soft"><code>langgraph/</code></dd>
+const graph = buildGraph();
 
-    <dt className="font-semibold text-ink">Runtime</dt>
-    <dd className="text-ink-soft">Node 20+ / TypeScript</dd>
+const inputText = `
+  Hi, I want to file a claim for incident on 12/04/2026
+  under policy POL-554821. My car was rear-ended at the lights.
+`;
 
-    <dt className="font-semibold text-ink">Model provider</dt>
-    <dd className="text-ink-soft">OpenAI by default. Swappable to Anthropic or a local Ollama model via a one-line provider change (notes in the repo README).</dd>
+console.log("Running graph...\n");
 
-    <dt className="font-semibold text-ink">What you will see</dt>
-    <dd className="text-ink-soft">
-      <ul className="list-disc pl-5 space-y-1">
-        <li>The full <code>StateGraph</code> wired end to end, with the typed state, classifier, extractor, validator, and decision nodes shown above</li>
-        <li>A conditional edge that routes valid claims to auto-process and everything else to a human-review pause node</li>
-        <li>A working <code>interrupt()</code> + resume cycle so you can watch the graph stop, persist, and pick up after approval</li>
-        <li>A streaming runner that emits state diffs as each node completes, with a small CLI that prints them as a timeline</li>
-        <li>Tests against three sample inputs (clean claim, malformed claim, ambiguous query) so you can see how the graph behaves at the edges</li>
-      </ul>
-    </dd>
+for await (const chunk of await graph.stream({ inputText })) {
+  for (const [nodeName, update] of Object.entries(chunk)) {
+    console.log(`[${nodeName}]`, update);
+  }
+}
+```
 
-    <dt className="font-semibold text-ink">Setup time</dt>
-    <dd className="text-ink-soft">About 5 minutes. <code>pnpm install</code>, set one env var with an API key, <code>pnpm dev</code>.</dd>
-  </dl>
+Run it:
+
+```bash
+pnpm dev
+```
+
+You should see something like:
+
+```
+Running graph...
+
+[classify] { category: 'claim' }
+[extract] { extracted: { policyNumber: 'POL-554821', incidentDate: '12/04/2026' } }
+[validate] { validationErrors: [] }
+[decide] { decision: 'auto-process' }
+```
+
+Four log lines, one per node, in execution order. The graph ran end to end and reached **auto-process** because the input had a policy number and an incident date.
+
+<Accordion title="Hit an error? Check here first">
+
+<ErrorBlock error="ERR_MODULE_NOT_FOUND: Cannot find module '.../src/main.ts'">
+
+The file does not exist. Make sure you actually saved `src/main.ts` (Step 6) and that it lives in the `src` folder, not the project root. From the project root, `ls src/` should list `state.ts`, `nodes.ts`, `graph.ts`, and `main.ts`.
+
+</ErrorBlock>
+
+<ErrorBlock error="Cannot find module '@langchain/langgraph' or '@langchain/core'">
+
+Dependencies did not install. Run `pnpm add @langchain/langgraph @langchain/core` again from the project root.
+
+</ErrorBlock>
+
+<ErrorBlock error="Cannot find module './state.js' (or similar relative import errors)">
+
+The imports in the demo use `.js` suffixes even on `.ts` files because Node's ESM resolver looks for the compiled extension. Keep the `.js` suffixes exactly as written; `tsx` rewrites them at runtime.
+
+</ErrorBlock>
+
+<ErrorBlock error="Type errors on Annotation<...> declarations">
+
+LangGraph 1.x requires `@langchain/langgraph` ≥ 0.1, which ships the typed `Annotation` API. If `pnpm list @langchain/langgraph` shows an older version, run `pnpm add @langchain/langgraph@latest`.
+
+</ErrorBlock>
+
+</Accordion>
+
+## Step 7: Add the human-in-the-loop branch
+
+A `for` loop could have done what we have so far. The reason to use LangGraph is the moment you need a pause for human review.
+
+**Open the existing `src/graph.ts`** and replace its entire contents with the version below. This swaps the simple `.addEdge("decide", END)` for a conditional edge that routes based on the decision field, plus three small terminal nodes:
+
+```ts
+import { StateGraph, START, END } from "@langchain/langgraph";
+import { TriageState } from "./state.js";
+import { classify, extract, validate, decide } from "./nodes.js";
+
+async function autoProcess() {
+  console.log("  → auto-processed");
+  return {};
+}
+
+async function queueForReview() {
+  console.log("  → queued for human review");
+  return {};
+}
+
+async function reject() {
+  console.log("  → rejected");
+  return {};
+}
+
+export function buildGraph() {
+  return new StateGraph(TriageState)
+    .addNode("classify", classify)
+    .addNode("extract", extract)
+    .addNode("validate", validate)
+    .addNode("decide", decide)
+    .addNode("autoProcess", autoProcess)
+    .addNode("queueForReview", queueForReview)
+    .addNode("reject", reject)
+    .addEdge(START, "classify")
+    .addEdge("classify", "extract")
+    .addEdge("extract", "validate")
+    .addEdge("validate", "decide")
+    .addConditionalEdges("decide", (state) => state.decision, {
+      "auto-process": "autoProcess",
+      "human-review": "queueForReview",
+      "reject": "reject",
+    })
+    .addEdge("autoProcess", END)
+    .addEdge("queueForReview", END)
+    .addEdge("reject", END)
+    .compile();
+}
+```
+
+Re-run `pnpm dev`. You should now see a fifth line:
+
+```
+[autoProcess] {}
+  → auto-processed
+```
+
+In a production system, `queueForReview` would call LangGraph's `interrupt()` to pause the graph, persist its state to a checkpointer, and exit. When a reviewer clicks Approve, your application resumes the graph from the same node with the reviewer's decision injected. The full version of that pattern, with a SQLite checkpointer, is in the companion repo.
+
+## Step 8: Test the edge cases
+
+Try three different inputs to see the branch decisions in action. **Open the existing `src/main.ts`** and replace its contents with this version, which loops over three sample inputs:
+
+```ts
+const inputs = [
+  // Clean claim → auto-process
+  "Filing a claim for an incident on 12/04/2026 under policy POL-554821.",
+  // Malformed claim → human-review
+  "I want to file a claim, my car was rear-ended yesterday.",
+  // Unknown → reject
+  "Are you hiring? I'd love to work with you.",
+];
+
+for (const inputText of inputs) {
+  console.log(`\n=== Input: "${inputText.slice(0, 60)}..." ===`);
+  for await (const chunk of await graph.stream({ inputText })) {
+    for (const [nodeName, update] of Object.entries(chunk)) {
+      console.log(`[${nodeName}]`, update);
+    }
+  }
+}
+```
+
+Re-run. You should see three distinct paths:
+
+- Input 1 reaches `autoProcess`
+- Input 2 reaches `queueForReview` (missing policy number and date)
+- Input 3 reaches `reject` (category `unknown`)
+
+<Accordion title="Answers: run the finished project">
+
+If you got stuck partway through and want a working reference, the final-state version of this demo lives in the companion repo under [`langgraph-triage-demo-answer/`](https://github.com/GoldenPassport/automation-review-examples/tree/main/langgraph-triage-demo-answer). Clone, install, run:
+
+<Terminal
+  commands={[
+    "git clone https://github.com/GoldenPassport/automation-review-examples.git",
+    "cd automation-review-examples/langgraph-triage-demo-answer",
+    "pnpm install",
+    "pnpm dev",
+  ]}
+/>
+
+The output should match what you saw in Step 8: three sample inputs, three different terminal branches (`autoProcess`, `queueForReview`, `reject`). Full expected output and a "where to take it next" guide are in the project's [README](https://github.com/GoldenPassport/automation-review-examples/blob/main/langgraph-triage-demo-answer/README.md).
+
+To diff your local version against the answers, point your editor's "compare folders" feature at both project roots. The `src/` files should match line for line.
+
+</Accordion>
+
+That is the whole point of LangGraph: one graph, one typed state, three deterministic outcomes, every node auditable.
+
+## Step 9: Real models, real documents, real UI
+
+Steps 1 to 8 use mocked classifiers and a CLI runner so the graph shape stays the focus. The natural next move is to put a **real model** behind the nodes and a **real UI** in front of them. That last step is in a separate companion project (`langgraph-triage-demo-ui-answer/`) rather than continued in the same folder, because the dependency footprint changes a lot: React, Vite, an Ollama runtime, a .docx parser. Keeping it separate means Steps 1 to 8 stay a tight CLI exercise.
+
+The companion project is a **single-page React app** built with Vite + TypeScript. It lets you upload a `.docx`, watch the graph execute in real time, and see the final report with a colour-coded decision. Same graph, same state, just real model calls and a browser UI.
+
+**Architecture:**
+
+- **Browser uploads `.docx`** → [mammoth.js](https://github.com/mwilliamson/mammoth.js) extracts plain text in the browser, no server needed
+- **LangGraph runs in the browser** → same `StateGraph` from Step 5, classify + extract now call a real model
+- **Model = local [Ollama](https://ollama.com)** running [llama3.2:3b](https://ollama.com/library/llama3.2) (3B params, ~2GB, runs comfortably on a laptop CPU)
+- **Vite dev-server proxy** forwards `/api/ollama/*` to `http://localhost:11434` (Ollama's port) so the browser does not hit CORS
+
+**Install Ollama and pull the model:**
+
+<Terminal
+  commands={[
+    "# macOS",
+    "brew install ollama",
+    "ollama serve",
+    "",
+    "# Then pull the model (any OS)",
+    "ollama pull llama3.2:3b",
+  ]}
+/>
+
+**Clone the project, generate samples, run the dev server:**
+
+<Terminal
+  commands={[
+    "git clone https://github.com/GoldenPassport/automation-review-examples.git",
+    "cd automation-review-examples/langgraph-triage-demo-ui-answer",
+    "pnpm install",
+    "pnpm generate-samples",
+    "pnpm dev",
+  ]}
+/>
+
+`pnpm generate-samples` writes three `.docx` files into `samples/` (one per branch outcome). Open `http://localhost:5173`, click **Choose .docx file**, and upload one of them. The graph view animates as each node runs; the report panel appears once the graph reaches `END`.
+
+**Key wiring.** The nodes look almost identical to Step 4's mocks, with one change: `classify` and `extract` now call Ollama. The graph shape itself does not change.
+
+```ts
+import { ChatOllama } from "@langchain/ollama";
+
+const model = new ChatOllama({
+  baseUrl: "/api/ollama",   // proxied by Vite to localhost:11434
+  model: "llama3.2:3b",
+  temperature: 0,
+});
+
+export async function classify(state: TriageStateType) {
+  const response = await model.invoke(`
+    Classify this document as claim / query / complaint / unknown.
+    Respond with ONLY one of these four words.
+
+    Document: ${state.inputText}
+  `);
+  const text = response.content.toString().trim().toLowerCase();
+  const category = CATEGORIES.find((c) => text.includes(c)) ?? "unknown";
+  return { category };
+}
+```
+
+The point worth flagging: `validate` and `decide` are still **pure deterministic functions**. The model only judges *category* and *extracts* fields. Everything that touches the routing decision is rule-based, so the audit trail stays clean even though there's a non-deterministic LLM in the pipeline. This is the regulated-industry hybrid pattern from the Article tab, in 50 lines of code.
+
+**What you see when you upload `clean-claim.docx`:**
+
+- `classify` lights up gold, then green (decision: `claim`)
+- `extract` lights up, then green (policy + date pulled out of the document)
+- `validate` runs, passes (no errors)
+- `decide` resolves to `auto-process`
+- The auto-process branch (left of the graph) goes green; the other two stay grey
+- Report panel: **"Auto-process"** in green, with the extracted fields listed
+
+Upload `malformed-claim.docx` (no policy number, no date) and the flow is identical until `decide`, which routes to `queueForReview`. Report panel: **"Queue for human review"** in amber, with the validation errors listed.
+
+Upload `unknown.docx` (a job application) and `classify` returns `unknown`, which short-circuits the validation step and routes to `reject`. Report panel: **"Reject"** in red.
+
+<figure className="not-prose my-8">
+  <MdxImage
+    src="/posts/automation-review-langgraph-demo/document-intake-human-demo.png"
+    alt="LangGraph triage demo UI: malformed-claim.docx uploaded, all pipeline nodes complete, human-review branch lit, triage report shows the missing incident date"
+    className="w-full h-auto rounded-lg ring-1 ring-gold/15 shadow-sm"
+  />
+  <figcaption className="mt-3 text-sm text-ink-mute italic text-center">
+    `malformed-claim.docx` uploaded: pipeline runs end-to-end, the graph routes through `human-review`, the report panel shows the missing field that triggered the routing.
+  </figcaption>
+</figure>
+
+The full source (Vite config, the proxy, the React components, the workflow visualisation SVG, the sample-generator script) is in the companion project's README. Diff it against your own attempt to compare line by line.
+
+## Where to next
+
+Steps 1 to 8 ship a typed StateGraph with deterministic routing. Step 9 puts a real model and a real UI in front of it. The natural extensions from here:
+
+- **Make `human-review` actually pause.** The demo's `queueForReview` node returns immediately. In production it should call LangGraph's `interrupt()`, persist state to a checkpointer (`MemorySaver` in the browser, `SqliteSaver` or `PostgresSaver` server-side), and resume only after a reviewer approves via a separate UI. The graph shape does not change; only the node body and the `.compile({ checkpointer })` call do.
+- **Upgrade to structured output.** `nodes.ts` currently prompts the model and parses the response with regex, which is robust on small models but fragile. With a 7B+ model, `model.withStructuredOutput(zodSchema)` returns a typed object directly: no regex, no `N/A` parsing edge cases.
+- **Swap the model.** `MODEL_NAME` in `nodes.ts` is the only thing tying the demo to `llama3.2:3b`. Try `qwen2.5:7b` for better extraction, `gpt-oss:20b` for a serious local model, or replace `ChatOllama` with `ChatOpenAI` / `ChatAnthropic` for a hosted endpoint.
+- **Replace upload with a real queue.** Swap the `FileUpload` handler for a poller / WebSocket / SSE feed pulling messages from SQS, Kafka, or a Postgres `LISTEN`. Same graph, same nodes; only the entry point changes.
+- **Generate the Mermaid diagram.** `graph.getGraph().drawMermaid()` returns a string you can paste into any markdown viewer. Or render it alongside the SVG view for an auto-updating system diagram.
+- **Stand up CI.** `pnpm test` against three fixed inputs (one per branch) catches breaking changes when LangGraph upgrades. Worth setting up before the graph is mission-critical.
+
+Both projects live in the companion monorepo:
+
+<aside className="not-prose my-8 rounded-lg border border-gold/30 bg-cream-50 overflow-hidden">
+  <div className="px-6 py-4 border-b border-gold/20 bg-gradient-to-br from-cream-50 to-cream-200/50 flex items-baseline justify-between gap-4 flex-wrap">
+    <div>
+      <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold mb-1">Companion repo</p>
+      <p className="font-serif text-xl text-ink leading-tight">GoldenPassport / automation-review-examples</p>
+    </div>
+    <a
+      href="https://github.com/GoldenPassport/automation-review-examples"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ink text-cream text-sm font-medium no-underline hover:bg-gold-deep transition-colors"
+    >
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden>
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+      </svg>
+      Open on GitHub
+    </a>
+  </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gold/20">
+    <a
+      href="https://github.com/GoldenPassport/automation-review-examples/tree/main/langgraph-triage-demo-answer"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block p-5 hover:bg-cream-200/40 transition-colors no-underline group"
+    >
+      <p className="text-[0.625rem] tracking-[0.22em] uppercase text-gold-deep font-semibold mb-1">Steps 1 to 8</p>
+      <p className="font-mono text-sm text-ink font-semibold mb-2 group-hover:text-gold-deep transition-colors"><code>langgraph-triage-demo-answer/</code></p>
+      <p className="text-sm text-ink-soft leading-snug">CLI runner with mocked nodes. The full reference for the follow-along tutorial. Node 20+ / TypeScript, no API key needed.</p>
+    </a>
+    <a
+      href="https://github.com/GoldenPassport/automation-review-examples/tree/main/langgraph-triage-demo-ui-answer"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block p-5 hover:bg-cream-200/40 transition-colors no-underline group"
+    >
+      <p className="text-[0.625rem] tracking-[0.22em] uppercase text-gold-deep font-semibold mb-1">Step 9</p>
+      <p className="font-mono text-sm text-ink font-semibold mb-2 group-hover:text-gold-deep transition-colors"><code>langgraph-triage-demo-ui-answer/</code></p>
+      <p className="text-sm text-ink-soft leading-snug">Vite + React UI with real Ollama model calls, .docx upload, and a live workflow visualisation. Three sample documents included.</p>
+    </a>
+  </div>
+  <div className="px-6 py-3 border-t border-gold/20 text-xs text-ink-mute bg-cream-200/30">MIT licensed. Pull requests welcome.</div>
 </aside>
-
-If a future LangGraph release breaks anything in the demo, the repo's CI runs against the latest published version and will catch it. Pull requests welcome.
 
 <CtaCard label="Suggest a review">
 

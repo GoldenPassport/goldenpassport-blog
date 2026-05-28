@@ -1,6 +1,6 @@
 ---
 title: "Automation Review: LangGraph"
-date: "2026-05-27"
+date: "2026-05-28"
 category: "Tech"
 series: "Automation Review"
 excerpt: "Just over two years after launch, LangGraph is among the most-adopted orchestration frameworks for agentic AI, but it is not unchallenged. A balanced look at what it actually is, where it earns its keep, and where the gaps are."
@@ -12,7 +12,7 @@ tags:
   - Orchestration
   - Tooling
   - Open Source
-unlisted: true
+unlisted: false
 group: "automation-review-langgraph"
 groupLabel: "Article"
 groupOrder: 1
@@ -36,8 +36,6 @@ groupOrder: 1
     { icon: "state", title: "Typed state across LLM calls" },
     { icon: "clock", title: "Long-running, pausable workflows" },
     { icon: "branch", title: "Branching with auditability" },
-    { icon: "stream", title: "Streaming and partial results" },
-    { icon: "group", title: "Sub-agent composition" },
   ]}
   reach={{
     primary: "~62M",
@@ -51,8 +49,8 @@ groupOrder: 1
   ]}
   cons={[
     "Security posture needs active management (2025 CVEs in checkpointers)",
-    "Docs uneven across runtimes; Python deeper than JS",
-    "LangChain peer-dependency gravity is real",
+    "Docs uneven across runtimes",
+    "LangChain peer-dependency is real",
     "Conditional-edge ergonomics are verbose",
     "Pre-1.0 versioning was spiky; 1.x stabilising",
   ]}
@@ -139,31 +137,59 @@ LangGraph has only been around for **just over two years** at the time of writin
 
 <TimelineEntry date="January 2024">
 
-Public launch. Python v0.0.10 on 9 January, JS v0.0.1 on 18 January, formal announcement on 22 January. Both releases were spartan: `StateGraph`, a handful of node helpers, integration with the existing LangChain ecosystem for prompts and tools.
+**Public launch.** Python v0.0.10 ships to PyPI on 9 January; JS v0.0.1 follows on 18 January; LangChain formally announces LangGraph on 22 January. Both releases are spartan: `StateGraph`, a handful of node helpers, integration with LangChain for prompts and tools. The launch lands in the middle of the industry's shift from "chatbots" to "agents".
+
+</TimelineEntry>
+
+{/* TODO verify before publish: LangChain reportedly raised a ~$25M Series A
+    from Sequoia in early 2024 at a roughly $200M valuation. Confirm round
+    size, lead, and timing. */}
+
+<TimelineEntry date="March 2024">
+
+**The Devin moment.** Cognition Labs demos Devin, an "AI software engineer", in a viral video. Mainstream attention to agentic frameworks intensifies; LangGraph's "explicit structure for agent loops" positioning starts landing with product teams who had bounced off less-opinionated alternatives.
 
 </TimelineEntry>
 
 <TimelineEntry date="Mid 2024">
 
-Stream support, conditional edges, the first usable checkpointing layer. LangGraph starts showing up in serious production case studies.
+**Maturing primitives.** Stream support, conditional edges, and the first usable checkpointing layer ship. LangGraph appears in the first wave of serious production case studies. {/* TODO verify: whether Klarna's much-reported customer-service agent (announced February 2024) is publicly attributed to LangGraph specifically, or to the broader LangChain stack. */}
 
 </TimelineEntry>
 
-<TimelineEntry date="Late 2024 to early 2025">
+<TimelineEntry date="Late 2024">
 
-Persistence backends (in-memory, Postgres, SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio. The Python side gets an adoption push from the LangChain v0.3 release that aligned the two ecosystems.
+**Competition arrives + Studio.** Persistence backends (in-memory, Postgres, SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio ship. {/* TODO verify Oct 2024: */} Meanwhile, OpenAI open-sources **Swarm** as an experimental agent-handoff framework, the first clear signal that the dominant model vendor intends to enter the orchestration space directly.
 
 </TimelineEntry>
 
-<TimelineEntry date="Late 2025">
+<TimelineEntry date="Early 2025">
 
-The 1.0 line. v1.0 alpha in September; v1.0 GA on 22 October 2025. The API stabilises; the TypeScript types get markedly better. The commercial deployment product has been renamed twice: launched as **LangGraph Cloud** (June 2024), rebranded to **LangGraph Platform** (October 2024) when self-hosted and bring-your-own-cloud landed, then renamed to **LangSmith Deployment** (October 2025) as part of a broader product-naming cleanup.
+**Vendor-official competition.** OpenAI ships the **Agents SDK** as the production-grade successor to Swarm {/* TODO verify Mar 2025 release timing at OpenAI dev event */}, directly targeting LangGraph's category from the model vendor itself. The LangChain v0.3 release aligns the Python and JS ecosystems and pushes another wave of LangGraph adoption.
+
+</TimelineEntry>
+
+<TimelineEntry date="Mid 2025">
+
+**Production adoption ramps.** Klarna, Lyft, Cloudflare, The Home Depot, Workday, Nvidia, LinkedIn, and Coinbase appear on LangChain's production-users page. Combined Python + JS downloads cross ~40M monthly {/* TODO verify exact mid-2025 download figure */}. Regulated-industry conversations centre on agentic + workflow hybrids rather than pure-agent stacks.
+
+</TimelineEntry>
+
+<TimelineEntry date="22 October 2025">
+
+**1.0 GA + product rename.** v1.0 alpha lands in September; v1.0 GA ships on 22 October. The API stabilises; TypeScript types get markedly better. The commercial deployment product completes its three-rename arc: **LangGraph Cloud** (June 2024) → **LangGraph Platform** (October 2024, when self-hosted and bring-your-own-cloud landed) → **LangSmith Deployment** (October 2025, as part of a broader product-naming cleanup).
+
+</TimelineEntry>
+
+<TimelineEntry date="November 2025">
+
+**Security disclosures.** [CVE-2025-64439](https://nvd.nist.gov/vuln/detail/CVE-2025-64439): high-severity remote-code-execution in `langgraph-checkpoint`'s JsonPlusSerializer, disclosed 5 November. [CVE-2025-67644](https://nvd.nist.gov/vuln/detail/CVE-2025-67644): SQL-injection in the LangGraph SQLite checkpoint backend follows. Both patched quickly; the pattern is flagged in the gaps section below.
 
 </TimelineEntry>
 
 <TimelineEntry date="Today" current>
 
-v1.2.2 (Python) and v1.3.2 (JS) are the current releases.
+v1.2.2 (Python) and v1.3.2 (JS) are current; ~62M combined monthly downloads across both runtimes.
 
 </TimelineEntry>
 
@@ -245,7 +271,7 @@ Deterministic supersteps from Pregel, compile-once-run-many-runtimes from Beam, 
 | --- | --- |
 | You are building **stateful, multi-step LLM features** in Python or TypeScript. | You are building a **single-prompt, single-call** feature. LangGraph is overkill. |
 | You want **deterministic structure** around non-deterministic model calls. | You want **agent-decides-everything** autonomy. AutoGen leans further that way. |
-| You need the production-concern surface (persistence, streaming, human approval, observability) provided by the framework rather than reinvented. | You will not tolerate the LangChain peer-dep gravity. |
+| You need the production-concern surface (persistence, streaming, human approval, observability) provided by the framework rather than reinvented. | You will not tolerate the LangChain peer-dependency footprint. |
 | You already use the LangChain ecosystem, or are happy to. | You are in a **heavily regulated industry** (banking, insurance, healthcare, pharma) under frameworks like SR 11-7, the EU AI Act, or GxP that demand deterministic, audit-proof steps. The LLM call inside any node is not deterministic, so the auditable spine belongs in a BPM or durable workflow engine (Flowable, jBPM, Temporal). |
 
 </div>
@@ -364,7 +390,7 @@ The balanced part of this review.
 
 <CrossItem>
 
-**The LangChain peer-dependency gravity is real.** ("Peer dependencies" are packages a library expects you to install alongside it.) You can use LangGraph without the rest of LangChain, but the path of least resistance pulls you in. If you prefer thinner installs, plan that boundary deliberately.
+**LangChain peer-dependency pulls you in.** ("Peer dependencies" are packages a library expects you to install alongside it.) You can use LangGraph without the rest of LangChain, but the path of least resistance leads through `@langchain/core` and the model adapter packages. If you prefer thinner installs, plan that boundary deliberately.
 
 </CrossItem>
 
@@ -384,7 +410,7 @@ The balanced part of this review.
 
 <VerdictCard>
 
-A few things the poster cannot carry, but the verdict should.
+The poster carries the headline. What the verdict should add to it:
 
 The same pace that delivers feature velocity also produces a steady trickle of security disclosures, including the 2025 issues flagged above. That is normal for a framework of this scope, but it does mean LangGraph is not a "set it up and forget it" dependency. Plan for ongoing patch hygiene the way you would for any other production-critical library.
 

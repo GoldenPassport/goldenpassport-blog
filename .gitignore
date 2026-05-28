@@ -145,3 +145,6 @@ playwright/.cache
 chromatic-build-*
 .chromatic
 build-storybook.log
+
+# --- Loose screenshots in repo root (debugging artefacts) --------------------
+/Screenshot*.png

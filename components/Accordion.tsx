@@ -49,7 +49,11 @@ export function Accordion({ title, defaultOpen = false, children }: Props) {
         </svg>
       </summary>
       <div className="border-t border-gold/15 px-6 py-5">
-        <div className="prose prose-base max-w-prose font-serif">{children}</div>
+        {/* Match the article body's typography exactly: prose-lg for size,
+            max-w-none to fill the article width. Accordion content used to
+            render at prose-base inside max-w-prose, which made code blocks
+            wrap unexpectedly and text shrink when an accordion opened. */}
+        <div className="prose prose-lg max-w-none font-serif">{children}</div>
       </div>
     </details>
   );
