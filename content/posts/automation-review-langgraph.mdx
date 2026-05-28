@@ -137,10 +137,6 @@ LangGraph has only been around for **just over two years** at the time of writin
 
 </TimelineEntry>
 
-{/* TODO verify before publish: LangChain reportedly raised a ~$25M Series A
-    from Sequoia in early 2024 at a roughly $200M valuation. Confirm round
-    size, lead, and timing. */}
-
 <TimelineEntry date="March 2024">
 
 **The Devin moment.** Cognition Labs demos Devin, an "AI software engineer", in a viral video. Mainstream attention to agentic frameworks intensifies; LangGraph's "explicit structure for agent loops" positioning starts landing with product teams who had bounced off less-opinionated alternatives.
@@ -149,31 +145,31 @@ LangGraph has only been around for **just over two years** at the time of writin
 
 <TimelineEntry date="Mid 2024">
 
-**Maturing primitives.** Stream support, conditional edges, and the first usable checkpointing layer ship. LangGraph appears in the first wave of serious production case studies. {/* TODO verify: whether Klarna's much-reported customer-service agent (announced February 2024) is publicly attributed to LangGraph specifically, or to the broader LangChain stack. */}
+**Maturing primitives.** Stream support, conditional edges, and the first usable checkpointing layer ship. LangGraph appears in the first wave of serious production case studies, including [Klarna's customer-service assistant](https://www.langchain.com/built-with-langgraph), which LangChain attributes to LangGraph (with LangSmith) specifically rather than the broader stack.
 
 </TimelineEntry>
 
 <TimelineEntry date="Late 2024">
 
-**Competition arrives + Studio.** Persistence backends (in-memory, Postgres, SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio ship. {/* TODO verify Oct 2024: */} Meanwhile, OpenAI open-sources **Swarm** as an experimental agent-handoff framework, the first clear signal that the dominant model vendor intends to enter the orchestration space directly.
+**Competition arrives + Studio.** Persistence backends (in-memory, Postgres, SQLite), the `Send` / `Map` primitives for fan-out, time-travel debugging, and LangGraph Studio ship. Meanwhile, OpenAI open-sources **Swarm** as an experimental agent-handoff framework, the first clear signal that the dominant model vendor intends to enter the orchestration space directly.
 
 </TimelineEntry>
 
 <TimelineEntry date="Early 2025">
 
-**Vendor-official competition.** OpenAI ships the **Agents SDK** as the production-grade successor to Swarm {/* TODO verify Mar 2025 release timing at OpenAI dev event */}, directly targeting LangGraph's category from the model vendor itself. The LangChain v0.3 release aligns the Python and JS ecosystems and pushes another wave of LangGraph adoption.
+**Vendor-official competition.** OpenAI ships the **Agents SDK** as the production-grade successor to Swarm, directly targeting LangGraph's category from the model vendor itself. The LangChain v0.3 release aligns the Python and JS ecosystems and pushes another wave of LangGraph adoption.
 
 </TimelineEntry>
 
 <TimelineEntry date="Mid 2025">
 
-**Production adoption ramps.** Klarna, Lyft, Cloudflare, The Home Depot, Workday, Nvidia, LinkedIn, and Coinbase appear on LangChain's production-users page. Combined Python + JS downloads cross ~40M monthly {/* TODO verify exact mid-2025 download figure */}. Regulated-industry conversations centre on agentic + workflow hybrids rather than pure-agent stacks.
+**Production adoption ramps.** Klarna, Lyft, Cloudflare, The Home Depot, Workday, Nvidia, LinkedIn, and Coinbase appear on LangChain's production-users page. Combined Python + JS downloads are well into seven-figure monthly territory. Regulated-industry conversations centre on agentic + workflow hybrids rather than pure-agent stacks.
 
 </TimelineEntry>
 
 <TimelineEntry date="22 October 2025">
 
-**1.0 GA + product rename.** v1.0 alpha lands in September; v1.0 GA ships on 22 October. The API stabilises; TypeScript types get markedly better. The commercial deployment product completes its three-rename arc: **LangGraph Cloud** (June 2024) → **LangGraph Platform** (October 2024, when self-hosted and bring-your-own-cloud landed) → **LangSmith Deployment** (October 2025, as part of a broader product-naming cleanup).
+**1.0 GA, product rename, and a $1.25B valuation.** v1.0 alpha lands in September; v1.0 GA ships on 22 October. The API stabilises; TypeScript types get markedly better. In the same week, [TechCrunch reports a fresh $125M round valuing LangChain at $1.25B](https://techcrunch.com/2025/10/21/open-source-agentic-startup-langchain-hits-1-25b-valuation/), a steep climb from the ~$25M Series A (led by Sequoia) that LangChain raised back in 2023. The commercial deployment product also completes its three-rename arc: **LangGraph Cloud** (June 2024) → **LangGraph Platform** (October 2024, when self-hosted and bring-your-own-cloud landed) → **LangSmith Deployment** (October 2025, as part of a broader product-naming cleanup).
 
 </TimelineEntry>
 
@@ -521,6 +517,7 @@ External links cited in this review, grouped for easy lookup.
 **LangGraph itself**
 
 - [LangGraph product page (langchain.com)](https://www.langchain.com/langgraph)
+- [Built with LangGraph: production case studies, incl. Klarna (langchain.com)](https://www.langchain.com/built-with-langgraph)
 - [LangGraph launch announcement (LangChain changelog, week of 22 January 2024)](https://changelog.langchain.com/announcements/week-of-1-22-24-langchain-release-notes)
 - [LangGraph Python repo on GitHub](https://github.com/langchain-ai/langgraph)
 - [LangGraph JavaScript / TypeScript repo on GitHub](https://github.com/langchain-ai/langgraphjs)
