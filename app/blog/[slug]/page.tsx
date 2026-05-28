@@ -179,16 +179,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {post.hero ? (
         <figure className="mt-8 -mx-6 sm:mx-0">
+          {/* Hero is a scene-setting banner, not a captioned figure: the
+              alt text stays for accessibility, but no visible figcaption. */}
           <MdxImage
             src={post.hero}
             alt={post.heroAlt ?? post.title}
             className="w-full h-auto sm:rounded-xl shadow-sm ring-1 ring-gold/10"
           />
-          {post.heroAlt ? (
-            <figcaption className="mt-3 text-sm text-ink-mute italic text-center px-6 sm:px-0">
-              {post.heroAlt}
-            </figcaption>
-          ) : null}
         </figure>
       ) : null}
 

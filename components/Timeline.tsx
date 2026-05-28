@@ -1,16 +1,21 @@
 /**
  * Vertical timeline used for "short history" sections in long-form posts.
  *
- * Visual: a single gold rule down the left, each entry pinned to it by a small
- * gold dot. The date sits in the small-caps accent style used elsewhere on the
- * site (Snapshot label, card chips). Content is rendered inside the surrounding
- * prose so links and emphasis inherit cleanly.
+ * Visual: a gold rule down the left, each entry anchored by a gold-deep
+ * circle that carries a short year ("'24", "'25"). The circle matches the
+ * 36px badge geometry used by TickList / NumberedList so the list styles
+ * read as a family. The connecting rule is drawn per-entry (flex-1 below
+ * each circle) so it always meets the next circle regardless of how tall
+ * the content is; it is hidden on the final entry.
  *
- * The final entry can be marked `current` to render a slightly larger,
- * ring-haloed dot ("you are here").
+ * The date sits in the small-caps accent style used elsewhere on the site.
+ * Content renders inside prose so links and emphasis inherit cleanly.
  *
- * Registered globally in `mdx-components.tsx` and in the post page's component
- * map, so any MDX file can use it directly:
+ * The final entry can be marked `current` to render a larger, ring-haloed
+ * circle ("you are here").
+ *
+ * Registered globally in `mdx-components.tsx` and in the post page's
+ * component map, so any MDX file can use it directly:
  *
  *   <Timeline>
  *     <TimelineEntry date="January 2024">
@@ -31,51 +36,78 @@ type TimelineProps = {
 
 export function Timeline({ children }: TimelineProps) {
   return (
-    <div className="not-prose my-8 ml-3">
-      {/* The ol carries the solid rule between the first and last dots.
-          Two pseudo-elements extend it as dashed segments above the first
-          dot and below the last dot, signalling "history continues before
-          this" and "story continues after this" without literal end-caps. */}
-      <ol
-        className={[
-          "relative space-y-8 border-l-2 border-gold/40",
-          "before:content-[''] before:absolute before:-left-0.5 before:-top-6 before:h-6 before:w-0 before:border-l-2 before:border-dashed before:border-gold/40",
-          "after:content-[''] after:absolute after:-left-0.5 after:-bottom-6 after:h-6 after:w-0 after:border-l-2 after:border-dashed after:border-gold/40",
-        ].join(" ")}
-      >
+    <div className="not-prose my-8">
+      {/* The connecting rule lives on each entry (see TimelineEntry); the
+          final entry's rule is hidden so the line stops at the last circle. */}
+      <ol className="relative [&>li:last-child_.tl-rule]:hidden">
         {children}
       </ol>
     </div>
   );
 }
 
+/** Derive a short year label ("'25") from the entry's date string. Falls back
+ *  to the current year for a `current` "Today"-style entry with no explicit
+ *  year, and honours an explicit `year` override when supplied. */
+function shortYear(date: string, current: boolean, year?: string): string {
+  if (year) return year;
+  const match = date.match(/\b20(\d{2})\b/);
+  if (match) return `'${match[1]}`;
+  if (current) return `'${String(new Date().getFullYear()).slice(-2)}`;
+  return "";
+}
+
+/** The date label shown beside the circle, with the full year stripped out
+ *  since the circle already carries it (e.g. "January 2024" -> "January",
+ *  "22 October 2025" -> "22 October", "Today" -> "Today"). */
+function labelWithoutYear(date: string): string {
+  return date.replace(/\b20\d{2}\b/, "").replace(/\s{2,}/g, " ").trim();
+}
+
 type TimelineEntryProps = {
   /** Short label rendered above the body, e.g. "January 2024" or "Today". */
   date: string;
-  /** Render a larger, ring-haloed dot for "you are here" style emphasis. */
+  /** Override the year shown in the circle (e.g. "'25"). Auto-derived from
+   *  `date` when omitted. */
+  year?: string;
+  /** Render a larger, ring-haloed circle for "you are here" style emphasis. */
   current?: boolean;
   children: React.ReactNode;
 };
 
-export function TimelineEntry({ date, current = false, children }: TimelineEntryProps) {
+export function TimelineEntry({ date, year, current = false, children }: TimelineEntryProps) {
+  const label = shortYear(date, current, year);
   return (
-    <li className="relative pl-8">
-      {/* Dot. left-0 sits at the inside edge of the ol's 2px border, so a
-          standard -translate-x-1/2 would leave the dot 1px to the right of
-          the rule's centre. The extra 1px shift puts it dead centre. */}
-      <span
-        aria-hidden
-        className={
-          current
-            ? "absolute left-0 top-1.5 -translate-x-[calc(50%+1px)] inline-block h-3.5 w-3.5 rounded-full bg-gold-deep ring-4 ring-gold/25"
-            : "absolute left-0 top-2 -translate-x-[calc(50%+1px)] inline-block h-2.5 w-2.5 rounded-full bg-gold-deep"
-        }
-      />
-      <p className="text-sm tracking-[0.22em] uppercase text-gold-deep font-semibold mb-2">
-        {date}
-      </p>
-      <div className="prose prose-base max-w-prose font-serif text-ink-soft">
-        {children}
+    <li className="flex gap-5">
+      {/* Left rail: fixed-width so the rule sits at the same x and runs
+          through the centre of every circle (including the larger current
+          one). The circle is centred in the rail; the rule fills the rest of
+          the row with no gap, so it touches the bottom of this circle and the
+          top of the next. */}
+      <div className="flex w-11 flex-col items-center self-stretch">
+        <span
+          aria-hidden
+          className={
+            "inline-flex shrink-0 items-center justify-center rounded-full bg-gold-deep font-serif font-semibold text-cream " +
+            (current
+              ? "h-11 w-11 text-sm ring-4 ring-gold/25"
+              : "h-9 w-9 text-xs ring-1 ring-gold-deep/30")
+          }
+        >
+          {label}
+        </span>
+        <span aria-hidden className="tl-rule w-0.5 flex-1 bg-gold/40" />
+      </div>
+
+      {/* Content. pb gives the gap to the next entry; the connecting rule
+          spans it. */}
+      <div className="pb-9 pt-1.5">
+        <p className="text-sm tracking-[0.22em] uppercase text-gold-deep font-semibold mb-2">
+          {labelWithoutYear(date)}
+        </p>
+        <div className="prose prose-base max-w-prose font-serif text-ink-soft">
+          {children}
+        </div>
       </div>
     </li>
   );
