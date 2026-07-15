@@ -69,8 +69,9 @@ export function CookieConsent() {
           A small note on cookies.
         </p>
         <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-          This site uses only what’s needed to make it work. If I add analytics later, it’ll be
-          privacy-respecting and only with your consent. No third-party trackers, ever.
+          If you accept, this site loads privacy-friendly Vercel Web Analytics to record anonymous,
+          aggregate page views. It uses no cookies, personal identifiers, advertising, or
+          cross-site tracking. Declining keeps analytics switched off.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <button
