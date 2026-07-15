@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Human review is only a rubber stamp</title>
+  <desc id="desc">A BPMN process where an AI assessment is followed by a user task to confirm the AI result, but the reviewer has no evidence, time or authority to change it.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2A3548" /></marker>
+    <marker id="arrow-risk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9B3A32" /></marker>
+    <symbol id="cog" viewBox="0 0 24 24"><path d="M9.4 1.5h5.2l.6 2.5c.7.2 1.3.6 1.9 1.1l2.4-.8 2.6 4.4-1.9 1.7c.2.7.2 1.4 0 2.1l1.9 1.7-2.6 4.4-2.4-.8c-.5.5-1.2.9-1.9 1.1l-.6 2.5H9.4l-.6-2.5c-.7-.2-1.3-.6-1.9-1.1l-2.4.8-2.6-4.4 1.9-1.7a7 7 0 0 1 0-2.1L1.9 8.7l2.6-4.4 2.4.8c.5-.5 1.2-.9 1.9-1.1l.6-2.5zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor" /></symbol>
+    <style>
+      .task{fill:#FEFCF8;stroke:#2A3548;stroke-width:2}.risk{fill:#FFF4F1;stroke:#9B3A32;stroke-width:2.5}.flow{fill:none;stroke:#2A3548;stroke-width:2;marker-end:url(#arrow)}.risk-flow{fill:none;stroke:#9B3A32;stroke-width:2.5;marker-end:url(#arrow-risk)}.association{fill:none;stroke:#8C661F;stroke-width:2;stroke-dasharray:6 6}.label{fill:#0F1B2D;font:500 18px Inter,Arial,sans-serif;text-anchor:middle}.small{fill:#5B6577;font:400 15px Inter,Arial,sans-serif;text-anchor:middle}.note{fill:#8C661F;font:500 16px Inter,Arial,sans-serif}.event{fill:#FEFCF8;stroke:#2A3548;stroke-width:2}.end{fill:#FEFCF8;stroke:#2A3548;stroke-width:5}
+    </style>
+  </defs>
+  <rect width="1200" height="360" fill="#FBF7EF" />
+  <circle class="event" cx="75" cy="165" r="22" />
+  <text class="small" x="75" y="208"><tspan x="75">Application</tspan><tspan x="75" dy="20">received</tspan></text>
+  <path class="flow" d="M97 165H160" />
+  <rect class="task" x="160" y="110" width="210" height="110" rx="10" />
+  <use href="#cog" x="171" y="121" width="28" height="28" color="#2A3548" />
+  <text class="label" x="265" y="159"><tspan x="265">AI assesses</tspan><tspan x="265" dy="24">application</tspan></text>
+  <path class="risk-flow" d="M370 165H440" />
+  <rect class="risk" x="440" y="110" width="210" height="110" rx="10" />
+  <circle cx="466" cy="132" r="8" fill="none" stroke="#9B3A32" stroke-width="2" /><path d="M452 151c2-9 7-13 14-13s12 4 14 13" fill="none" stroke="#9B3A32" stroke-width="2" />
+  <text class="label" x="545" y="159"><tspan x="545">Confirm</tspan><tspan x="545" dy="24">AI result</tspan></text>
+  <path class="risk-flow" d="M650 165H720" />
+  <rect class="risk" x="720" y="110" width="210" height="110" rx="10" />
+  <use href="#cog" x="731" y="121" width="28" height="28" color="#9B3A32" />
+  <text class="label" x="825" y="159"><tspan x="825">Apply AI</tspan><tspan x="825" dy="24">outcome</tspan></text>
+  <path class="flow" d="M930 165H1010" />
+  <circle class="end" cx="1034" cy="165" r="21" />
+  <text class="small" x="1034" y="207">Case completed</text>
+  <path class="association" d="M545 220V270H680" />
+  <path d="M680 245v58M680 245h12M680 303h12" fill="none" stroke="#8C661F" stroke-width="2" />
+  <text class="note" x="705" y="264"><tspan x="705">No evidence, time or authority</tspan><tspan x="705" dy="22">to change the result</tspan></text>
+</svg>

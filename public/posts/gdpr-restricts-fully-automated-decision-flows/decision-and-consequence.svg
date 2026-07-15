@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">The decision and consequence happen in one step</title>
+  <desc id="desc">A BPMN process where an AI assesses a mortgage application and the applicant is informed of approval or decline without human review of the core decision activity.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2A3548" /></marker>
+    <marker id="arrow-risk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9B3A32" /></marker>
+    <symbol id="cog" viewBox="0 0 24 24"><path d="M9.4 1.5h5.2l.6 2.5c.7.2 1.3.6 1.9 1.1l2.4-.8 2.6 4.4-1.9 1.7c.2.7.2 1.4 0 2.1l1.9 1.7-2.6 4.4-2.4-.8c-.5.5-1.2.9-1.9 1.1l-.6 2.5H9.4l-.6-2.5c-.7-.2-1.3-.6-1.9-1.1l-2.4.8-2.6-4.4 1.9-1.7a7 7 0 0 1 0-2.1L1.9 8.7l2.6-4.4 2.4.8c.5-.5 1.2-.9 1.9-1.1l.6-2.5zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor" /></symbol>
+    <style>
+      .task{fill:#FEFCF8;stroke:#2A3548;stroke-width:2}.risk{fill:#FFF4F1;stroke:#9B3A32;stroke-width:2.5}.flow{fill:none;stroke:#2A3548;stroke-width:2;marker-end:url(#arrow)}.risk-flow{fill:none;stroke:#9B3A32;stroke-width:2.5;marker-end:url(#arrow-risk)}.association{fill:none;stroke:#8C661F;stroke-width:2;stroke-dasharray:6 6}.label{fill:#0F1B2D;font:500 18px Inter,Arial,sans-serif;text-anchor:middle}.task-label{fill:#0F1B2D;font:500 16px Inter,Arial,sans-serif;text-anchor:middle}.small{fill:#5B6577;font:400 15px Inter,Arial,sans-serif;text-anchor:middle}.branch{fill:#5B6577;font:500 14px Inter,Arial,sans-serif}.note{fill:#8C661F;font:500 16px Inter,Arial,sans-serif}.event{fill:#FEFCF8;stroke:#2A3548;stroke-width:2}.end{fill:#FEFCF8;stroke:#2A3548;stroke-width:5}.gateway{fill:#FEFCF8;stroke:#2A3548;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1200" height="360" fill="#FBF7EF" />
+  <circle class="event" cx="70" cy="180" r="22" />
+  <text class="small" x="70" y="225"><tspan x="70">Application</tspan><tspan x="70" dy="20">received</tspan></text>
+  <path class="flow" d="M92 180H145" />
+  <rect class="task" x="145" y="125" width="215" height="110" rx="10" />
+  <use href="#cog" x="156" y="136" width="28" height="28" color="#2A3548" />
+  <text class="label" x="253" y="174"><tspan x="253">AI assesses</tspan><tspan x="253" dy="24">application</tspan></text>
+  <path class="flow" d="M360 180H420" />
+  <path class="gateway" d="M455 145L490 180L455 215L420 180Z" />
+  <path d="M443 168l24 24M467 168l-24 24" stroke="#2A3548" stroke-width="3" />
+  <text class="small" x="455" y="242">Approved?</text>
+  <path class="flow" d="M455 145V78H550" />
+  <text class="branch" x="470" y="95">Yes</text>
+  <rect class="task" x="550" y="38" width="190" height="80" rx="10" />
+  <path d="M561 50h27v18h-27zM561 51l13.5 10L588 51" fill="none" stroke="#2A3548" stroke-width="2" />
+  <text class="task-label" x="668" y="72"><tspan x="668">Inform applicant</tspan><tspan x="668" dy="22">of approval</tspan></text>
+  <path class="flow" d="M740 78H815" />
+  <circle class="end" cx="838" cy="78" r="20" />
+  <text class="small" x="838" y="116">Approved</text>
+  <path class="risk-flow" d="M455 215V280H550" />
+  <text class="branch" x="470" y="268">No</text>
+  <rect class="risk" x="550" y="240" width="190" height="80" rx="10" />
+  <path d="M561 252h27v18h-27zM561 253l13.5 10L588 253" fill="none" stroke="#9B3A32" stroke-width="2" />
+  <text class="task-label" x="668" y="274"><tspan x="668">Inform applicant</tspan><tspan x="668" dy="22">of decline</tspan></text>
+  <path class="risk-flow" d="M740 280H815" />
+  <circle cx="838" cy="280" r="20" fill="#FFF4F1" stroke="#9B3A32" stroke-width="5" />
+  <text class="small" x="838" y="320">Case closed</text>
+  <path class="association" d="M490 180H520" />
+  <path d="M520 150v62M520 150h12M520 212h12" fill="none" stroke="#8C661F" stroke-width="2" />
+  <text class="note" x="545" y="172"><tspan x="545">No human review of</tspan><tspan x="545" dy="22">core decision activity</tspan></text>
+</svg>

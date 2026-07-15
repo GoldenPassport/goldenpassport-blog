@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_RubberStamp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.38.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:process id="Process_RubberStamp" name="Human review is only a rubber stamp" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_Application" name="Application received"><bpmn:outgoing>Flow_StartToAssess</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:serviceTask id="Task_AIAssessment" name="AI assesses application"><bpmn:incoming>Flow_StartToAssess</bpmn:incoming><bpmn:outgoing>Flow_AssessToReview</bpmn:outgoing></bpmn:serviceTask>
+    <bpmn:userTask id="Task_ConfirmResult" name="Confirm AI result"><bpmn:incoming>Flow_AssessToReview</bpmn:incoming><bpmn:outgoing>Flow_ReviewToApply</bpmn:outgoing></bpmn:userTask>
+    <bpmn:serviceTask id="Task_ApplyOutcome" name="Apply AI outcome"><bpmn:incoming>Flow_ReviewToApply</bpmn:incoming><bpmn:outgoing>Flow_ApplyToEnd</bpmn:outgoing></bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_Complete" name="Case completed"><bpmn:incoming>Flow_ApplyToEnd</bpmn:incoming></bpmn:endEvent>
+    <bpmn:textAnnotation id="Annotation_NoAuthority"><bpmn:text>No evidence, time or authority to change the result</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Association_NoAuthority" sourceRef="Task_ConfirmResult" targetRef="Annotation_NoAuthority" />
+    <bpmn:sequenceFlow id="Flow_StartToAssess" sourceRef="StartEvent_Application" targetRef="Task_AIAssessment" />
+    <bpmn:sequenceFlow id="Flow_AssessToReview" sourceRef="Task_AIAssessment" targetRef="Task_ConfirmResult" />
+    <bpmn:sequenceFlow id="Flow_ReviewToApply" sourceRef="Task_ConfirmResult" targetRef="Task_ApplyOutcome" />
+    <bpmn:sequenceFlow id="Flow_ApplyToEnd" sourceRef="Task_ApplyOutcome" targetRef="EndEvent_Complete" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_RubberStamp"><bpmndi:BPMNPlane id="BPMNPlane_RubberStamp" bpmnElement="Process_RubberStamp">
+    <bpmndi:BPMNShape id="StartEvent_Application_di" bpmnElement="StartEvent_Application"><dc:Bounds x="72" y="142" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="48" y="185" width="85" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_AIAssessment_di" bpmnElement="Task_AIAssessment"><dc:Bounds x="160" y="110" width="190" height="100" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ConfirmResult_di" bpmnElement="Task_ConfirmResult"><dc:Bounds x="435" y="110" width="190" height="100" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Task_ApplyOutcome_di" bpmnElement="Task_ApplyOutcome"><dc:Bounds x="710" y="110" width="190" height="100" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="EndEvent_Complete_di" bpmnElement="EndEvent_Complete"><dc:Bounds x="975" y="142" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="958" y="185" width="70" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Annotation_NoAuthority_di" bpmnElement="Annotation_NoAuthority"><dc:Bounds x="425" y="245" width="250" height="45" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNEdge id="Flow_StartToAssess_di" bpmnElement="Flow_StartToAssess"><di:waypoint x="108" y="160" /><di:waypoint x="160" y="160" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Flow_AssessToReview_di" bpmnElement="Flow_AssessToReview"><di:waypoint x="350" y="160" /><di:waypoint x="435" y="160" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Flow_ReviewToApply_di" bpmnElement="Flow_ReviewToApply"><di:waypoint x="625" y="160" /><di:waypoint x="710" y="160" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Flow_ApplyToEnd_di" bpmnElement="Flow_ApplyToEnd"><di:waypoint x="900" y="160" /><di:waypoint x="975" y="160" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Association_NoAuthority_di" bpmnElement="Association_NoAuthority"><di:waypoint x="530" y="210" /><di:waypoint x="530" y="245" /></bpmndi:BPMNEdge>
+  </bpmndi:BPMNPlane></bpmndi:BPMNDiagram>
+</bpmn:definitions>

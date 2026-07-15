@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">Do you use any of these?</title>
+  <desc id="desc">Three automated decision anti-patterns: the decision and consequence happen together, human review is only a rubber stamp, and the outcome is a dead end.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#24324a"/>
+    </marker>
+    <marker id="arrow-risk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#9b3a32"/>
+    </marker>
+    <symbol id="cog" viewBox="0 0 24 24">
+      <path d="M9.4 1.5h5.2l.6 2.5c.7.2 1.3.6 1.9 1.1l2.4-.8 2.6 4.4-1.9 1.7c.2.7.2 1.4 0 2.1l1.9 1.7-2.6 4.4-2.4-.8c-.5.5-1.2.9-1.9 1.1l-.6 2.5H9.4l-.6-2.5c-.7-.2-1.3-.6-1.9-1.1l-2.4.8-2.6-4.4 1.9-1.7a7 7 0 0 1 0-2.1L1.9 8.7l2.6-4.4 2.4.8c.5-.5 1.2-.9 1.9-1.1l.6-2.5zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor"/>
+    </symbol>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#b78923" opacity="0.16"/>
+    </pattern>
+    <style>
+      .eyebrow{fill:#8c661f;font:600 18px Arial,sans-serif;letter-spacing:3px}
+      .headline{fill:#0f1b2d;font:700 60px Arial,sans-serif}
+      .subhead{fill:#5b6577;font:400 23px Arial,sans-serif}
+      .card{fill:#fffdf8;stroke:#dfd4be;stroke-width:2}
+      .number{fill:#9b3a32;font:700 18px Arial,sans-serif;letter-spacing:2px}
+      .card-title{fill:#0f1b2d;font:600 25px Arial,sans-serif}
+      .task{fill:#fffdf8;stroke:#24324a;stroke-width:2.5}
+      .risk-task{fill:#fff4f1;stroke:#9b3a32;stroke-width:2.5}
+      .flow{fill:none;stroke:#24324a;stroke-width:3;marker-end:url(#arrow)}
+      .risk-flow{fill:none;stroke:#9b3a32;stroke-width:3;marker-end:url(#arrow-risk)}
+      .node-label{fill:#24324a;font:600 16px Arial,sans-serif;text-anchor:middle}
+      .risk-label{fill:#7f302a;font:600 16px Arial,sans-serif;text-anchor:middle}
+      .caption{fill:#5b6577;font:400 17px Arial,sans-serif}
+    </style>
+  </defs>
+
+  <rect width="1440" height="760" fill="#fbf7ef"/>
+  <rect x="0" y="0" width="1440" height="760" fill="url(#dots)"/>
+  <circle cx="1325" cy="80" r="190" fill="#fff4df" opacity="0.8"/>
+  <circle cx="1325" cy="80" r="118" fill="none" stroke="#b78923" stroke-width="2" opacity="0.35"/>
+  <text x="1325" y="130" text-anchor="middle" fill="#b78923" font-family="Arial,sans-serif" font-size="150" font-weight="500">?</text>
+
+  <text class="eyebrow" x="72" y="70">THREE PROCESS PATTERNS TO WATCH</text>
+  <text class="headline" x="72" y="145">Do you use any of these?</text>
+  <text class="subhead" x="72" y="195">Automated decision flows can fail in familiar ways.</text>
+
+  <!-- Pattern one -->
+  <rect class="card" x="65" y="250" width="410" height="425" rx="22"/>
+  <text class="number" x="98" y="300">01</text>
+  <text class="card-title" x="98" y="343">Decision and consequence</text>
+  <text class="card-title" x="98" y="374">happen together</text>
+  <path class="flow" d="M118 493H172"/>
+  <rect class="task" x="172" y="443" width="120" height="100" rx="10"/>
+  <use href="#cog" x="184" y="455" width="26" height="26" color="#24324a"/>
+  <text class="node-label" x="232" y="488">AI makes</text>
+  <text class="node-label" x="232" y="510">decision</text>
+  <path class="risk-flow" d="M292 493H340"/>
+  <rect class="risk-task" x="340" y="443" width="105" height="100" rx="10"/>
+  <path d="M353 458h25v18h-25zM354 459l11.5 9 11.5-9" fill="none" stroke="#9b3a32" stroke-width="2"/>
+  <text class="risk-label" x="392" y="493">Outcome</text>
+  <text class="risk-label" x="392" y="515">applied</text>
+  <path d="M98 602H442" stroke="#dfd4be" stroke-width="2"/>
+  <text class="caption" x="98" y="635">No meaningful review before the</text>
+  <text class="caption" x="98" y="658">consequence takes effect.</text>
+
+  <!-- Pattern two -->
+  <rect class="card" x="515" y="250" width="410" height="425" rx="22"/>
+  <text class="number" x="548" y="300">02</text>
+  <text class="card-title" x="548" y="343">Human review is only</text>
+  <text class="card-title" x="548" y="374">a rubber stamp</text>
+  <rect class="task" x="548" y="443" width="105" height="100" rx="10"/>
+  <use href="#cog" x="560" y="455" width="26" height="26" color="#24324a"/>
+  <text class="node-label" x="600" y="493">AI result</text>
+  <path class="risk-flow" d="M653 493H690"/>
+  <rect class="risk-task" x="690" y="443" width="105" height="100" rx="10"/>
+  <g fill="none" stroke="#9b3a32" stroke-width="2">
+    <circle cx="710" cy="465" r="6"/>
+    <path d="M699 483c2-8 5-11 11-11s9 3 11 11"/>
+  </g>
+  <text class="risk-label" x="742" y="493">Confirm</text>
+  <text class="risk-label" x="742" y="515">result</text>
+  <path class="risk-flow" d="M795 493H832"/>
+  <rect class="risk-task" x="832" y="443" width="63" height="100" rx="10"/>
+  <use href="#cog" x="844" y="455" width="26" height="26" color="#9b3a32"/>
+  <text class="risk-label" x="863" y="505">Apply</text>
+  <path d="M548 602H892" stroke="#dfd4be" stroke-width="2"/>
+  <text class="caption" x="548" y="635">The person lacks the evidence, time</text>
+  <text class="caption" x="548" y="658">or authority to decide independently.</text>
+
+  <!-- Pattern three -->
+  <rect class="card" x="965" y="250" width="410" height="425" rx="22"/>
+  <text class="number" x="998" y="300">03</text>
+  <text class="card-title" x="998" y="343">The outcome is</text>
+  <text class="card-title" x="998" y="374">a dead end</text>
+  <rect class="task" x="998" y="443" width="120" height="100" rx="10"/>
+  <use href="#cog" x="1010" y="455" width="26" height="26" color="#24324a"/>
+  <text class="node-label" x="1058" y="493">AI makes</text>
+  <text class="node-label" x="1058" y="515">decision</text>
+  <path class="risk-flow" d="M1118 493H1180"/>
+  <rect class="risk-task" x="1180" y="443" width="120" height="100" rx="10"/>
+  <use href="#cog" x="1192" y="455" width="26" height="26" color="#9b3a32"/>
+  <text class="risk-label" x="1240" y="493">Close</text>
+  <text class="risk-label" x="1240" y="515">case</text>
+  <path class="risk-flow" d="M1300 493H1325"/>
+  <circle cx="1340" cy="493" r="15" fill="#fff4f1" stroke="#9b3a32" stroke-width="5"/>
+  <path d="M998 602H1342" stroke="#dfd4be" stroke-width="2"/>
+  <text class="caption" x="998" y="635">No explanation, practical next step</text>
+  <text class="caption" x="998" y="658">or route to query the outcome.</text>
+</svg>

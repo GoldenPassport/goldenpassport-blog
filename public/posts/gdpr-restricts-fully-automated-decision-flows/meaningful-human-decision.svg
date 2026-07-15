@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 560" role="img" aria-labelledby="title desc">
+  <title id="title">A good process pattern for meaningful human decision-making</title>
+  <desc id="desc">An explainable AI model gathers data, prepares the application, summarises its findings and flags potential issues while deterministic business rules run in parallel. A person then makes an independent decision, and the applicant receives either an approval or a decline with reasons and a route to independent reconsideration.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0L10 5L0 10Z" fill="#17233f"/>
+    </marker>
+    <symbol id="cog" viewBox="0 0 24 24">
+      <path d="M9.4 1.5h5.2l.6 2.5c.7.2 1.3.6 1.9 1.1l2.4-.8 2.6 4.4-1.9 1.7c.2.7.2 1.4 0 2.1l1.9 1.7-2.6 4.4-2.4-.8c-.5.5-1.2.9-1.9 1.1l-.6 2.5H9.4l-.6-2.5c-.7-.2-1.3-.6-1.9-1.1l-2.4.8-2.6-4.4 1.9-1.7a7 7 0 0 1 0-2.1L1.9 8.7l2.6-4.4 2.4.8c.5-.5 1.2-.9 1.9-1.1l.6-2.5zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor"/>
+    </symbol>
+    <style>
+      .flow{fill:none;stroke:#17233f;stroke-width:2.5;marker-end:url(#arrow)}
+      .assoc{fill:none;stroke:#8a806d;stroke-width:2;stroke-dasharray:5 5}
+      .task{fill:#fffdf6;stroke:#17233f;stroke-width:2.5}
+      .human{fill:#fff7dc;stroke:#b78923;stroke-width:3}
+      .event{fill:#fffdf6;stroke:#17233f;stroke-width:3}
+      .gateway{fill:#fff7dc;stroke:#b78923;stroke-width:3}
+      .label{fill:#17233f;font-family:Arial,sans-serif;font-size:17px;font-weight:600;text-anchor:middle}
+      .small{fill:#17233f;font-family:Arial,sans-serif;font-size:14px;font-weight:600;text-anchor:middle}
+      .note{fill:#5b554b;font-family:Arial,sans-serif;font-size:15px}
+      .icon{fill:none;stroke:#17233f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+  </defs>
+  <rect width="1280" height="560" rx="24" fill="#fbf7ec"/>
+
+  <!-- Notes -->
+  <path class="assoc" d="M260 100V72"/>
+  <path d="M140 28V70M140 28H376" fill="none" stroke="#8a806d" stroke-width="2"/>
+  <text class="note" x="155" y="49">Explainable findings and</text>
+  <text class="note" x="155" y="68">flagged issues</text>
+
+  <path class="assoc" d="M570 195V111"/>
+  <path d="M470 56V108M470 56H666" fill="none" stroke="#8a806d" stroke-width="2"/>
+  <text class="note" x="485" y="78">Context, time and authority</text>
+  <text class="note" x="485" y="98">to decide</text>
+
+  <!-- Sequence flows -->
+  <path class="flow" d="M68 250H80"/>
+  <path class="flow" d="M105 225V155H140"/>
+  <path class="flow" d="M105 275V345H140"/>
+  <path class="flow" d="M380 155H420V225"/>
+  <path class="flow" d="M380 345H420V275"/>
+  <path class="flow" d="M445 250H470"/>
+  <path class="flow" d="M670 250H695"/>
+  <path class="flow" d="M720 225V110H790"/>
+  <path class="flow" d="M1020 110H1062"/>
+  <path class="flow" d="M720 275V340H790"/>
+  <path class="flow" d="M1020 340H1055"/>
+  <path class="flow" d="M1105 340H1182"/>
+  <path class="flow" d="M1080 365V480H1020"/>
+  <path class="flow" d="M790 480H720V275"/>
+
+  <!-- Start and parallel split -->
+  <circle class="event" cx="50" cy="250" r="18"/>
+  <text class="small" x="50" y="286">Application</text>
+  <text class="small" x="50" y="303">received</text>
+  <path class="gateway" d="M105 225L130 250L105 275L80 250Z"/>
+  <path class="icon" d="M105 235V265M90 250H120"/>
+
+  <!-- Complementary automated work -->
+  <rect class="task" x="140" y="100" width="240" height="110" rx="10"/>
+  <use href="#cog" x="158" y="116" width="28" height="28" color="#17233f"/>
+  <text class="label" x="260" y="137">AI gathers data,</text>
+  <text class="label" x="260" y="158">prepares application,</text>
+  <text class="label" x="260" y="179">summarises findings and</text>
+  <text class="label" x="260" y="200">flags potential issues</text>
+
+  <rect class="task" x="140" y="290" width="240" height="110" rx="10"/>
+  <use href="#cog" x="158" y="306" width="28" height="28" color="#17233f"/>
+  <text class="label" x="260" y="343">Business rules check</text>
+  <text class="label" x="260" y="366">eligibility and</text>
+  <text class="label" x="260" y="389">mandatory controls</text>
+
+  <!-- Parallel join and human decision -->
+  <path class="gateway" d="M420 225L445 250L420 275L395 250Z"/>
+  <path class="icon" d="M420 235V265M405 250H435"/>
+
+  <rect class="human" x="470" y="195" width="200" height="110" rx="10"/>
+  <g class="icon" transform="translate(489 211)">
+    <circle cx="12" cy="8" r="5"/>
+    <path d="M3 26c1-7 4-10 9-10s8 3 9 10"/>
+  </g>
+  <text class="label" x="570" y="251">Make independent</text>
+  <text class="label" x="570" y="274">decision</text>
+
+  <!-- Outcome gateway -->
+  <path class="gateway" d="M720 225L745 250L720 275L695 250Z"/>
+  <path class="icon" d="M710 240L730 260M730 240L710 260"/>
+  <text class="small" x="720" y="299">Approved?</text>
+  <text class="small" x="750" y="99">Yes</text>
+  <text class="small" x="750" y="329">No</text>
+
+  <!-- Approval communication -->
+  <rect class="task" x="790" y="70" width="230" height="80" rx="10"/>
+  <g class="icon" transform="translate(808 91)">
+    <rect x="0" y="0" width="27" height="19" rx="2"/>
+    <path d="M1 2l12.5 9L26 2"/>
+  </g>
+  <text class="label" x="905" y="104">Inform applicant</text>
+  <text class="label" x="905" y="127">of approval</text>
+  <circle class="event" cx="1080" cy="110" r="18"/>
+  <circle cx="1080" cy="110" r="13" fill="none" stroke="#17233f" stroke-width="2"/>
+  <text class="small" x="1080" y="145">Approved</text>
+
+  <!-- Decline communication -->
+  <rect class="task" x="790" y="300" width="230" height="80" rx="10"/>
+  <g class="icon" transform="translate(808 321)">
+    <rect x="0" y="0" width="27" height="19" rx="2"/>
+    <path d="M1 2l12.5 9L26 2"/>
+  </g>
+  <text class="label" x="905" y="334">Explain decline</text>
+  <text class="label" x="905" y="357">and next steps</text>
+
+  <!-- Challenge gateway -->
+  <path class="gateway" d="M1080 315L1105 340L1080 365L1055 340Z"/>
+  <path class="icon" d="M1070 330L1090 350M1090 330L1070 350"/>
+  <text class="small" x="1080" y="390">Challenge raised?</text>
+  <text class="small" x="1142" y="329">No</text>
+  <text class="small" x="1098" y="420">Yes</text>
+
+  <circle class="event" cx="1200" cy="340" r="18"/>
+  <circle cx="1200" cy="340" r="13" fill="none" stroke="#17233f" stroke-width="2"/>
+  <text class="small" x="1200" y="375">Case closed</text>
+
+  <!-- Reconsideration -->
+  <rect class="human" x="790" y="440" width="230" height="80" rx="10"/>
+  <g class="icon" transform="translate(809 458)">
+    <circle cx="12" cy="8" r="5"/>
+    <path d="M3 26c1-7 4-10 9-10s8 3 9 10"/>
+  </g>
+  <text class="label" x="905" y="475">Independent</text>
+  <text class="label" x="905" y="498">reconsideration</text>
+</svg>

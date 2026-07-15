@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_ImmediateConsequence" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.38.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:process id="Process_ImmediateConsequence" name="Decision and consequence happen in one step" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_Application" name="Application received">
+      <bpmn:outgoing>Flow_StartToAssess</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Task_AIAssessment" name="AI assesses application">
+      <bpmn:incoming>Flow_StartToAssess</bpmn:incoming>
+      <bpmn:outgoing>Flow_AssessToDecision</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_AIOutcome" name="Approved?">
+      <bpmn:incoming>Flow_AssessToDecision</bpmn:incoming>
+      <bpmn:outgoing>Flow_Approved</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Declined</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="Task_Approve" name="Inform applicant of approval">
+      <bpmn:incoming>Flow_Approved</bpmn:incoming>
+      <bpmn:outgoing>Flow_ApproveToEnd</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sendTask id="Task_Decline" name="Inform applicant of decline">
+      <bpmn:incoming>Flow_Declined</bpmn:incoming>
+      <bpmn:outgoing>Flow_DeclineToEnd</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="EndEvent_Approved" name="Mortgage approved">
+      <bpmn:incoming>Flow_ApproveToEnd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_Declined" name="Case closed">
+      <bpmn:incoming>Flow_DeclineToEnd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:textAnnotation id="Annotation_NoReview">
+      <bpmn:text>No human review of core decision activity</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_NoReview" sourceRef="Gateway_AIOutcome" targetRef="Annotation_NoReview" />
+    <bpmn:sequenceFlow id="Flow_StartToAssess" sourceRef="StartEvent_Application" targetRef="Task_AIAssessment" />
+    <bpmn:sequenceFlow id="Flow_AssessToDecision" sourceRef="Task_AIAssessment" targetRef="Gateway_AIOutcome" />
+    <bpmn:sequenceFlow id="Flow_Approved" name="Yes" sourceRef="Gateway_AIOutcome" targetRef="Task_Approve" />
+    <bpmn:sequenceFlow id="Flow_Declined" name="No" sourceRef="Gateway_AIOutcome" targetRef="Task_Decline" />
+    <bpmn:sequenceFlow id="Flow_ApproveToEnd" sourceRef="Task_Approve" targetRef="EndEvent_Approved" />
+    <bpmn:sequenceFlow id="Flow_DeclineToEnd" sourceRef="Task_Decline" targetRef="EndEvent_Declined" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ImmediateConsequence">
+    <bpmndi:BPMNPlane id="BPMNPlane_ImmediateConsequence" bpmnElement="Process_ImmediateConsequence">
+      <bpmndi:BPMNShape id="StartEvent_Application_di" bpmnElement="StartEvent_Application"><dc:Bounds x="72" y="142" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="48" y="185" width="85" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AIAssessment_di" bpmnElement="Task_AIAssessment"><dc:Bounds x="155" y="110" width="190" height="100" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_AIOutcome_di" bpmnElement="Gateway_AIOutcome" isMarkerVisible="true"><dc:Bounds x="405" y="135" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="401" y="192" width="58" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Approve_di" bpmnElement="Task_Approve"><dc:Bounds x="525" y="45" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Decline_di" bpmnElement="Task_Decline"><dc:Bounds x="525" y="195" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Approved_di" bpmnElement="EndEvent_Approved"><dc:Bounds x="780" y="67" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="748" y="110" width="101" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_Declined_di" bpmnElement="EndEvent_Declined"><dc:Bounds x="780" y="217" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="768" y="260" width="61" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Annotation_NoReview_di" bpmnElement="Annotation_NoReview"><dc:Bounds x="485" y="130" width="220" height="45" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_StartToAssess_di" bpmnElement="Flow_StartToAssess"><di:waypoint x="108" y="160" /><di:waypoint x="155" y="160" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AssessToDecision_di" bpmnElement="Flow_AssessToDecision"><di:waypoint x="345" y="160" /><di:waypoint x="405" y="160" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Approved_di" bpmnElement="Flow_Approved"><di:waypoint x="430" y="135" /><di:waypoint x="430" y="85" /><di:waypoint x="525" y="85" /><bpmndi:BPMNLabel><dc:Bounds x="446" y="67" width="18" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Declined_di" bpmnElement="Flow_Declined"><di:waypoint x="430" y="185" /><di:waypoint x="430" y="235" /><di:waypoint x="525" y="235" /><bpmndi:BPMNLabel><dc:Bounds x="448" y="242" width="14" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ApproveToEnd_di" bpmnElement="Flow_ApproveToEnd"><di:waypoint x="700" y="85" /><di:waypoint x="780" y="85" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_DeclineToEnd_di" bpmnElement="Flow_DeclineToEnd"><di:waypoint x="700" y="235" /><di:waypoint x="780" y="235" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_NoReview_di" bpmnElement="Association_NoReview"><di:waypoint x="455" y="160" /><di:waypoint x="485" y="160" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
