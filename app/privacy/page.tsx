@@ -39,7 +39,7 @@ export default function PrivacyPage() {
           <li>
             <strong>Read history (local only).</strong> When you open a blog post, the slug is added
             to a list in your browser’s <em>localStorage</em> under the key{" "}
-            <code>gp:read-posts</code>. It is used purely to display a small "Read" badge on posts
+            <code>gp:read-posts</code>. It is used purely to display a small “Read” badge on posts
             you have seen, and to stop pinned posts from staying pinned for you once you have read
             them. The data stays on your device and is never sent to any server.
           </li>

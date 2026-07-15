@@ -31,6 +31,7 @@ export function MdxImage({ src, alt, className, ...rest }: Props) {
   // Manage focus + scroll lock + Escape while the lightbox is open.
   useEffect(() => {
     if (!open) return;
+    const trigger = triggerRef.current;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
@@ -43,7 +44,7 @@ export function MdxImage({ src, alt, className, ...rest }: Props) {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
       // Return focus to the trigger when the lightbox closes.
-      triggerRef.current?.focus();
+      trigger?.focus();
     };
   }, [open]);
 
