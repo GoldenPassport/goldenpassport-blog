@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CookieConsent } from "./CookieConsent";
 
 const meta: Meta<typeof CookieConsent> = {
@@ -41,4 +42,58 @@ export const Default: Story = {
       <CookieConsent />
     </div>
   ),
+};
+
+/** Simulates browsers that expose localStorage but reject every operation. */
+function BlockedStorageHarness() {
+  const [ready, setReady] = useState(false);
+
+  useLayoutEffect(() => {
+    const originalStorage = window.localStorage;
+    const blockedStorage = {
+      getItem() {
+        throw new DOMException("Storage access blocked", "SecurityError");
+      },
+      setItem() {
+        throw new DOMException("Storage access blocked", "SecurityError");
+      },
+    } as unknown as Storage;
+
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      value: blockedStorage,
+    });
+    setReady(true);
+
+    return () => {
+      Object.defineProperty(window, "localStorage", {
+        configurable: true,
+        value: originalStorage,
+      });
+    };
+  }, []);
+
+  return ready ? <CookieConsent /> : null;
+}
+
+export const StorageBlocked: Story = {
+  render: () => <BlockedStorageHarness />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const onConsent = fn();
+    window.addEventListener("gp:cookie-consent", onConsent);
+
+    try {
+      const accept = await canvas.findByRole("button", { name: "Accept" });
+      await userEvent.click(accept);
+
+      await waitFor(() => {
+        expect(canvas.queryByRole("region", { name: "Cookie preferences" })).not.toBeInTheDocument();
+      });
+      expect(onConsent).toHaveBeenCalledOnce();
+      expect((onConsent.mock.calls[0][0] as CustomEvent).detail).toBe("accepted");
+    } finally {
+      window.removeEventListener("gp:cookie-consent", onConsent);
+    }
+  },
 };

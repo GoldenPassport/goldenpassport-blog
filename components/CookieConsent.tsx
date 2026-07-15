@@ -26,13 +26,24 @@ type ConsentValue = "accepted" | "declined";
 
 export function getCookieConsent(): ConsentValue | null {
   if (typeof window === "undefined") return null;
-  const v = window.localStorage.getItem(STORAGE_KEY);
-  return v === "accepted" || v === "declined" ? v : null;
+  try {
+    const value = window.localStorage.getItem(STORAGE_KEY);
+    return value === "accepted" || value === "declined" ? value : null;
+  } catch {
+    // Storage can be unavailable when browser privacy settings block
+    // persistence. Treat that like a first visit so the choice remains usable.
+    return null;
+  }
 }
 
 function setCookieConsent(value: ConsentValue) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, value);
+  try {
+    window.localStorage.setItem(STORAGE_KEY, value);
+  } catch {
+    // The choice cannot survive a reload, but it should still take effect for
+    // this page. Dispatching below keeps analytics in sync for this session.
+  }
   window.dispatchEvent(new CustomEvent("gp:cookie-consent", { detail: value }));
 }
 
