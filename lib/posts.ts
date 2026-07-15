@@ -144,7 +144,8 @@ export function getAllPosts(): PostMeta[] {
     .filter((p) => !p.draft)
     .sort((a, b) => {
       if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-      return a.date < b.date ? 1 : -1;
+      const dateOrder = b.date.localeCompare(a.date);
+      return dateOrder || a.slug.localeCompare(b.slug);
     });
 }
 

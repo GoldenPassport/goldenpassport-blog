@@ -30,7 +30,8 @@ export function PostList({ posts, limit }: { posts: PostMeta[]; limit?: number }
       const aPinned = !!a.pinned && !readSet.has(a.slug);
       const bPinned = !!b.pinned && !readSet.has(b.slug);
       if (aPinned !== bPinned) return aPinned ? -1 : 1;
-      return a.date < b.date ? 1 : -1;
+      const dateOrder = b.date.localeCompare(a.date);
+      return dateOrder || a.slug.localeCompare(b.slug);
     });
   }, [posts, readSet]);
 
