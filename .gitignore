@@ -75,7 +75,13 @@ coverage
 
 
 # --- Editors / IDEs ----------------------------------------------------------
-.vscode
+# Ignore per-user VS Code state, but track the shared workspace config
+# (spell-check dictionary, Tailwind CSS lint settings, recommended extensions).
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
 .idea
 *.iml
 *.swp
