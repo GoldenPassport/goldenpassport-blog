@@ -106,9 +106,10 @@ export const BrandHero = (p: Omit<BrandProps, "size">) => <Brand size="hero" {..
 export function BrandResponsive({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center ${className}`}>
-      {/* < 640px: mark + stacked wordmark */}
+      {/* < 640px: mark only. The "Golden Passport" wordmark is dropped here to
+          keep the header uncluttered; it still appears in the footer. */}
       <span className="inline-flex sm:hidden">
-        <Brand size="sm" stacked />
+        <Brand size="md" markOnly />
       </span>
       {/* 640px – 1023px: full lockup, md */}
       <span className="hidden sm:inline-flex lg:hidden">

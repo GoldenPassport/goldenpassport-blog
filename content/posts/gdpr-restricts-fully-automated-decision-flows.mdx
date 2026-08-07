@@ -18,6 +18,8 @@ tags:
   - Responsible AI
 ---
 
+## Introduction
+
 **Why Process Orchestration Matters More in the Age of Agentic AI** is a series in which we ask one question: holistically, **what does good look like?**
 
 Like most automation architects, I love straight-through processing. But did you know the GDPR can prevent certain decision flows from being fully automated?
@@ -42,16 +44,14 @@ Like most automation architects, I love straight-through processing. But did you
 
 </NumberedList>
 
-<figure className="not-prose my-8">
-  <MdxImage
-    src="/posts/gdpr-restricts-fully-automated-decision-flows/gdpr-a22.png"
-    alt="GDPR Article 22 describing the right not to be subject to solely automated decisions with significant effects, its exceptions, and the right to human intervention"
-    className="w-full h-auto rounded-lg ring-1 ring-gold/10"
-  />
-  <figcaption className="mt-3 text-center text-sm text-ink-mute italic">
-    Article 22: Automated individual decision-making, including profiling. Source: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679#art_22" target="_blank" rel="noopener noreferrer">EUR-Lex</a>.
-  </figcaption>
-</figure>
+<Figure
+  src="/posts/gdpr-restricts-fully-automated-decision-flows/gdpr-a22.png"
+  alt="GDPR Article 22 describing the right not to be subject to solely automated decisions with significant effects, its exceptions, and the right to human intervention"
+>
+
+Article 22: Automated individual decision-making, including profiling. Source: [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679#art_22).
+
+</Figure>
 
 That does not make every automated decision unlawful. Article 22 has a specific scope and contains exceptions. These include decisions authorised by law, contracts that meet the narrow 'necessity test' and decisions based on explicit, informed opt-in consent. Depending on the exception, safeguards can include the right to obtain human intervention, express a point of view and contest the decision.
 
@@ -73,49 +73,37 @@ Everyone leaves frustrated. AI has created another barrier to accessing the serv
 
 The AI outcome immediately updates the case or triggers a consequence before a person can take part in the core decision.
 
-<figure className="not-prose my-8">
-  <MdxImage
-    src="/posts/gdpr-restricts-fully-automated-decision-flows/decision-and-consequence.svg"
-    alt="BPMN process showing an AI mortgage assessment informing the applicant of approval or decline without human review of the core decision activity"
-    className="w-full h-auto rounded-lg ring-1 ring-gold/10"
-  />
-  <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-ink-mute italic">
-    <span className="min-w-0 flex-1">Anti-pattern 1: the decision and its consequence are part of the same automated path.</span>
-    <a href="/posts/gdpr-restricts-fully-automated-decision-flows/decision-and-consequence.bpmn" download className="shrink-0 not-italic text-gold-deep underline underline-offset-2">Download BPMN</a>
-  </figcaption>
-</figure>
+<Figure
+  src="/posts/gdpr-restricts-fully-automated-decision-flows/decision-and-consequence.svg"
+  alt="BPMN process showing an AI mortgage assessment informing the applicant of approval or decline without human review of the core decision activity"
+  caption="Anti-pattern 1: the decision and its consequence are part of the same automated path."
+  download="/posts/gdpr-restricts-fully-automated-decision-flows/decision-and-consequence.bpmn"
+  downloadLabel="Download BPMN"
+/>
 
 ### 2. Human review is only a rubber stamp
 
 Having a 'human in the loop' is not enough if their only role is to communicate a decision that has already been made. They need to take part in the core decision-making, with the context, time and authority to reach an independent outcome.
 
-<figure className="not-prose my-8">
-  <MdxImage
-    src="/posts/gdpr-restricts-fully-automated-decision-flows/rubber-stamp-review.svg"
-    alt="BPMN process showing a person confirming an AI result without the evidence, time or authority needed to change it"
-    className="w-full h-auto rounded-lg ring-1 ring-gold/10"
-  />
-  <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-ink-mute italic">
-    <span className="min-w-0 flex-1">Anti-pattern 2: a user task exists, but the person cannot provide meaningful review.</span>
-    <a href="/posts/gdpr-restricts-fully-automated-decision-flows/rubber-stamp-review.bpmn" download className="shrink-0 not-italic text-gold-deep underline underline-offset-2">Download BPMN</a>
-  </figcaption>
-</figure>
+<Figure
+  src="/posts/gdpr-restricts-fully-automated-decision-flows/rubber-stamp-review.svg"
+  alt="BPMN process showing a person confirming an AI result without the evidence, time or authority needed to change it"
+  caption="Anti-pattern 2: a user task exists, but the person cannot provide meaningful review."
+  download="/posts/gdpr-restricts-fully-automated-decision-flows/rubber-stamp-review.bpmn"
+  downloadLabel="Download BPMN"
+/>
 
 ### 3. The outcome is a dead end, often followed by a meaningless post-mortem
 
 Some organisations review these interactions afterwards, asking a team or a second AI agent to assess what happened and add 'lessons learnt' to a RAG knowledge base. That may improve future cases, but it does nothing for the person already affected. It provides neither meaningful human intervention in the original decision nor a route to express their view and contest the outcome. A retrospective review is not a substitute for safeguards when the decision is made.
 
-<figure className="not-prose my-8">
-  <MdxImage
-    src="/posts/gdpr-restricts-fully-automated-decision-flows/dead-end-outcome.svg"
-    alt="BPMN process showing an AI assessment declining an application, sending a notice and closing the case without an explanation, appeal or next step"
-    className="w-full h-auto rounded-lg ring-1 ring-gold/10"
-  />
-  <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-ink-mute italic">
-    <span className="min-w-0 flex-1">Anti-pattern 3: the process closes the case without giving the individual a route forward or a clear, fair explanation.</span>
-    <a href="/posts/gdpr-restricts-fully-automated-decision-flows/dead-end-outcome.bpmn" download className="shrink-0 not-italic text-gold-deep underline underline-offset-2">Download BPMN</a>
-  </figcaption>
-</figure>
+<Figure
+  src="/posts/gdpr-restricts-fully-automated-decision-flows/dead-end-outcome.svg"
+  alt="BPMN process showing an AI assessment declining an application, sending a notice and closing the case without an explanation, appeal or next step"
+  caption="Anti-pattern 3: the process closes the case without giving the individual a route forward or a clear, fair explanation."
+  download="/posts/gdpr-restricts-fully-automated-decision-flows/dead-end-outcome.bpmn"
+  downloadLabel="Download BPMN"
+/>
 
 ## What could good look like?
 
@@ -127,17 +115,13 @@ Good orchestration can also run complementary technologies in parallel. For exam
 
 The model and its findings should also be explainable enough to examine and challenge. The reviewer needs to understand the important factors behind the findings, while the individual needs a clear account of the eventual decision and a meaningful opportunity to contest it.
 
-<figure className="not-prose my-8">
-  <MdxImage
-    src="/posts/gdpr-restricts-fully-automated-decision-flows/meaningful-human-decision.svg"
-    alt="BPMN process in which an explainable AI model gathers data, prepares the application, summarises its findings and flags potential issues while deterministic business rules run in parallel before a person makes an independent decision"
-    className="w-full h-auto rounded-lg ring-1 ring-gold/10"
-  />
-  <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-ink-mute italic">
-    <span className="min-w-0 flex-1">Example pattern: explainable AI and business rules provide complementary evidence, a person makes the decision independently, and the applicant has a clear route forward.</span>
-    <a href="/posts/gdpr-restricts-fully-automated-decision-flows/meaningful-human-decision.bpmn" download className="shrink-0 not-italic text-gold-deep underline underline-offset-2">Download BPMN</a>
-  </figcaption>
-</figure>
+<Figure
+  src="/posts/gdpr-restricts-fully-automated-decision-flows/meaningful-human-decision.svg"
+  alt="BPMN process in which an explainable AI model gathers data, prepares the application, summarises its findings and flags potential issues while deterministic business rules run in parallel before a person makes an independent decision"
+  caption="Example pattern: explainable AI and business rules provide complementary evidence, a person makes the decision independently, and the applicant has a clear route forward."
+  download="/posts/gdpr-restricts-fully-automated-decision-flows/meaningful-human-decision.bpmn"
+  downloadLabel="Download BPMN"
+/>
 
 The important design choices are to:
 
@@ -149,7 +133,7 @@ The important design choices are to:
 - Record the automated findings and the human decision separately
 - Explain the outcome, provide a clear reason for the conclusion and give the person a route to query it
 
-## In conclusion
+## Conclusion
 
 The lesson for Agentic AI is simple: better decision-making does not remove the need for process. The more consequential the decision, the more important it becomes to orchestrate accountability around it.
 

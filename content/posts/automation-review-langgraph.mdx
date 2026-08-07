@@ -52,6 +52,8 @@ poster:
     - "Pre-1.0 versioning was spiky; 1.x stabilising"
 ---
 
+## Introduction
+
 First piece in a new series called **Automation Review**. Every review treats two axes as first-class: whether the tool is genuinely open source, and whether it ties you to one AI vendor. The series has a deliberate bias toward open-source-powered automation.
 
 <TldrCard>
@@ -425,6 +427,8 @@ The balanced part of this review.
 
 </CrossList>
 
+## Conclusion
+
 <VerdictCard>
 
 The poster carries the headline. What the verdict should add to it:
@@ -460,9 +464,7 @@ If there is a tool or concept you would like reviewed next in this format, [drop
 
 <div className="gold-rule mt-16 mb-8" aria-hidden />
 
-<Accordion title="Terms">
-
-<div className="[&>p]:border-b [&>p]:border-gold/15 [&>p]:pb-3 [&>p:last-child]:border-0 [&>p:last-child]:pb-0">
+<Terms>
 
 Plain-English definitions for the agentic-AI and graph vocabulary used in this review, listed alphabetically.
 
@@ -504,43 +506,9 @@ Plain-English definitions for the agentic-AI and graph vocabulary used in this r
 
 **Vendor-official.** A framework published by the organisation that makes the underlying model, e.g. OpenAI's Agents SDK for OpenAI models. Easy to start with; tighter coupling to one vendor.
 
-</div>
+</Terms>
 
-</Accordion>
-
-<Accordion title="References" id="references">
-
-<div className="[&_li]:my-2 [&_ul]:mt-3 [&_ul]:pb-6 [&_ul]:mb-6 [&_ul]:border-b [&_ul]:border-gold/15 [&_ul:last-child]:border-b-0 [&_ul:last-child]:pb-0">
-
-External links cited in this review, grouped for easy lookup.
-
-**LangGraph itself**
-
-- [LangGraph product page (langchain.com)](https://www.langchain.com/langgraph)
-- [Built with LangGraph: production case studies, incl. Klarna (langchain.com)](https://www.langchain.com/built-with-langgraph)
-- [LangGraph launch announcement (LangChain changelog, week of 22 January 2024)](https://changelog.langchain.com/announcements/week-of-1-22-24-langchain-release-notes)
-- [LangGraph Python repo on GitHub](https://github.com/langchain-ai/langgraph)
-- [LangGraph JavaScript / TypeScript repo on GitHub](https://github.com/langchain-ai/langgraphjs)
-- [`@langchain/langgraph` on npm](https://www.npmjs.com/package/@langchain/langgraph)
-- [`langgraph` on PyPI](https://pypi.org/project/langgraph/)
-- [LangGraph Studio (now branded LangSmith Studio in the docs; visual debugger, desktop app, not open source)](https://docs.langchain.com/langsmith/studio)
-- [LangGraph4j (community Java port, separate GitHub organisation)](https://github.com/langgraph4j/langgraph4j)
-
-**Design inspirations**
-
-- [Pregel: A System for Large-Scale Graph Processing (Google research, 2009)](https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing-2/)
-- [Apache Beam: about / overview](https://beam.apache.org/about/)
-- [NetworkX documentation](https://networkx.org/documentation/stable/)
-
-**Notable alternatives discussed in the landscape section**
-
-- [Pydantic AI](https://github.com/pydantic/pydantic-ai)
-- [OpenAI Agents SDK (Python)](https://github.com/openai/openai-agents-python)
-- [CrewAI](https://github.com/crewAIInc/crewAI)
-- [AutoGen (Microsoft)](https://github.com/microsoft/autogen)
-- [Mastra](https://github.com/mastra-ai/mastra)
-- [Vercel AI SDK](https://github.com/vercel/ai)
-- [n8n](https://github.com/n8n-io/n8n) ([Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md))
+<Calculations>
 
 **Download figures (poster and landscape charts)**
 
@@ -575,15 +543,47 @@ Sources:
 
 Download counts and star counts move daily, so treat these as a point-in-time snapshot rather than live figures.
 
+</Calculations>
+
+<References>
+
+External links cited in this review, grouped for easy lookup.
+
+**LangGraph itself**
+
+- LangGraph product page (langchain.com). <RefLink href="https://www.langchain.com/langgraph" />
+- Built with LangGraph: production case studies, including Klarna (langchain.com). <RefLink href="https://www.langchain.com/built-with-langgraph" />
+- LangGraph launch announcement (LangChain changelog, week of 22 January 2024). <RefLink href="https://changelog.langchain.com/announcements/week-of-1-22-24-langchain-release-notes" />
+- LangGraph Python repo on GitHub. <RefLink href="https://github.com/langchain-ai/langgraph" />
+- LangGraph JavaScript / TypeScript repo on GitHub. <RefLink href="https://github.com/langchain-ai/langgraphjs" />
+- `@langchain/langgraph` on npm. <RefLink href="https://www.npmjs.com/package/@langchain/langgraph" />
+- `langgraph` on PyPI. <RefLink href="https://pypi.org/project/langgraph/" />
+- LangGraph Studio (now branded LangSmith Studio in the docs; visual debugger, desktop app, not open source). <RefLink href="https://docs.langchain.com/langsmith/studio" />
+- LangGraph4j (community Java port, separate GitHub organisation). <RefLink href="https://github.com/langgraph4j/langgraph4j" />
+
+**Design inspirations**
+
+- Pregel: A System for Large-Scale Graph Processing (Google research, 2009). <RefLink href="https://research.google/pubs/pregel-a-system-for-large-scale-graph-processing-2/" />
+- Apache Beam: about and overview. <RefLink href="https://beam.apache.org/about/" />
+- NetworkX documentation. <RefLink href="https://networkx.org/documentation/stable/" />
+
+**Notable alternatives discussed in the landscape section**
+
+- Pydantic AI. <RefLink href="https://github.com/pydantic/pydantic-ai" />
+- OpenAI Agents SDK (Python). <RefLink href="https://github.com/openai/openai-agents-python" />
+- CrewAI. <RefLink href="https://github.com/crewAIInc/crewAI" />
+- AutoGen (Microsoft). <RefLink href="https://github.com/microsoft/autogen" />
+- Mastra. <RefLink href="https://github.com/mastra-ai/mastra" />
+- Vercel AI SDK. <RefLink href="https://github.com/vercel/ai" />
+- n8n. <RefLink href="https://github.com/n8n-io/n8n" /> Sustainable Use License. <RefLink href="https://github.com/n8n-io/n8n/blob/master/LICENSE.md" />
+
 **Security disclosures referenced**
 
-- [CVE-2025-64439](https://nvd.nist.gov/vuln/detail/CVE-2025-64439): remote-code-execution in `langgraph-checkpoint`'s JsonPlusSerializer "json" mode, disclosed 5 November 2025
-- [CVE-2025-67644](https://nvd.nist.gov/vuln/detail/CVE-2025-67644): SQL-injection in the LangGraph SQLite checkpoint backend
+- CVE-2025-64439: remote-code-execution in `langgraph-checkpoint`'s JsonPlusSerializer "json" mode, disclosed 5 November 2025. <RefLink href="https://nvd.nist.gov/vuln/detail/CVE-2025-64439" />
+- CVE-2025-67644: SQL-injection in the LangGraph SQLite checkpoint backend. <RefLink href="https://nvd.nist.gov/vuln/detail/CVE-2025-67644" />
 
 **Companion demo**
 
-- [GoldenPassport/automation-review-examples](https://github.com/GoldenPassport/automation-review-examples) (runnable hands-on code for every review in the series)
+- GoldenPassport/automation-review-examples: runnable hands-on code for every review in the series. <RefLink href="https://github.com/GoldenPassport/automation-review-examples" />
 
-</div>
-
-</Accordion>
+</References>

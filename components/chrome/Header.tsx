@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BrandResponsive } from "@/components/Brand";
+import { BrandResponsive } from "@/components/chrome/Brand";
 
 // Plain text links; Contact is rendered separately as a CTA button below.
 const nav = [

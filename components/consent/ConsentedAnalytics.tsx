@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/next";
-import { getCookieConsent } from "@/components/CookieConsent";
+import { getCookieConsent } from "@/components/consent/CookieConsent";
 
 /**
  * Vercel Analytics, gated behind the visitor's cookie-consent choice.

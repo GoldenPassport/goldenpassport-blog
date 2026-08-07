@@ -109,22 +109,35 @@ const CATEGORY_STYLES: Record<PostMeta["category"], string> = {
   Shorts: "bg-gold-light text-ink border-gold-light",
 };
 
+/**
+ * A small glyph per category, echoing each track's character:
+ *   - Business: briefcase   (the warm, considered track)
+ *   - Tech:     code brackets (the engineering track)
+ *   - Shorts:   play triangle (the snackable track)
+ * Paths share a 24x24 viewBox; `evenodd` punches the hollow parts.
+ */
+const CATEGORY_ICONS: Record<PostMeta["category"], string> = {
+  Business:
+    "M9 4a2 2 0 0 0-2 2v1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-3V6a2 2 0 0 0-2-2H9zm0 2h6v1H9V6z",
+  Tech: "M9.4 7.6 4.4 12l5 4.4 1.32-1.5L7.24 12l3.48-2.9L9.4 7.6zm5.2 0-1.32 1.5L16.76 12l-3.48 2.9 1.32 1.5 5-4.4-5-4.4z",
+  Shorts: "M8 5v14l11-7z",
+};
+
 export function CategoryBadge({ category }: { category: PostMeta["category"] }) {
   return (
     <span
       className={`inline-flex items-center gap-1 text-[10px] tracking-[0.18em] uppercase px-2 py-1 border rounded-full ${CATEGORY_STYLES[category]}`}
     >
-      {category === "Shorts" ? (
-        <svg
-          viewBox="0 0 24 24"
-          width="9"
-          height="9"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M8 5v14l11-7z" />
-        </svg>
-      ) : null}
+      <svg
+        viewBox="0 0 24 24"
+        width="9"
+        height="9"
+        fill="currentColor"
+        fillRule="evenodd"
+        aria-hidden="true"
+      >
+        <path d={CATEGORY_ICONS[category]} />
+      </svg>
       {category}
     </span>
   );

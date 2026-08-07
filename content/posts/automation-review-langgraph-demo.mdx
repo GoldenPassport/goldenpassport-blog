@@ -52,6 +52,8 @@ poster:
     - "Pre-1.0 versioning was spiky; 1.x stabilising"
 ---
 
+## Introduction
+
 > **Reading the Article tab first?** Switch back if you haven't yet; this page assumes you know what LangGraph is and why you would pick it. The Article tab covers positioning, the competitive landscape, what is good, and where the gaps are. This page is the hands-on.
 
 ## What you'll build
@@ -571,20 +573,19 @@ Upload `malformed-claim.docx` (no policy number, no date) and the flow is identi
 
 Upload `unknown.docx` (a job application) and `classify` returns `unknown`, which short-circuits the validation step and routes to `reject`. Report panel: **"Reject"** in red.
 
-<figure className="not-prose my-8">
-  <MdxImage
-    src="/posts/automation-review-langgraph-demo/document-intake-human-demo.png"
-    alt="LangGraph triage demo UI: malformed-claim.docx uploaded, all pipeline nodes complete, human-review branch lit, triage report shows the missing incident date"
-    className="w-full h-auto rounded-lg ring-1 ring-gold/15 shadow-sm"
-  />
-  <figcaption className="mt-3 text-sm text-ink-mute italic text-center">
-    `malformed-claim.docx` uploaded: pipeline runs end-to-end, the graph routes through `human-review`, the report panel shows the missing field that triggered the routing.
-  </figcaption>
-</figure>
+<Figure
+  src="/posts/automation-review-langgraph-demo/document-intake-human-demo.png"
+  alt="LangGraph triage demo UI: malformed-claim.docx uploaded, all pipeline nodes complete, human-review branch lit, triage report shows the missing incident date"
+  className="w-full h-auto rounded-lg ring-1 ring-gold/15 shadow-sm"
+>
+
+`malformed-claim.docx` uploaded: pipeline runs end-to-end, the graph routes through `human-review`, the report panel shows the missing field that triggered the routing.
+
+</Figure>
 
 The full source (Vite config, the proxy, the React components, the workflow visualisation SVG, the sample-generator script) is in the companion project's README. Diff it against your own attempt to compare line by line.
 
-## Where to next
+## Conclusion
 
 Steps 1 to 8 ship a typed StateGraph with deterministic routing. Step 9 puts a real model and a real UI in front of it. The natural extensions from here:
 

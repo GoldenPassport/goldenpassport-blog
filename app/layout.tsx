@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { CookieConsent } from "@/components/CookieConsent";
-import { ConsentedAnalytics } from "@/components/ConsentedAnalytics";
+import { Header } from "@/components/chrome/Header";
+import { Footer } from "@/components/chrome/Footer";
+import { CookieConsent } from "@/components/consent/CookieConsent";
+import { ConsentedAnalytics } from "@/components/consent/ConsentedAnalytics";
 import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "@/lib/site";
 
 export const metadata: Metadata = {
