@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">A manager's attention splits into two camps</title>
+  <desc id="desc">Roughly 60% of a manager's time faces inward on running their own unit (efficiency, cost, quality). About 40% faces outward on the wider business (reporting, governance, wider-business integration, industry compliance). AI's gains usually land in the inward camp.</desc>
+  <defs>
+    <style>
+      .h { fill:#0F1B2D; font:600 42px Georgia, serif }
+      .sub { fill:#5B6577; font:400 22px Arial, sans-serif }
+      .barlabel { fill:#FFFCF5; font:700 18px Arial, sans-serif; letter-spacing:1.5px }
+      .barpct { fill:#FFFCF5; font:700 24px Arial, sans-serif }
+      .eyebrow { font:700 15px Arial, sans-serif; letter-spacing:2px }
+      .cardh { fill:#0F1B2D; font:600 30px Georgia, serif }
+      .item { fill:#2A3548; font:400 23px Arial, sans-serif }
+      .chip { font:600 15px Arial, sans-serif; letter-spacing:0.5px }
+    </style>
+  </defs>
+
+  <rect width="1400" height="760" rx="28" fill="#FBF7EF"/>
+
+  <text class="h" x="72" y="82">A manager's attention splits into two camps</text>
+  <text class="sub" x="72" y="122">AI's application and direct gains usually focus on inward activities.</text>
+
+  <!-- Proportion bar: 60 / 40 -->
+  <rect x="72" y="158" width="748" height="60" rx="12" fill="#B8893B"/>
+  <text class="barlabel" x="94" y="195">INTERNAL, LOCAL UNIT</text>
+  <text class="barpct" x="798" y="197" text-anchor="end">~60%</text>
+
+  <rect x="830" y="158" width="498" height="60" rx="12" fill="#0F1B2D"/>
+  <text class="barlabel" x="852" y="195">THE WIDER BUSINESS</text>
+  <text class="barpct" x="1306" y="197" text-anchor="end">~40%</text>
+
+  <!-- Left card: internal / your unit -->
+  <rect x="72" y="266" width="608" height="430" rx="20" fill="#FEFCF8" stroke="#B8893B" stroke-width="2" stroke-opacity="0.45"/>
+  <text class="eyebrow" x="104" y="316" fill="#8C661F">RUN THE UNIT WELL</text>
+  <text class="cardh" x="104" y="356">Inward: efficiency of the work</text>
+
+  <circle cx="116" cy="410" r="6" fill="#B8893B"/>
+  <text class="item" x="138" y="417">Efficiency and throughput</text>
+  <circle cx="116" cy="462" r="6" fill="#B8893B"/>
+  <text class="item" x="138" y="469">Cost</text>
+  <circle cx="116" cy="514" r="6" fill="#B8893B"/>
+  <text class="item" x="138" y="521">Quality and delivery</text>
+
+  <rect x="104" y="628" width="290" height="40" rx="20" fill="#047857" fill-opacity="0.10"/>
+  <text class="chip" x="126" y="654" fill="#047857">Where AI's gains land</text>
+
+  <!-- Right card: external / wider business -->
+  <rect x="720" y="266" width="608" height="430" rx="20" fill="#FEFCF8" stroke="#0F1B2D" stroke-width="2" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="752" y="316" fill="#0F1B2D">CONNECT TO THE ORGANISATION</text>
+  <text class="cardh" x="752" y="356">Outward: fit and value</text>
+
+  <circle cx="764" cy="404" r="6" fill="#0F1B2D"/>
+  <text class="item" x="786" y="411">Reporting</text>
+  <circle cx="764" cy="452" r="6" fill="#0F1B2D"/>
+  <text class="item" x="786" y="459">Governance</text>
+  <circle cx="764" cy="500" r="6" fill="#0F1B2D"/>
+  <text class="item" x="786" y="507">Wider-business integration</text>
+  <circle cx="764" cy="548" r="6" fill="#0F1B2D"/>
+  <text class="item" x="786" y="555">Industry compliance</text>
+
+  <rect x="752" y="628" width="300" height="40" rx="20" fill="#5B6577" fill-opacity="0.14"/>
+  <text class="chip" x="774" y="654" fill="#5B6577">Barely touched by AI</text>
+</svg>

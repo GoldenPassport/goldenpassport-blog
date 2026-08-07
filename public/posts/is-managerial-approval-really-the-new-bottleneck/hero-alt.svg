@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">The manager is not the bottleneck; the missing context is</title>
+  <desc id="desc">A flood of AI output on conveyor belts (drafts, code, options, analysis) flows right and jams against a barrier labelled Missing Context, which is marked as the real bottleneck. Behind the barrier a manager sits calm and ready at a desk, tagged not the bottleneck. The headline reads: the manager isn't the bottleneck; the missing context around the decision is.</desc>
+  <defs>
+    <style>
+      .h1 { fill:#0F1B2D; font:600 46px Georgia, serif }
+      .h2 { fill:#2A3548; font:400 25px Arial, sans-serif }
+      .flabel { fill:#5B4522; font:700 12px Arial, sans-serif; text-anchor:middle }
+      .barrier { fill:#FBF7EF; font:800 24px Arial, sans-serif; letter-spacing:0.12em; text-anchor:middle }
+      .callout { fill:#9B3A32; font:800 19px Arial, sans-serif; letter-spacing:0.06em; text-anchor:middle }
+      .oktag { fill:#047857; font:700 16px Arial, sans-serif; text-anchor:middle }
+      .cap { fill:#5B6577; font:400 16px Arial, sans-serif }
+      .rolelabel { fill:#0F1B2D; font:700 14px Arial, sans-serif; letter-spacing:0.12em; text-anchor:middle }
+      .roleitem { fill:#2A3548; font:400 15px Arial, sans-serif; text-anchor:middle }
+      .uatbig { fill:#8C661F; font:700 48px Georgia, serif; text-anchor:middle }
+      .mitem { fill:#2A3548; font:400 13px Arial, sans-serif }
+      .misscap { fill:#9B3A32; font:italic 400 16px Arial, sans-serif }
+      .brand { fill:#8C661F; font:700 16px Arial, sans-serif; letter-spacing:0.05em }
+    </style>
+  </defs>
+
+  <rect width="1200" height="675" fill="#FBF7EF"/>
+
+  <text class="h1" x="64" y="72">The manager isn't the bottleneck.</text>
+  <text class="h2" x="64" y="112">The missing context around the decision is.</text>
+  <line x1="64" y1="140" x2="1136" y2="140" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+
+  <!-- ===== conveyor belts (AI output) ===== -->
+  <g>
+    <!-- belt A y=250 -->
+    <rect x="70" y="266" width="490" height="14" rx="7" fill="#C9B187"/>
+    <g fill="#8C661F"><circle cx="100" cy="287" r="7"/><circle cx="180" cy="287" r="7"/><circle cx="260" cy="287" r="7"/><circle cx="340" cy="287" r="7"/><circle cx="420" cy="287" r="7"/><circle cx="500" cy="287" r="7"/></g>
+    <!-- belt B y=360 -->
+    <rect x="70" y="376" width="490" height="14" rx="7" fill="#C9B187"/>
+    <g fill="#8C661F"><circle cx="100" cy="397" r="7"/><circle cx="180" cy="397" r="7"/><circle cx="260" cy="397" r="7"/><circle cx="340" cy="397" r="7"/><circle cx="420" cy="397" r="7"/><circle cx="500" cy="397" r="7"/></g>
+    <!-- belt C y=470 -->
+    <rect x="70" y="486" width="490" height="14" rx="7" fill="#C9B187"/>
+    <g fill="#8C661F"><circle cx="100" cy="507" r="7"/><circle cx="180" cy="507" r="7"/><circle cx="260" cy="507" r="7"/><circle cx="340" cy="507" r="7"/><circle cx="420" cy="507" r="7"/><circle cx="500" cy="507" r="7"/></g>
+  </g>
+
+  <!-- folders on belts -->
+  <g>
+    <!-- belt A -->
+    <g><rect x="96" y="212" width="40" height="12" rx="3" fill="#B8893B"/><rect x="96" y="222" width="96" height="56" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/><text class="flabel" x="144" y="256">DRAFT</text></g>
+    <g><rect x="246" y="212" width="40" height="12" rx="3" fill="#B8893B"/><rect x="246" y="222" width="96" height="56" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/><text class="flabel" x="294" y="256">CODE</text></g>
+    <!-- belt B -->
+    <g><rect x="96" y="322" width="40" height="12" rx="3" fill="#B8893B"/><rect x="96" y="332" width="96" height="56" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/><text class="flabel" x="144" y="366">ANALYSIS</text></g>
+    <g><rect x="246" y="322" width="40" height="12" rx="3" fill="#B8893B"/><rect x="246" y="332" width="96" height="56" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/><text class="flabel" x="294" y="366">UPDATE</text></g>
+    <!-- belt C -->
+    <g><rect x="96" y="432" width="40" height="12" rx="3" fill="#B8893B"/><rect x="96" y="442" width="96" height="56" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/><text class="flabel" x="144" y="476">OPTION</text></g>
+    <g><rect x="246" y="432" width="40" height="12" rx="3" fill="#B8893B"/><rect x="246" y="442" width="96" height="56" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/><text class="flabel" x="294" y="476">DRAFT</text></g>
+  </g>
+
+  <!-- jammed pile against the barrier -->
+  <g>
+    <g transform="rotate(-9 470 300)"><rect x="422" y="278" width="90" height="52" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/></g>
+    <g transform="rotate(7 480 372)"><rect x="435" y="350" width="90" height="52" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/></g>
+    <g transform="rotate(-5 465 452)"><rect x="420" y="430" width="90" height="52" rx="6" fill="#FBEFD6" stroke="#B8893B" stroke-width="1.5"/></g>
+    <g transform="rotate(11 505 340)"><rect x="462" y="320" width="86" height="50" rx="6" fill="#F5E6C8" stroke="#B8893B" stroke-width="1.5"/></g>
+    <g transform="rotate(-6 500 415)"><rect x="458" y="395" width="86" height="50" rx="6" fill="#F5E6C8" stroke="#B8893B" stroke-width="1.5"/></g>
+  </g>
+
+  <!-- what context is missing, and around what -->
+  <text class="misscap" x="70" y="556">No outcome, boundaries, risk or controls attached to the output.</text>
+
+  <!-- ===== the barrier: missing context (the real bottleneck) ===== -->
+  <text class="callout" x="628" y="182">THE BOTTLENECK</text>
+  <path d="M628 212 l-9 -14 l18 0 z" fill="#9B3A32"/>
+  <rect x="606" y="224" width="44" height="354" rx="10" fill="#8C661F"/>
+  <rect x="606" y="224" width="44" height="354" rx="10" fill="url(#hatch)" opacity="0.25"/>
+  <text class="barrier" x="637" y="401" transform="rotate(-90 637 401)">MISSING CONTEXT</text>
+  <defs>
+    <pattern id="hatch" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#0F1B2D" stroke-width="3"/>
+    </pattern>
+  </defs>
+
+  <!-- flow direction: read left to right -->
+  <polygon points="574,385 600,401 574,417" fill="#B8893B"/>
+  <polygon points="658,385 682,401 658,417" fill="#B8893B"/>
+
+  <!-- ===== manager: calm and ready ===== -->
+  <!-- desk: the manager's remit is far more than code review -->
+  <rect x="686" y="452" width="404" height="126" rx="10" fill="#E5D9C2" stroke="#8C661F" stroke-width="2"/>
+  <text class="rolelabel" x="888" y="478">THE MANAGER</text>
+  <text class="uatbig" x="768" y="548">UAT +</text>
+  <line x1="852" y1="494" x2="852" y2="566" stroke="#8C661F" stroke-width="1.5" stroke-opacity="0.4"/>
+  <g fill="#8C661F"><circle cx="868" cy="496" r="2.6"/><circle cx="868" cy="512" r="2.6"/><circle cx="868" cy="528" r="2.6"/><circle cx="868" cy="544" r="2.6"/><circle cx="868" cy="560" r="2.6"/></g>
+  <text class="mitem" x="880" y="500">Regulatory compliance</text>
+  <text class="mitem" x="880" y="516">Business continuity</text>
+  <text class="mitem" x="880" y="532">Risk management</text>
+  <text class="mitem" x="880" y="548">Cross-team integration</text>
+  <text class="mitem" x="880" y="564">Sustainable value</text>
+  <!-- empty in-tray -->
+  <rect x="966" y="430" width="86" height="22" rx="4" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+  <text class="cap" x="1009" y="420" text-anchor="middle" font-size="13">in-tray: empty</text>
+  <!-- person -->
+  <path d="M812 452 q0 -66 68 -66 q68 0 68 66 z" fill="#2A3548"/>
+  <circle cx="880" cy="372" r="34" fill="#F3E7CE" stroke="#0F1B2D" stroke-width="3"/>
+
+  <text class="brand" x="64" y="646">goldenpassport.blog</text>
+</svg>

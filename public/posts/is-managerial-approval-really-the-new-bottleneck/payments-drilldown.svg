@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 990" role="img" aria-labelledby="title desc">
+  <title id="title">Payments process from level 3 to level 4, with the systems that run it</title>
+  <desc id="desc">At level 3, a payment flows left to right across five functions: from a start event, Channels capture the payment, Payments validate and authorise, the Fraud team screens for fraud, Settlement clears and settles, and Finance reconciles and reports, to an end event. The fraud-screening step carries a plus marker and fans out below into its level-4 detail: a payment arrives to screen, the transaction is scored, then a manager-owned gateway on the risk score approves it automatically when low, refers it to an analyst when uncertain, or declines it automatically when high. Example systems behind each step are listed: fraud ML model and AML and sanctions screening for scoring, a rules engine for the decision, case management for referral, and a payment processor for approve or decline. The fraud manager owns the thresholds and the referral rule, not each case.</desc>
+  <defs>
+    <style>
+      .h { fill:#0F1B2D; font:600 38px Georgia, serif }
+      .sub { fill:#5B6577; font:400 20px Arial, sans-serif }
+      .fn { fill:#5B6577; font:700 14px Arial, sans-serif; letter-spacing:0.06em }
+      .own { fill:#8C661F; font:700 14px Arial, sans-serif; letter-spacing:0.06em }
+      .st { fill:#0F1B2D; font:600 21px Georgia, serif }
+      .gw { fill:#0F1B2D; font:600 18px Georgia, serif; text-anchor:middle }
+      .cond { fill:#5B6577; font:700 13px Arial, sans-serif; text-anchor:middle; letter-spacing:0.05em }
+      .ev { fill:#5B6577; font:400 14px Arial, sans-serif; text-anchor:middle }
+      .plabel { fill:#0F1B2D; font:600 21px Georgia, serif }
+      .zoom { fill:#8C661F; font:700 14px Arial, sans-serif; text-anchor:middle; letter-spacing:0.14em }
+      .eyebrow { fill:#8C661F; font:700 13px Arial, sans-serif; text-anchor:middle; letter-spacing:0.1em }
+      .sys { fill:#5B6577; font:italic 400 15px Arial, sans-serif; text-anchor:middle }
+      .flag { fill:#8C661F; font:italic 400 17px Arial, sans-serif; text-anchor:middle }
+    </style>
+  </defs>
+
+  <rect width="1400" height="990" rx="28" fill="#FBF7EF"/>
+
+  <text class="h" x="72" y="72">Payments: level-3 flow, level-4 detail</text>
+  <text class="sub" x="72" y="106">Screen for fraud is one step in the flow. Drill in to see the manager's decision.</text>
+
+  <!-- drill-down fan-out connector -->
+  <g stroke="#B8893B" stroke-width="1.5" stroke-dasharray="6 6" stroke-opacity="0.7" fill="none">
+    <path d="M600 318 L150 430"/>
+    <path d="M800 318 L1250 430"/>
+  </g>
+  <text class="zoom" x="700" y="374">LEVEL 4</text>
+
+  <!-- ===== level-4 panel ===== -->
+  <rect x="150" y="430" width="1100" height="530" rx="20" fill="#FDF6EA" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.45"/>
+  <text class="plabel" x="176" y="474">Inside the fraud screen</text>
+
+  <!-- level-4 sequence flows -->
+  <g fill="none" stroke="#B8893B" stroke-width="2.5">
+    <line x1="258" y1="660" x2="290" y2="660"/>
+    <line x1="520" y1="660" x2="568" y2="660"/>
+    <path d="M620 618 V560 H722"/>
+    <line x1="664" y1="660" x2="722" y2="660"/>
+    <path d="M620 702 V760 H722"/>
+    <line x1="1000" y1="560" x2="1082" y2="560"/>
+    <line x1="1000" y1="660" x2="1082" y2="660"/>
+    <line x1="1000" y1="760" x2="1082" y2="760"/>
+  </g>
+  <g fill="#B8893B">
+    <polygon points="290,654 298,660 290,666"/>
+    <polygon points="568,654 576,660 568,666"/>
+    <polygon points="722,554 730,560 722,566"/>
+    <polygon points="722,654 730,660 722,666"/>
+    <polygon points="722,754 730,760 722,766"/>
+    <polygon points="1082,554 1090,560 1082,566"/>
+    <polygon points="1082,654 1090,660 1082,666"/>
+    <polygon points="1082,754 1090,760 1082,766"/>
+  </g>
+
+  <!-- level-4 start -->
+  <circle cx="238" cy="660" r="20" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+  <text class="ev" x="238" y="702">Payment</text>
+  <text class="ev" x="238" y="719">to screen</text>
+
+  <!-- score -->
+  <rect x="300" y="616" width="220" height="88" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="st" x="324" y="652">Score the</text>
+  <text class="st" x="324" y="680">transaction</text>
+
+  <!-- gateway (manager-owned) -->
+  <path d="M620 618 L664 660 L620 702 L576 660 Z" fill="#FCF3E1" stroke="#B8893B" stroke-width="2.5"/>
+  <text class="gw" x="620" y="666">Risk?</text>
+
+  <!-- condition labels -->
+  <text class="cond" x="694" y="548">LOW RISK</text>
+  <text class="cond" x="700" y="644">UNSURE</text>
+  <text class="cond" x="690" y="796">HIGH RISK</text>
+
+  <!-- approve -->
+  <rect x="730" y="516" width="270" height="88" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="st" x="754" y="552">Approve</text>
+  <text class="st" x="754" y="580">automatically</text>
+  <circle cx="1110" cy="560" r="18" fill="#FEFCF8" stroke="#8C661F" stroke-width="4"/>
+  <text class="ev" x="1110" y="599">Approved</text>
+
+  <!-- refer -->
+  <rect x="730" y="616" width="270" height="88" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="st" x="754" y="652">Refer to an</text>
+  <text class="st" x="754" y="680">analyst</text>
+  <circle cx="1110" cy="660" r="18" fill="#FEFCF8" stroke="#8C661F" stroke-width="4"/>
+  <text class="ev" x="1110" y="696">Manual</text>
+  <text class="ev" x="1110" y="713">decision</text>
+
+  <!-- decline -->
+  <rect x="730" y="716" width="270" height="88" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="st" x="754" y="752">Decline</text>
+  <text class="st" x="754" y="780">automatically</text>
+  <circle cx="1110" cy="760" r="18" fill="#FEFCF8" stroke="#8C661F" stroke-width="4"/>
+  <text class="ev" x="1110" y="799">Declined</text>
+
+  <!-- the how layer: example systems -->
+  <line x1="176" y1="838" x2="1224" y2="838" stroke="#B8893B" stroke-width="1" stroke-opacity="0.25"/>
+  <text class="eyebrow" x="700" y="866">EXAMPLE SYSTEMS BEHIND EACH STEP  (THE HOW LAYER)</text>
+  <text class="sys" x="700" y="894">Score: fraud ML model, AML and sanctions screening</text>
+  <text class="sys" x="700" y="918">Decide: rules engine   ·   Refer: case management   ·   Approve or decline: payment processor</text>
+
+  <text class="flag" x="700" y="948">The fraud manager owns the gateway thresholds and the referral rule.</text>
+
+  <!-- ===== level-3 band (on top) ===== -->
+  <g stroke="#B8893B" stroke-width="3" fill="#B8893B">
+    <line x1="119" y1="238" x2="134" y2="238"/>
+    <polygon points="134,232 143,238 134,244" stroke="none"/>
+    <line x1="347" y1="238" x2="362" y2="238"/>
+    <polygon points="362,232 371,238 362,244" stroke="none"/>
+    <line x1="575" y1="238" x2="590" y2="238"/>
+    <polygon points="590,232 599,238 590,244" stroke="none"/>
+    <line x1="803" y1="238" x2="818" y2="238"/>
+    <polygon points="818,232 827,238 818,244" stroke="none"/>
+    <line x1="1031" y1="238" x2="1046" y2="238"/>
+    <polygon points="1046,232 1055,238 1046,244" stroke="none"/>
+    <line x1="1259" y1="238" x2="1274" y2="238"/>
+    <polygon points="1274,232 1283,238 1274,244" stroke="none"/>
+  </g>
+
+  <circle cx="94" cy="238" r="22" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+  <text class="ev" x="94" y="292">Payment</text>
+  <text class="ev" x="94" y="310">requested</text>
+
+  <rect x="144" y="158" width="200" height="160" rx="18" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="fn" x="166" y="200">CHANNELS</text>
+  <text class="st" x="166" y="250">Capture</text>
+  <text class="st" x="166" y="278">payment</text>
+
+  <rect x="372" y="158" width="200" height="160" rx="18" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="fn" x="394" y="200">PAYMENTS</text>
+  <text class="st" x="394" y="250">Validate and</text>
+  <text class="st" x="394" y="278">authorise</text>
+
+  <!-- fraud card, highlighted, with drill marker -->
+  <rect x="600" y="158" width="200" height="160" rx="18" fill="#FCF3E1" stroke="#B8893B" stroke-width="2.5"/>
+  <rect x="622" y="158" width="156" height="6" rx="3" fill="#B8893B"/>
+  <text class="own" x="622" y="200">FRAUD TEAM</text>
+  <text class="st" x="622" y="250">Screen for</text>
+  <text class="st" x="622" y="278">fraud</text>
+  <rect x="688" y="306" width="24" height="24" rx="5" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+  <g stroke="#8C661F" stroke-width="2.5" stroke-linecap="round">
+    <line x1="694" y1="318" x2="706" y2="318"/>
+    <line x1="700" y1="312" x2="700" y2="324"/>
+  </g>
+
+  <rect x="828" y="158" width="200" height="160" rx="18" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="fn" x="850" y="200">SETTLEMENT</text>
+  <text class="st" x="850" y="250">Clear and</text>
+  <text class="st" x="850" y="278">settle</text>
+
+  <rect x="1056" y="158" width="200" height="160" rx="18" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="fn" x="1078" y="200">FINANCE</text>
+  <text class="st" x="1078" y="250">Reconcile</text>
+  <text class="st" x="1078" y="278">and report</text>
+
+  <circle cx="1306" cy="238" r="22" fill="#FEFCF8" stroke="#8C661F" stroke-width="4"/>
+  <text class="ev" x="1306" y="292">Payment</text>
+  <text class="ev" x="1306" y="310">complete</text>
+</svg>

@@ -1,11 +1,14 @@
 import type { MDXComponents } from "mdx/types";
 import { MdxImage } from "@/components/MdxImage";
+import { Figure } from "@/components/Figure";
 import { CodeBlock } from "@/components/CodeBlock";
 import { TldrCard, VerdictCard, CtaCard } from "@/components/CalloutCard";
 import { Accordion } from "@/components/Accordion";
+import { Terms, Calculations, References } from "@/components/EndMatter";
 import { Timeline, TimelineEntry } from "@/components/Timeline";
 import { DownloadsChart } from "@/components/DownloadsChart";
 import { NumberedList, NumberedItem } from "@/components/NumberedList";
+import { Chips } from "@/components/Chips";
 import { TickList, TickItem } from "@/components/TickList";
 import { CrossList, CrossItem } from "@/components/CrossList";
 import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
@@ -32,16 +35,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
     img: MdxImage,
+    Figure,
     pre: CodeBlock,
     TldrCard,
     VerdictCard,
     CtaCard,
     Accordion,
+    Terms,
+    Calculations,
+    References,
     Timeline,
     TimelineEntry,
     DownloadsChart,
     NumberedList,
     NumberedItem,
+    Chips,
     TickList,
     TickItem,
     CrossList,

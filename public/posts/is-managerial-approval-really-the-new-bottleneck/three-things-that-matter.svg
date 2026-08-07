@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 470" role="img" aria-labelledby="title desc">
+  <title id="title">A three-step action plan for the operating model</title>
+  <desc id="desc">A three-step action plan for the operating model around a manager. One, an end-to-end process map: cross-functional and level-3, so upstream and downstream impacts are clear. Two, rules, risk and controls: processes mapped to controls and metrics for impact up front and context at sign-off. Three, decision-ready information: the right content at the right moment.</desc>
+  <defs>
+    <style>
+      .h { fill:#0F1B2D; font:600 42px Georgia, serif }
+      .sub { fill:#5B6577; font:400 22px Arial, sans-serif }
+      .num { fill:#FFFCF5; font:600 24px Georgia, serif; text-anchor:middle }
+      .btitle { fill:#0F1B2D; font:600 25px Georgia, serif }
+      .note { fill:#5B6577; font:400 18px Arial, sans-serif }
+    </style>
+  </defs>
+
+  <rect width="1400" height="470" rx="28" fill="#FBF7EF"/>
+
+  <text class="h" x="72" y="80">The three steps</text>
+  <text class="sub" x="72" y="118">Design the operating model so a manager's sign-off is fast and meaningful.</text>
+
+  <!-- Badge 1 -->
+  <rect x="72" y="160" width="392" height="270" rx="20" fill="#FEFCF8" stroke="#B8893B" stroke-width="2" stroke-opacity="0.4"/>
+  <rect x="94" y="160" width="348" height="6" rx="3" fill="#B8893B"/>
+  <circle cx="126" cy="216" r="24" fill="#8C661F"/>
+  <text class="num" x="126" y="224">1</text>
+  <text class="btitle" x="104" y="288">End-to-end</text>
+  <text class="btitle" x="104" y="318">process map</text>
+  <text class="note" x="104" y="360">Cross-functional and level-3,</text>
+  <text class="note" x="104" y="384">so upstream and downstream</text>
+  <text class="note" x="104" y="408">impacts are clear up front.</text>
+
+  <!-- Badge 2 -->
+  <rect x="504" y="160" width="392" height="270" rx="20" fill="#FEFCF8" stroke="#B8893B" stroke-width="2" stroke-opacity="0.4"/>
+  <rect x="526" y="160" width="348" height="6" rx="3" fill="#B8893B"/>
+  <circle cx="558" cy="216" r="24" fill="#8C661F"/>
+  <text class="num" x="558" y="224">2</text>
+  <text class="btitle" x="536" y="288">Rules, risk</text>
+  <text class="btitle" x="536" y="318">and controls</text>
+  <text class="note" x="536" y="360">Processes mapped to controls</text>
+  <text class="note" x="536" y="384">and metrics, for impact early</text>
+  <text class="note" x="536" y="408">and context at sign-off.</text>
+
+  <!-- Badge 3 -->
+  <rect x="936" y="160" width="392" height="270" rx="20" fill="#FEFCF8" stroke="#B8893B" stroke-width="2" stroke-opacity="0.4"/>
+  <rect x="958" y="160" width="348" height="6" rx="3" fill="#B8893B"/>
+  <circle cx="990" cy="216" r="24" fill="#8C661F"/>
+  <text class="num" x="990" y="224">3</text>
+  <text class="btitle" x="968" y="288">Decision-ready</text>
+  <text class="btitle" x="968" y="318">information</text>
+  <text class="note" x="968" y="360">The right content, at the</text>
+  <text class="note" x="968" y="384">right moment, in a form the</text>
+  <text class="note" x="968" y="408">manager can act on.</text>
+</svg>

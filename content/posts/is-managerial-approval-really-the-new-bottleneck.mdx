@@ -1,0 +1,329 @@
+---
+title: "Is managerial approval really the new bottleneck in agentic AI?"
+date: "2026-08-06"
+category: "Business"
+series: "Why Process Orchestration Matters More in the Age of Agentic AI"
+excerpt: "Managers are cast as the new bottleneck to AI-led delivery. But the constraint is rarely the approval itself, it is the missing context around it, and fixing that is an operating-model job."
+hero: "/posts/is-managerial-approval-really-the-new-bottleneck/hero-alt.svg"
+heroAlt: "The manager isn't the bottleneck, the missing context is. AI output floods in on conveyor belts with no outcome, boundaries, risk or controls attached and jams against a wall labelled Missing Context, the real bottleneck. Behind it the manager sits ready with an empty in-tray, carrying a broad remit that starts at UAT and spans regulatory compliance, business continuity, risk management, cross-team integration and sustainable value."
+# The hero is an SVG, which crawlers (LinkedIn, X, Facebook, Slack) will not
+# render as an og:image. This 1200x630 raster of the same artwork is for link
+# unfurls only; the SVG still renders on the page. Regenerate with sharp from
+# hero-alt.svg (same approach as scripts/gen-social-avatars.mjs).
+ogImage: "/posts/is-managerial-approval-really-the-new-bottleneck/og.png"
+tags:
+  - Agentic AI
+  - Process Orchestration
+  - Decision Making
+  - Operating Model
+  - Management
+---
+
+## Introduction
+
+The internet is awash with articles arguing that managers are the new bottleneck to AI-led innovation. The fix, they suggest, is simple: step aside, approve work faster or fundamentally change the role, and organisations will finally release the value of AI.
+
+The funny thing is, AI is already paying off, according to ISBSG. It found that post-2023 projects in AI-conducive environments (modern languages, agile or DevOps methods and cloud-native technology) needed roughly **15% to 25% fewer effort hours per function point** than comparable earlier ones.
+
+<aside className="not-prose my-6 rounded-lg border-l-4 border-gold-deep bg-cream-50 px-5 py-4 shadow-sm">
+  <p className="font-serif text-lg leading-snug text-ink-soft">In practical terms, a 12-week epic delivering 48 function points could reach the same scope in around <strong className="text-ink">9 to 9.6 weeks</strong>.</p>
+</aside>
+
+So why does this not feel like a clear win? If teams can produce useful work faster, why has the overwhelmed manager become the next target?
+
+## My view
+
+I think we are confusing faster production with faster value delivery.
+
+A manager may be the most visible place where work waits, but that does not make them the original cause of the delay. They are often the point where a technical change meets operational reality. Sometimes the approval adds no value. Sometimes it is the only place where upstream dependencies, downstream consequences, customer experience and organisational risk are considered together.
+
+To get my head around the difference, I wanted to break the problem down to first principles.
+
+## First principles
+
+### Time, cost, quality and risk remain connected
+
+The traditional project triangle is usually drawn as scope, time and cost, with quality and risk shaped by decisions across all three. For this discussion, I am holding scope steady and looking directly at time, cost and quality. I include risk within quality because a fast release that is unsafe, unreliable or non-compliant is not a high-quality outcome.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/time-cost-quality.svg"
+  alt="Triangle connecting time, cost, and quality and risk, with sustainable value at its centre"
+  caption="AI can improve productivity, but sustainable value still depends on time, cost, quality and risk holding together."
+/>
+
+In most conversations about AI-assisted development, the emphasis is on time and, by association, cost. Requirements can be drafted faster, code can be produced faster and tests can be generated faster. Those are real gains.
+
+The question that deserves equal attention is: **what has happened to quality and risk?**
+
+Quality here means more than whether the software passes its technical tests. It includes:
+
+- whether the service remains reliable
+- whether controls still work
+- whether the change fits the wider organisation, upstream and downstream, not just the immediate team
+- whether customers receive a better outcome and are not overwhelmed by change
+
+Risk management is how we make those quality expectations explicit before release rather than discovering them afterwards.
+
+### What are a business manager's highest priorities?
+
+Business managers have many existing claims on their attention. A [McKinsey survey of 706 middle managers](https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/stop-wasting-your-most-precious-resource-middle-managers) found that they reported spending 31% of their time on individual-contributor work, 28% on talent and people management, 23% on strategy-focused work and 18% on administration.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/manager-time-allocation.svg"
+  alt="Donut chart showing how 706 surveyed middle managers allocate their working time"
+  caption="This is reported time allocation, not an ideal job description. Source: McKinsey Global Survey on middle managers, 2022."
+/>
+
+Group those four figures and two camps appear. Close to 60% (individual-contributor work and people management) goes on the efficiency of the manager's own unit: doing the work and looking after the team. The other 40% (strategy and administration) faces outward: keeping the unit aligned with strategy, making the case for its value and carrying the reporting that comes with operating inside a larger organisation.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/attention-two-camps.svg"
+  alt="Two-camp view of a manager's attention: about 60% inward on running the unit (efficiency, cost, quality), and about 40% outward on the wider business (reporting, governance, wider-business integration, industry compliance). AI's gains land in the inward camp."
+  caption="A conceptual split of the two camps. The proportions follow the McKinsey time allocation; the groupings are illustrative."
+/>
+
+This is where AI lands unevenly, usually inside the inward 60%. It is aimed at the engine room, the core operational work of a unit, where code, content and analysis are produced faster and cheaper. It does far less for the outward job of reporting, governance, regulatory compliance and the integration that ties the unit to the rest of the business. This is not to say AI is ignored for those areas, but they are usually owned by centralised functions with their own funding. In short, from a business manager's perspective, AI lifts the output, not the connective work around it.
+
+> [A Harvard study](https://jellyfish.co/blog/harvard-jellyfish-ai-is-making-developers-faster/) put it plainly: coding was not the bottleneck. The constraints sat in review, testing and cross-team coordination, the connective work that AI leaves largely untouched.
+
+If anything, the outward load only grows: more change moving faster means more to align, more to explain and more value to prove to everyone the unit depends on.
+
+So a manager can look like a bottleneck without being the cause of the delay. They may seem preoccupied with outside matters instead of quickly approving AI-led change, but that outward work is not avoidance, it is vital. They are not short of output; they are short of the one thing AI has not given them more of: the capacity to connect faster change to the rest of the business without breaking it.
+
+<aside className="not-prose my-8 rounded-xl border border-gold/30 bg-cream-50 p-6 shadow-sm">
+  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep">The role of the business manager</p>
+  <p className="mt-3 font-serif text-2xl leading-snug text-ink md:text-3xl"><strong>A good business manager is not the gatekeeper of technology. They are the gatekeeper of whether technical change becomes sustainable business value.</strong></p>
+</aside>
+
+This does not excuse slow or unnecessary approval. It explains why releasing technology faster does not, by itself, produce better integration, a better service or a better customer experience.
+
+### More output does not automatically create more value
+
+AI reduces the cost of producing plausible work. A team can generate more requirements, more options, more designs, more code and more analysis in the same period.
+
+But an artefact is not an outcome. A [Harvard analysis of 100,000 engineers across 500 companies](https://jellyfish.co/blog/harvard-jellyfish-ai-is-making-developers-faster/) found that AI sped up coding without a matching rise in features shipped or any shift towards higher-value work.
+
+Each additional option may require a decision. Each release may require training, communication, support and operational change. Each new integration creates something else to monitor and maintain. If work enters the organisation faster than it can be understood, prioritised and absorbed, productivity at one point simply creates inventory somewhere else.
+
+The useful question is therefore not, "How much did we produce?" It is, "What improved for the business or customer, and what evidence proves it?"
+
+### Speed and volume can look like chaos
+
+Most organisations want to appear innovative and responsive. Few want to seem frantic or unpredictable to their employees and customers.
+
+Internally, a high volume of poorly coordinated change can mean competing priorities, moving procedures, unfinished training and constant exceptions. Upstream and downstream teams experience the same change from different angles and at different times. Externally, customers may see inconsistent messages, altered journeys and new features that solve one problem while creating another.
+
+The technical side is not immune either. The same [ISBSG analysis](https://www.isbsg.org/wp-content/uploads/2026/02/Short-Paper-2026-02-Impact-of-AI-Assisted-Development-on-Productivity-and-Delivery-Speed.pdf) that measured the speed-up also flags its costs: declines in code quality, rising technical debt and slowdowns on complex work, including a [2025 METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) in which experienced developers took **19% longer** on code they already knew well. Faster output can arrive with hidden liabilities that surface later as rework and incidents.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/hidden-costs-of-speed.svg"
+  alt="Three hidden costs of the AI speed-up: code quality can slip, technical debt grows, and complex work can slow down. A 2025 METR study found experienced developers took 19% longer on code they already knew well."
+  caption="Costs flagged alongside the speed-up in the ISBSG analysis, including the METR slowdown for experienced developers."
+/>
+
+A company can be technically innovative and operationally unreliable at the same time.
+
+The goal should be a business that changes quickly but feels calm: responsive without being erratic, innovative without making the customer absorb its internal complexity.
+
+## What could great look like?
+
+The debate has produced plenty of advice for managers themselves. One recent example is [Managers Are Struggling to Keep Up with the AI Productivity Boom](https://hbr.org/2026/05/managers-are-struggling-to-keep-up-with-the-ai-productivity-boom) in Harvard Business Review, which argues the manager's role has to shift from editor-in-chief to strategic guide: focus on where the team is headed rather than what each person does at every step, and let AI handle the tactical detail.
+
+I would put that in terms of decision rights. Before a person or agent starts producing work, four things should be clear:
+
+<NumberedList>
+
+<NumberedItem>
+
+**The outcome.** What business or customer result is the work meant to achieve?
+
+</NumberedItem>
+
+<NumberedItem>
+
+**The boundaries.** Which limits, policies and risks must not be crossed?
+
+</NumberedItem>
+
+<NumberedItem>
+
+**The evidence.** What will demonstrate that the outcome is ready and acceptable?
+
+</NumberedItem>
+
+<NumberedItem>
+
+**The exceptions.** Which conditions require the work to stop and be escalated?
+
+</NumberedItem>
+
+</NumberedList>
+
+The manager should not have to rediscover these rules for every output. They should help establish the decision policy, then retain authority over genuine exceptions and consequential choices.
+
+That clarity is still aimed at the manager's own way of working. My interest is also in the operating model around them.
+
+### A three-step action plan
+
+To make managerial sign-off fast and meaningful rather than a bottleneck, three steps do the heavy lifting. To keep them concrete, take one running example: the head of a fraud team in a payments business. Their job is to approve how automated fraud screening behaves, one step in a payment journey that begins well before them and continues well after.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/three-things-that-matter.svg"
+  alt="A three-step action plan for the operating model: one, an end-to-end process map that is cross-functional and level-3; two, rules, risk and controls mapped to processes and metrics; three, decision-ready information for managers."
+  caption="The three steps that make a manager's sign-off fast and meaningful."
+/>
+
+**1. Map the cross-functional, level-3, end-to-end processes.**
+
+<Chips label="Clarifies" items={["Outcome", "Boundaries", "Ownership"]} />
+
+Set out a clear "what" layer, the end-to-end process across functions, and attach the "how" layer of systems, AI and teams to it. Then the upstream and downstream business-integration impacts of a change are visible before release rather than discovered afterwards.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/payments-drilldown.svg"
+  alt="A payments process shown at two levels. At level 3 the payment flows across five functions: Channels capture it, Payments validate and authorise, the Fraud team screens for fraud, Settlement clears and settles, and Finance reconciles and reports, with start and end events. The fraud-screening step carries a plus marker and drills down into its level-4 detail: a payment arrives to screen, the transaction is scored, then a manager-owned gateway on the risk score approves it automatically when low, refers it to an analyst when uncertain, or declines it automatically when high. Example systems behind each step are listed underneath: a fraud ML model and AML and sanctions screening for scoring, a rules engine for the decision, case management for referral, and a payment processor for approve or decline."
+  caption="The payments flow at level 3, with fraud screening drilled down to level 4 and the systems that run each step. The manager owns the gateway, not every case."
+/>
+
+<Accordion title="Follow the payments example">
+
+That payment journey is a level-3, end-to-end flow across five functions: Channels capture the payment, Payments validate and authorise it, the Fraud team screens it, Settlement clears and settles, and Finance reconciles and reports. Screening for fraud is our manager's step, but its inputs and consequences sit upstream and downstream of them.
+
+Drill into that one step and a level-4 view appears: the fraud screen itself. A transaction is scored, then a gateway on the risk score approves it, refers it to an analyst or declines it, each run by a supporting system. This is where the manager's decision rights become concrete. They own the thresholds and the referral rule, not each individual case.
+
+</Accordion>
+
+Mapped this way, the level-3 view draws the edges between functions and business units. Scope and ownership become explicit: who owns which area, and where each function hands work to the next. For the fraud team it sets out their incoming dependencies and the outgoing outcome requirements they are accountable for, and drilling down names the apps and systems that underpin each step.
+
+That process lineage also drives the underlying data lineage, which has a business continuity impact. For example, when the fraud team changes a capability, the downstream effects on Settlement and Finance are visible before release; when Payments changes something upstream, so is its effect on fraud screening, and so forth.
+
+**2. Enrich those processes with clear mappings to business rules, risk, controls and performance metrics.**
+
+<Chips label="Provides" items={["Evidence", "Controls", "Exceptions"]} />
+
+This guides the initial impact assessment and the design, and it gives a manager the context to sign off quickly and well. That is precisely the outward, connective work that took up the other 40% of their time.
+
+Take the same fraud-scoring task and wrap it in its business context: the requirements it serves, the systems and data it uses, the legislation it must respect, and the risks, controls and metrics that govern it. Each mapping is a thread the manager can pull when a change lands on their desk.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/task-business-context.svg"
+  alt="A function allocation view of a single task, Score the transaction, owned by the fraud team, at the centre. Around it are eight context areas. On the left, what the task draws on: business requirements, systems, data objects and roles. On the right, how it is governed and judged: legislation, risks, controls and metrics. Each area lists fraud-screening examples."
+  caption="One task, mapped to its business context: an ARIS-style function allocation view."
+/>
+
+Now imagine every task in a business unit carrying this kind of context. Real-time impact assessment, reporting and continuous improvement stop being big-effort, one-off projects and become routine, straightforward and part of the organisation's DNA. A compliance team reporting to a regulator, for instance, could pinpoint exactly where a rule touches the organisation and what is being done about it.
+
+Consider [GDPR Article 22](/blog/gdpr-restricts-fully-automated-decision-flows), which restricts decisions based solely on automated processing where they significantly affect a person. Declining a payment automatically is exactly that kind of decision. Because the process is mapped, compliance can trace Article 22 straight to the fraud screen, flag the automatic decline as the point of exposure, and show where a person can intervene. Answering the regulator becomes a matter of reading the map rather than launching an investigation.
+
+**3. Change the content, timing and presentation of the information managers receive.**
+
+<Chips label="Serves" items={["Evidence", "Continuity", "Performance", "Context"]} />
+
+A wall of AI-generated output, reviewed late and out of context, is not a decision aid. Managers need the right information, at the right moment, in a form they can act on, so a sign-off becomes a judgement rather than a scramble.
+
+Recall the two camps. A manager's attention splits roughly 60/40 between their own unit and the wider business, and AI has mostly served the inward 60%. Their information should shift the other way. Less of it needs to be technical requirements, the sprint-level detail that lives in agile tooling such as Confluence. More of it needs to serve the outward 40%: business continuity and performance impact, the connective view of how a change moves through the end-to-end process.
+
+That view tends to live in a different kind of knowledge portal. Process and business-linked artefacts tie each decision to the wider operating model, but on their own they are only half the picture. They have to be merged with the app-level development updates so a business unit owner sees one unified position rather than two disconnected stories.
+
+Business intelligence does not solve this on its own. A BI suite is a set of dashboards laid over multiple, separate data sources: it surfaces the numbers but does not link process to risk, control and delivery. That linking needs a specialised, process-powered knowledge management system, such as ARIS, a long-recognised leader in process analysis. Think of it as a business knowledge warehouse, where the artefacts are linked by design, so a manager's sign-off draws on one coherent picture rather than several.
+
+<Figure
+  src="/posts/is-managerial-approval-really-the-new-bottleneck/unified-decision-view.svg"
+  alt="Four source systems on the left (ARIS for process context, Confluence and Jira for delivery updates, a risk and controls source, and a metrics and monitoring source) feed into a central business knowledge warehouse labelled linked by design. The warehouse feeds a single unified decision view on the right, a manager's dashboard with live tiles: a fraud model deploying to staging, a rule-threshold change pending sign-off, the business impact touching Settlement and Finance, and false positives within target."
+  caption="Process and delivery sources linked in a knowledge warehouse, feeding one unified decision view."
+/>
+
+## Conclusion
+
+Managerial approval can look like a bottleneck, and it earns that name when it adds no judgement, applies the same control to every decision or merely collects a signature. But the manager is rarely the real problem. AI has raised the speed and volume of technical output, while the wider business still has to protect quality, manage risk and turn that output into a better service or customer outcome. Removing the manager does not remove those responsibilities; it simply moves the consequences downstream.
+
+The fix is an operating-model job, and it comes down to the three steps above. Map the cross-functional, end-to-end processes, so scope, ownership and dependencies are explicit. Enrich them with the business rules, risks, controls and metrics that turn a process into a decision a manager can actually assess. And change the content, timing and presentation of the information they receive, so the right context arrives at the point of decision rather than as a wall of output reviewed too late.
+
+Do that, and approval stops being a queue and becomes what it should be: a fast, well-founded act of judgement. The bottleneck was rarely the approval itself. It was the missing context around it.
+
+<CtaCard label="Let's talk">
+
+If your teams are feeling the tension between AI-led delivery and managerial sign-off, or you are designing the operating model that makes approval fast and well-founded, [drop me a message](/contact). I am always happy to compare notes and share what has worked.
+
+</CtaCard>
+
+<div className="gold-rule mt-16 mb-8" aria-hidden />
+
+<Terms>
+
+Plain-English definitions for the software-delivery and management vocabulary used in this article, listed alphabetically.
+
+**Agile.** An iterative approach to software delivery that works in short cycles, releasing and adjusting frequently rather than planning everything up front.
+
+**AI-conducive environments.** ISBSG's term for the settings where AI assistance tends to help most: modern languages, agile or DevOps ways of working and cloud-native technology. Because ISBSG did not record AI use directly, it treated these characteristics, together with the post-2023 (post-AI era) timing, as a proxy for AI adoption.
+
+**ARIS.** A process and enterprise-architecture platform used to model end-to-end processes and link them to the systems, data, roles, risks and controls that support them. Cited here as an example of a process-powered knowledge management system.
+
+**Business intelligence (BI).** Tools and dashboards that report and visualise data pulled from across an organisation. Good at surfacing numbers, but on its own it does not link a process to the risks, controls and delivery work around it.
+
+**Business knowledge warehouse.** A purpose-built store in which process, risk, control and delivery information are linked by design, so a decision can draw on one connected picture rather than several separate sources.
+
+**Cloud-native.** Software designed from the outset to run on cloud infrastructure, using building blocks such as containers and managed services rather than fixed, self-managed servers.
+
+**Data lineage.** A record of where data comes from, how it moves and how it is transformed across systems. It shows which downstream reports and processes a change to a data source will affect.
+
+**Decision rights.** The authority to make a specific decision: who owns the outcome, the boundaries they must stay within, the evidence required and the exceptions that must be escalated.
+
+**DevOps.** A set of practices that bring software development and IT operations closer together to release changes more frequently and more reliably.
+
+**End-to-end process.** The full flow of a piece of work from its trigger to its outcome, across every function it passes through, rather than the slice owned by a single team.
+
+**Epic.** In agile delivery, a large body of work broken down into smaller pieces. Used here as a sizeable, self-contained unit of delivery, illustrated as a 12-week piece of work.
+
+**Function allocation diagram (FAD).** An ARIS-style view that places a single task at the centre and maps the business context around it: the requirements, systems, data, roles, legislation, risks, controls and metrics it touches.
+
+**Function point.** A standardised unit of software size based on the functionality delivered to the user, independent of programming language or lines of code. It lets projects built on different technologies be compared on a like-for-like basis.
+
+**GDPR Article 22.** A provision of the EU General Data Protection Regulation giving individuals the right not to be subject to a decision based solely on automated processing that significantly affects them, unless specific conditions and safeguards apply.
+
+**ISBSG.** The International Software Benchmarking Standards Group, a non-profit that maintains one of the largest repositories of completed software-project data and publishes analysis based on it.
+
+**Level-3 and level-4 processes.** Levels in a process hierarchy. Level 3 is the end-to-end flow of activities across functions; level 4 breaks a single activity into its detailed steps. The lower the level, the more operational the detail.
+
+**Process lineage.** The end-to-end chain of how work flows across functions, showing each step's upstream inputs and downstream consequences, so the impact of a change is visible before release.
+
+</Terms>
+
+<Calculations>
+
+The 12-week illustration uses the [ISBSG analysis of AI-assisted development](https://www.isbsg.org/wp-content/uploads/2026/02/Short-Paper-2026-02-Impact-of-AI-Assisted-Development-on-Productivity-and-Delivery-Speed.pdf) and holds scope at 48 function points:
+
+1. **Original capacity:** 12 weeks × 40 hours = 480 person-hours.
+2. **Original scope:** 480 hours ÷ 10 hours per function point = 48 function points.
+3. **At 8 hours per function point:** 48 × 8 = 384 hours, or 9.6 weeks. This saves 96 hours, a 20% reduction.
+4. **At 7.5 hours per function point:** 48 × 7.5 = 360 hours, or 9 weeks. This saves 120 hours, a 25% reduction.
+
+This assumes that 480 person-hours represents one person's full-time capacity and that the saved effort sits on the delivery path. A team epic should use total team capacity. Fixed waiting periods, dependencies and approval queues may prevent an effort saving from becoming an equal reduction in calendar time. ISBSG also did not record AI usage directly; its analysis used the post-2023 period and AI-conducive technology and delivery practices as proxies, so the finding is indicative rather than causal.
+
+</Calculations>
+
+<References>
+
+External sources cited in this article.
+
+**Managers and their role**
+
+- CIPD: Line Managers' Role in Supporting the People Profession. <RefLink href="https://www.cipd.org/en/knowledge/factsheets/line-managers-factsheet/" />
+- McKinsey: Stop Wasting Your Most Precious Resource, Middle Managers. <RefLink href="https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/stop-wasting-your-most-precious-resource-middle-managers" />
+- PMI: Interlocking Program and Project Governance with PMI's Process Groups. <RefLink href="https://www.pmi.org/learning/library/interlocking-program-project-governance-pmi-process-group-10175" />
+
+**Where AI's gains do and do not land**
+
+- Harvard economists (Chen and Stratton) with Jellyfish: AI is making developers faster, so where is the business impact? A study of 100,000 engineers across 500 companies: faster coding, but no matching rise in features shipped or higher-value work. <RefLink href="https://jellyfish.co/blog/harvard-jellyfish-ai-is-making-developers-faster/" />
+- METR: Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity. A randomised study of 16 experienced developers on large repositories they knew well: they took 19% longer with early-2025 AI tools, despite expecting a speed-up. Also cited in the ISBSG analysis. <RefLink href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" />
+
+**The wider debate**
+
+- Harvard Business Review: Managers Are Struggling to Keep Up with the AI Productivity Boom. <RefLink href="https://hbr.org/2026/05/managers-are-struggling-to-keep-up-with-the-ai-productivity-boom" />
+
+**Process tooling and regulation**
+
+- ARIS: process intelligence and business process analysis platform, used here as the example of a process-powered knowledge management system. <RefLink href="https://aris.com/" />
+- GDPR Article 22, EU General Data Protection Regulation: the right not to be subject to a decision based solely on automated processing. <RefLink href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679#art_22" />
+
+</References>
