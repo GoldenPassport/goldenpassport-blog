@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { MdxImage } from "./MdxImage";
 
 const meta: Meta<typeof MdxImage> = {

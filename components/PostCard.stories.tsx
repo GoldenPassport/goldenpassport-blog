@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { CategoryBadge, PinnedBadge, ReadIndicator, Tag, TagList, PostCard } from "./PostCard";
 import type { PostMeta } from "@/lib/posts";
 
@@ -96,15 +96,9 @@ const basePost: PostMeta = {
   readingTime: "9 min read",
 };
 
-const cardMeta: Meta<typeof PostCard> = {
-  title: "Post / Card",
-  component: PostCard,
-  parameters: { layout: "padded" },
-};
-
 export const Card: StoryObj<typeof PostCard> = {
-  ...cardMeta,
   name: "Default (Tech, many tags, truncated)",
+  parameters: { layout: "padded" },
   render: () => (
     <div className="max-w-3xl">
       <PostCard post={basePost} />

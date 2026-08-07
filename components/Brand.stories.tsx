@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { Brand, BrandMark, BrandResponsive } from "./Brand";
 
 const meta: Meta<typeof Brand> = {

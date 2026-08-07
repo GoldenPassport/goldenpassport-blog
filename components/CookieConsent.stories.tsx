@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CookieConsent } from "./CookieConsent";
