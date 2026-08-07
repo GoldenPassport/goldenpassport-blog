@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 780" role="img" aria-labelledby="title desc">
+  <title id="title">A unified decision view fed by linked sources</title>
+  <desc id="desc">On the left, four source systems: ARIS for process and business context, Confluence and Jira for delivery and sprint updates, a risk and controls source, and a metrics and monitoring source. They feed into a central business knowledge warehouse, where the information is linked by design rather than left unconnected. The warehouse feeds a single unified decision view on the right, a manager's dashboard showing live updates (a fraud model deploying to staging), a pending sign-off (a rule-threshold change awaiting decision), the business impact (the change touches Settlement and Finance), and performance (false-positive rate within target).</desc>
+  <defs>
+    <style>
+      .h { fill:#0F1B2D; font:600 38px Georgia, serif }
+      .sub { fill:#5B6577; font:400 20px Arial, sans-serif }
+      .eyebrow { fill:#8C661F; font:700 12px Arial, sans-serif; letter-spacing:0.08em }
+      .name { fill:#0F1B2D; font:600 20px Georgia, serif }
+      .desc { fill:#5B6577; font:400 14px Arial, sans-serif }
+      .wh { fill:#8C661F; font:700 16px Arial, sans-serif; letter-spacing:0.1em; text-anchor:middle }
+      .whsub { fill:#5B6577; font:italic 400 13px Arial, sans-serif; text-anchor:middle }
+      .dashh { fill:#0F1B2D; font:600 24px Georgia, serif }
+      .live { fill:#047857; font:700 13px Arial, sans-serif; letter-spacing:0.08em }
+      .tk { fill:#8C661F; font:700 12px Arial, sans-serif; letter-spacing:0.07em }
+      .tt { fill:#0F1B2D; font:600 18px Georgia, serif }
+      .ts { fill:#5B6577; font:400 13px Arial, sans-serif }
+    </style>
+  </defs>
+
+  <rect width="1400" height="780" rx="28" fill="#FBF7EF"/>
+
+  <text class="h" x="72" y="72">One unified view, fed by linked sources</text>
+  <text class="sub" x="72" y="106">Process context and delivery updates, linked in a business knowledge warehouse, not a dashboard on unconnected data.</text>
+
+  <!-- arrows: sources into warehouse -->
+  <g stroke="#B8893B" stroke-width="2" fill="#B8893B">
+    <line x1="364" y1="239" x2="428" y2="239" stroke-width="2"/>
+    <polygon points="428,233 438,239 428,245" stroke="none"/>
+    <line x1="364" y1="383" x2="428" y2="383"/>
+    <polygon points="428,377 438,383 428,389" stroke="none"/>
+    <line x1="364" y1="527" x2="428" y2="527"/>
+    <polygon points="428,521 438,527 428,533" stroke="none"/>
+    <line x1="364" y1="671" x2="428" y2="671"/>
+    <polygon points="428,665 438,671 428,677" stroke="none"/>
+  </g>
+  <!-- arrow: warehouse into dashboard -->
+  <g stroke="#B8893B" stroke-width="3.5" fill="#B8893B">
+    <line x1="570" y1="455" x2="618" y2="455"/>
+    <polygon points="618,447 630,455 618,463" stroke="none"/>
+  </g>
+
+  <!-- ===== source systems (left) ===== -->
+  <rect x="64" y="180" width="300" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="88" y="212">PROCESS PLATFORM</text>
+  <text class="name" x="88" y="244">ARIS</text>
+  <text class="desc" x="88" y="272">End-to-end context and business lineage</text>
+
+  <rect x="64" y="324" width="300" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="88" y="356">DELIVERY</text>
+  <text class="name" x="88" y="388">Confluence and Jira</text>
+  <text class="desc" x="88" y="416">Sprint and release updates</text>
+
+  <rect x="64" y="468" width="300" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="88" y="500">GOVERNANCE</text>
+  <text class="name" x="88" y="532">Risk and controls</text>
+  <text class="desc" x="88" y="560">Thresholds, AML, controls</text>
+
+  <rect x="64" y="612" width="300" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="88" y="644">MEASUREMENT</text>
+  <text class="name" x="88" y="676">Metrics and monitoring</text>
+  <text class="desc" x="88" y="704">KPIs, model health, alerts</text>
+
+  <!-- ===== business knowledge warehouse (middle spine) ===== -->
+  <rect x="440" y="180" width="130" height="550" rx="18" fill="#FCF3E1" stroke="#B8893B" stroke-width="2.5"/>
+  <g transform="translate(505 455) rotate(-90)">
+    <text class="wh" x="0" y="-6">BUSINESS KNOWLEDGE WAREHOUSE</text>
+    <text class="whsub" x="0" y="16">linked by design</text>
+  </g>
+
+  <!-- ===== unified decision view (right) ===== -->
+  <rect x="630" y="180" width="706" height="550" rx="20" fill="#FEFCF8" stroke="#B8893B" stroke-width="2"/>
+  <text class="dashh" x="656" y="226">Unified decision view</text>
+  <circle cx="1256" cy="219" r="6" fill="#047857"/>
+  <text class="live" x="1272" y="224">LIVE</text>
+  <line x1="656" y1="252" x2="1310" y2="252" stroke="#B8893B" stroke-width="1" stroke-opacity="0.25"/>
+
+  <!-- tile 1: live updates -->
+  <rect x="656" y="300" width="308" height="176" rx="14" fill="#FBF7EF" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.3"/>
+  <circle cx="940" cy="328" r="6" fill="#B8893B"/>
+  <text class="tk" x="680" y="334">LIVE UPDATES</text>
+  <text class="tt" x="680" y="372">Fraud model v4</text>
+  <text class="ts" x="680" y="400">deploying to staging</text>
+
+  <!-- tile 2: pending sign-off -->
+  <rect x="992" y="300" width="308" height="176" rx="14" fill="#FBF7EF" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.3"/>
+  <circle cx="1276" cy="328" r="6" fill="#B45309"/>
+  <text class="tk" x="1016" y="334">PENDING SIGN-OFF</text>
+  <text class="tt" x="1016" y="372">1 rule-threshold change</text>
+  <text class="ts" x="1016" y="400">awaiting your decision</text>
+
+  <!-- tile 3: business impact -->
+  <rect x="656" y="496" width="308" height="176" rx="14" fill="#FBF7EF" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.3"/>
+  <circle cx="940" cy="524" r="6" fill="#B45309"/>
+  <text class="tk" x="680" y="530">BUSINESS IMPACT</text>
+  <text class="tt" x="680" y="568">Touches Settlement</text>
+  <text class="ts" x="680" y="596">and Finance downstream</text>
+
+  <!-- tile 4: performance -->
+  <rect x="992" y="496" width="308" height="176" rx="14" fill="#FBF7EF" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.3"/>
+  <circle cx="1276" cy="524" r="6" fill="#047857"/>
+  <text class="tk" x="1016" y="530">PERFORMANCE</text>
+  <text class="tt" x="1016" y="568">False positives 1.8%</text>
+  <text class="ts" x="1016" y="596">within target</text>
+</svg>

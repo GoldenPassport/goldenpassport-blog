@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">A single task mapped to its business context</title>
+  <desc id="desc">A function allocation view. At the centre is one task, Score the transaction, owned by the fraud team. Around it are eight context areas. On the left, the things the task draws on: business requirements (stop fraud, approve good payments, meet approval SLAs), systems (fraud ML model, rules engine, case management), data objects (transaction, customer, device, risk score) and roles (fraud manager as owner, fraud analysts). On the right, how it is governed and judged: legislation (AML and KYC, PSD2 authentication, GDPR), risks (missed fraud, wrongful decline, model drift), controls (risk thresholds, approval limits, model monitoring) and metrics (false-positive rate, fraud loss, decision time).</desc>
+  <defs>
+    <style>
+      .h { fill:#0F1B2D; font:600 38px Georgia, serif }
+      .sub { fill:#5B6577; font:400 20px Arial, sans-serif }
+      .eyebrow { fill:#8C661F; font:700 13px Arial, sans-serif; letter-spacing:0.07em }
+      .ex { fill:#5B6577; font:400 15px Arial, sans-serif }
+      .hubk { fill:#8C661F; font:700 14px Arial, sans-serif; letter-spacing:0.12em; text-anchor:middle }
+      .hubt { fill:#0F1B2D; font:600 26px Georgia, serif; text-anchor:middle }
+      .hubs { fill:#5B6577; font:400 15px Arial, sans-serif; text-anchor:middle }
+    </style>
+  </defs>
+
+  <rect width="1400" height="820" rx="28" fill="#FBF7EF"/>
+
+  <text class="h" x="72" y="72">Enrich the task with its business context</text>
+  <text class="sub" x="72" y="106">One task, mapped to the requirements, systems, data, rules, risks, controls and metrics around it.</text>
+
+  <!-- connectors (drawn first, hub covers the inner parts) -->
+  <g stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.5">
+    <line x1="408" y1="235" x2="700" y2="451"/>
+    <line x1="408" y1="379" x2="700" y2="451"/>
+    <line x1="408" y1="523" x2="700" y2="451"/>
+    <line x1="408" y1="667" x2="700" y2="451"/>
+    <line x1="992" y1="235" x2="700" y2="451"/>
+    <line x1="992" y1="379" x2="700" y2="451"/>
+    <line x1="992" y1="523" x2="700" y2="451"/>
+    <line x1="992" y1="667" x2="700" y2="451"/>
+  </g>
+
+  <!-- central task -->
+  <rect x="530" y="376" width="340" height="150" rx="18" fill="#FCF3E1" stroke="#B8893B" stroke-width="2.5"/>
+  <text class="hubk" x="700" y="418">THE TASK</text>
+  <text class="hubt" x="700" y="458">Score the transaction</text>
+  <text class="hubs" x="700" y="492">Owned by the fraud team</text>
+
+  <!-- ===== left column: what the task draws on ===== -->
+  <rect x="64" y="176" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="86" y="210">BUSINESS REQUIREMENTS</text>
+  <text class="ex" x="86" y="242">Stop fraud, approve good</text>
+  <text class="ex" x="86" y="268">payments, meet approval SLAs</text>
+
+  <rect x="64" y="320" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="86" y="354">SYSTEMS</text>
+  <text class="ex" x="86" y="386">Fraud ML model, rules</text>
+  <text class="ex" x="86" y="412">engine, case management</text>
+
+  <rect x="64" y="464" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="86" y="498">DATA OBJECTS</text>
+  <text class="ex" x="86" y="530">Transaction, customer,</text>
+  <text class="ex" x="86" y="556">device, risk score</text>
+
+  <rect x="64" y="608" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="86" y="642">ROLES</text>
+  <text class="ex" x="86" y="674">Fraud manager (owner),</text>
+  <text class="ex" x="86" y="700">fraud analysts</text>
+
+  <!-- ===== right column: how it is governed and judged ===== -->
+  <rect x="992" y="176" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="1014" y="210">LEGISLATION</text>
+  <text class="ex" x="1014" y="242">AML and KYC, PSD2</text>
+  <text class="ex" x="1014" y="268">authentication, GDPR</text>
+
+  <rect x="992" y="320" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="1014" y="354">RISKS</text>
+  <text class="ex" x="1014" y="386">Missed fraud, wrongful</text>
+  <text class="ex" x="1014" y="412">decline, model drift</text>
+
+  <rect x="992" y="464" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="1014" y="498">CONTROLS</text>
+  <text class="ex" x="1014" y="530">Risk thresholds, approval</text>
+  <text class="ex" x="1014" y="556">limits, model monitoring</text>
+
+  <rect x="992" y="608" width="344" height="118" rx="16" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
+  <text class="eyebrow" x="1014" y="642">METRICS</text>
+  <text class="ex" x="1014" y="674">False-positive rate,</text>
+  <text class="ex" x="1014" y="700">fraud loss, decision time</text>
+</svg>

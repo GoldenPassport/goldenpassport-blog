@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 560" role="img" aria-labelledby="title desc">
+  <title id="title">Faster output can carry hidden costs</title>
+  <desc id="desc">The same ISBSG analysis that measured the AI speed-up flags three costs: code quality can slip, technical debt grows, and complex work can slow down. One 2025 METR study found experienced developers took 19% longer on code they already knew well.</desc>
+  <defs>
+    <style>
+      .h { fill:#0F1B2D; font:600 42px Georgia, serif }
+      .sub { fill:#5B6577; font:400 22px Arial, sans-serif }
+      .eyebrow { fill:#9B3A32; font:700 15px Arial, sans-serif; letter-spacing:2px }
+      .val { fill:#0F1B2D; font:600 46px Georgia, serif }
+      .big { fill:#9B3A32; font:600 64px Georgia, serif }
+      .bigsub { fill:#0F1B2D; font:600 30px Georgia, serif }
+      .note { fill:#5B6577; font:400 18px Arial, sans-serif }
+      .foot { fill:#5B6577; font:italic 400 19px Georgia, serif }
+    </style>
+  </defs>
+
+  <rect width="1400" height="560" rx="28" fill="#FBF7EF"/>
+
+  <text class="h" x="72" y="80">Faster output can carry hidden costs</text>
+  <text class="sub" x="72" y="118">The same analysis that measured the AI speed-up also flags what rides along with it.</text>
+
+  <!-- Card 1: code quality -->
+  <rect x="72" y="160" width="392" height="290" rx="20" fill="#FEFCF8" stroke="#9B3A32" stroke-width="2" stroke-opacity="0.3"/>
+  <rect x="94" y="160" width="348" height="6" rx="3" fill="#9B3A32" fill-opacity="0.7"/>
+  <text class="eyebrow" x="104" y="218">CODE QUALITY</text>
+  <text class="val" x="104" y="290">Slips</text>
+  <text class="note" x="104" y="378">Quality can fall as the</text>
+  <text class="note" x="104" y="404">volume of change rises.</text>
+
+  <!-- Card 2: technical debt -->
+  <rect x="504" y="160" width="392" height="290" rx="20" fill="#FEFCF8" stroke="#9B3A32" stroke-width="2" stroke-opacity="0.3"/>
+  <rect x="526" y="160" width="348" height="6" rx="3" fill="#9B3A32" fill-opacity="0.7"/>
+  <text class="eyebrow" x="536" y="218">TECHNICAL DEBT</text>
+  <text class="val" x="536" y="290">Grows</text>
+  <text class="note" x="536" y="378">More code produced</text>
+  <text class="note" x="536" y="404">means more to maintain.</text>
+
+  <!-- Card 3: complex work (hero number) -->
+  <rect x="936" y="160" width="392" height="290" rx="20" fill="#FEFCF8" stroke="#9B3A32" stroke-width="2" stroke-opacity="0.3"/>
+  <rect x="958" y="160" width="348" height="6" rx="3" fill="#9B3A32" fill-opacity="0.7"/>
+  <text class="eyebrow" x="968" y="218">COMPLEX WORK</text>
+  <text class="big" x="968" y="298">19%</text>
+  <text class="bigsub" x="968" y="336">slower</text>
+  <text class="note" x="968" y="384">Experienced developers, on</text>
+  <text class="note" x="968" y="410">code they knew well. METR, 2025.</text>
+
+  <text class="foot" x="72" y="510">The costs are not visible on release day. They surface later, as rework and incidents.</text>
+</svg>

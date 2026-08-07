@@ -3,14 +3,17 @@ import Link from "next/link";
 import { getAllPosts, getGroupSiblings, getPostSlugs } from "@/lib/posts";
 import { CategoryBadge, TagList } from "@/components/PostCard";
 import { MdxImage } from "@/components/MdxImage";
+import { Figure } from "@/components/Figure";
 import { CodeBlock } from "@/components/CodeBlock";
 import { MarkAsRead } from "@/components/MarkAsRead";
 import { PostTabs } from "@/components/PostTabs";
 import { TldrCard, VerdictCard, CtaCard } from "@/components/CalloutCard";
 import { Accordion } from "@/components/Accordion";
+import { Terms, Calculations, References } from "@/components/EndMatter";
 import { Timeline, TimelineEntry } from "@/components/Timeline";
 import { DownloadsChart } from "@/components/DownloadsChart";
 import { NumberedList, NumberedItem } from "@/components/NumberedList";
+import { Chips } from "@/components/Chips";
 import { TickList, TickItem } from "@/components/TickList";
 import { CrossList, CrossItem } from "@/components/CrossList";
 import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
@@ -19,6 +22,7 @@ import { ReviewDashboard } from "@/components/ReviewDashboard";
 import { TriageGraphDiagram } from "@/components/TriageGraphDiagram";
 import { Terminal } from "@/components/Terminal";
 import { ErrorBlock } from "@/components/ErrorBlock";
+import { RefLink } from "@/components/RefLink";
 import { LinkedInShare } from "@/components/LinkedInShare";
 import { PostToc } from "@/components/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
@@ -26,16 +30,21 @@ import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 const mdxComponents = {
   img: MdxImage,
   MdxImage,
+  Figure,
   pre: CodeBlock,
   TldrCard,
   VerdictCard,
   CtaCard,
   Accordion,
+  Terms,
+  Calculations,
+  References,
   Timeline,
   TimelineEntry,
   DownloadsChart,
   NumberedList,
   NumberedItem,
+  Chips,
   TickList,
   TickItem,
   CrossList,
@@ -48,6 +57,7 @@ const mdxComponents = {
   TriageGraphDiagram,
   Terminal,
   ErrorBlock,
+  RefLink,
 };
 
 export function generateStaticParams() {
