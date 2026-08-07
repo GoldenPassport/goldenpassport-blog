@@ -29,9 +29,9 @@ const nextConfig = {
   // Ensure the OG-card font (read via fs at runtime) is bundled into the
   // serverless function for the blog post route on Vercel.
   outputFileTracingIncludes: {
-    "/blog/[slug]": ["./assets/CormorantGaramond-600.woff"],
+    "/blog/[slug]": ["./public/fonts/CormorantGaramond-600.woff"],
     "/blog/[slug]/opengraph-image/[__metadata_id__]": [
-      "./assets/CormorantGaramond-600.woff",
+      "./public/fonts/CormorantGaramond-600.woff",
     ],
   },
 };

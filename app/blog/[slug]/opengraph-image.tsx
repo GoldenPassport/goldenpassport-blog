@@ -26,7 +26,7 @@ import { SITE_NAME } from "@/lib/site";
 let serifFont: Buffer | null = null;
 try {
   serifFont = readFileSync(
-    join(process.cwd(), "assets", "CormorantGaramond-600.woff"),
+    join(process.cwd(), "public", "fonts", "CormorantGaramond-600.woff"),
   );
 } catch {
   serifFont = null;

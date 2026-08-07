@@ -148,3 +148,6 @@ build-storybook.log
 
 # --- Loose screenshots in repo root (debugging artefacts) --------------------
 /Screenshot*.png
+
+# Local-only draft / archived material (not for the public repo)
+drafts/
