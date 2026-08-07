@@ -35,6 +35,19 @@ export function PostToc() {
   const [sections, setSections] = useState<Section[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
+
+  // Fade out the mobile floating button once the site footer scrolls into
+  // view, so it never sits over the footer content.
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(([entry]) =>
+      setFooterVisible(entry.isIntersecting),
+    );
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const headings = Array.from(
@@ -168,7 +181,7 @@ export function PostToc() {
         aria-label="Open table of contents"
         aria-expanded={isSheetOpen}
         onClick={() => setIsSheetOpen(true)}
-        className="xl:hidden fixed bottom-5 right-5 z-30 inline-flex items-center justify-center w-12 h-12 rounded-full bg-ink text-cream shadow-lg ring-1 ring-gold/30 hover:bg-gold-deep transition-colors"
+        className={`xl:hidden fixed bottom-6 right-5 z-30 inline-flex items-center justify-center w-12 h-12 rounded-full bg-ink text-cream shadow-lg ring-1 ring-gold/30 hover:bg-gold-deep transition-all duration-200 ${footerVisible ? "opacity-0 translate-y-4 pointer-events-none" : "opacity-100"}`}
       >
         <svg
           viewBox="0 0 24 24"

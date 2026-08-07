@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
  *
  * To consume the consent state elsewhere (e.g. before mounting a tracker):
  *
- *   import { getCookieConsent } from "@/components/CookieConsent";
+ *   import { getCookieConsent } from "@/components/consent/CookieConsent";
  *   if (getCookieConsent() === "accepted") { ...initialise analytics... }
  *
  * A `gp:cookie-consent` CustomEvent is dispatched on window when the choice

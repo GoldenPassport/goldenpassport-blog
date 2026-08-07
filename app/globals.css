@@ -106,8 +106,9 @@ select:focus-visible {
 /* The typography plugin's defaults render inline <code> with surrounding     */
 /* backticks via ::before/::after and no chip background — which reads as     */
 /* "just bare monospace" rather than as a discrete code token. We strip the   */
-/* backticks and give it a proper pill treatment: cream-200 background,      */
-/* thin gold border, tight padding, ink text.                                 */
+/* backticks and give it a quiet, borderless treatment: a faint gold tint,    */
+/* tight padding, ink text, so clustered code (e.g. the References list) does */
+/* not read as a busy row of bordered chips.                                  */
 /*                                                                            */
 /* On <pre>, we force white-space: pre + overflow-x: auto so long lines       */
 /* (URLs, long commands) scroll horizontally instead of wrapping mid-word.    */
@@ -120,12 +121,24 @@ select:focus-visible {
 }
 
 .prose :where(code):not(:where(pre code, [class~="not-prose"] *)) {
-  background-color: theme("colors.cream.200");
-  border: 1px solid rgba(184, 137, 59, 0.25); /* gold @ 25% */
+  background-color: rgba(184, 137, 59, 0.08); /* faint gold tint, no border */
   border-radius: 0.25rem;
-  padding: 0.05em 0.35em;
+  padding: 0.05em 0.3em;
   font-weight: 500;
-  font-size: 0.85em;
+  font-size: 0.9em;
+  color: theme("colors.ink.DEFAULT");
+}
+
+/* The Accordion (Terms / Calculations / References) renders prose inside a
+   not-prose wrapper, so the rule above is excluded and inline code there falls
+   back to raw, full-size monospace that jumps out. Re-apply the quiet
+   treatment for code inside any prose nested in a not-prose block. */
+.not-prose :where(.prose) :where(code):not(:where(pre code)) {
+  background-color: rgba(184, 137, 59, 0.08);
+  border-radius: 0.25rem;
+  padding: 0.05em 0.3em;
+  font-weight: 500;
+  font-size: 0.9em;
   color: theme("colors.ink.DEFAULT");
 }
 

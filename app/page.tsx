@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getListedPosts } from "@/lib/posts";
-import { PostList } from "@/components/PostList";
+import { PostList } from "@/components/blog/PostList";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 
 // Home title falls back to the default site title (no `%s · Golden Passport` template).

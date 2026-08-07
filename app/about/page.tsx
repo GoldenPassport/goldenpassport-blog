@@ -1,4 +1,4 @@
-import { BrandStrip } from "@/components/BrandStrip";
+import { BrandStrip } from "@/components/chrome/BrandStrip";
 
 import { SITE_URL } from "@/lib/site";
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getListedPosts } from "@/lib/posts";
-import { PostList } from "@/components/PostList";
-import { TopicsFilter } from "@/components/TopicsFilter";
+import { PostList } from "@/components/blog/PostList";
+import { TopicsFilter } from "@/components/blog/TopicsFilter";
 
 import { SITE_URL } from "@/lib/site";
 

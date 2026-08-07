@@ -1,22 +1,23 @@
 import type { MDXComponents } from "mdx/types";
-import { MdxImage } from "@/components/MdxImage";
-import { Figure } from "@/components/Figure";
-import { CodeBlock } from "@/components/CodeBlock";
-import { TldrCard, VerdictCard, CtaCard } from "@/components/CalloutCard";
-import { Accordion } from "@/components/Accordion";
-import { Terms, Calculations, References } from "@/components/EndMatter";
-import { Timeline, TimelineEntry } from "@/components/Timeline";
-import { DownloadsChart } from "@/components/DownloadsChart";
-import { NumberedList, NumberedItem } from "@/components/NumberedList";
-import { Chips } from "@/components/Chips";
-import { TickList, TickItem } from "@/components/TickList";
-import { CrossList, CrossItem } from "@/components/CrossList";
-import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
-import { BarChart } from "@/components/BarChart";
-import { ReviewDashboard } from "@/components/ReviewDashboard";
-import { TriageGraphDiagram } from "@/components/TriageGraphDiagram";
-import { Terminal } from "@/components/Terminal";
-import { ErrorBlock } from "@/components/ErrorBlock";
+import { MdxImage } from "@/components/mdx/MdxImage";
+import { Figure } from "@/components/mdx/Figure";
+import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
+import { CodeBlock } from "@/components/mdx/CodeBlock";
+import { TldrCard, VerdictCard, CtaCard } from "@/components/mdx/CalloutCard";
+import { Accordion } from "@/components/mdx/Accordion";
+import { Terms, Calculations, References } from "@/components/mdx/EndMatter";
+import { Timeline, TimelineEntry } from "@/components/mdx/Timeline";
+import { DownloadsChart } from "@/components/mdx/DownloadsChart";
+import { NumberedList, NumberedItem } from "@/components/mdx/NumberedList";
+import { Chips } from "@/components/mdx/Chips";
+import { TickList, TickItem } from "@/components/mdx/TickList";
+import { CrossList, CrossItem } from "@/components/mdx/CrossList";
+import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/mdx/DesignCard";
+import { BarChart } from "@/components/mdx/BarChart";
+import { ReviewDashboard } from "@/components/mdx/ReviewDashboard";
+import { TriageGraphDiagram } from "@/components/mdx/TriageGraphDiagram";
+import { Terminal } from "@/components/mdx/Terminal";
+import { ErrorBlock } from "@/components/mdx/ErrorBlock";
 
 /**
  * Required by @next/mdx in App Router. Exports the components that MDX pages
@@ -36,6 +37,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ...components,
     img: MdxImage,
     Figure,
+    Republished,
+    PullQuote,
+    Callout,
     pre: CodeBlock,
     TldrCard,
     VerdictCard,

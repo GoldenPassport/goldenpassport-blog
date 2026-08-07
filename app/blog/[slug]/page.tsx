@@ -1,36 +1,40 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllPosts, getGroupSiblings, getPostSlugs } from "@/lib/posts";
-import { CategoryBadge, TagList } from "@/components/PostCard";
-import { MdxImage } from "@/components/MdxImage";
-import { Figure } from "@/components/Figure";
-import { CodeBlock } from "@/components/CodeBlock";
-import { MarkAsRead } from "@/components/MarkAsRead";
-import { PostTabs } from "@/components/PostTabs";
-import { TldrCard, VerdictCard, CtaCard } from "@/components/CalloutCard";
-import { Accordion } from "@/components/Accordion";
-import { Terms, Calculations, References } from "@/components/EndMatter";
-import { Timeline, TimelineEntry } from "@/components/Timeline";
-import { DownloadsChart } from "@/components/DownloadsChart";
-import { NumberedList, NumberedItem } from "@/components/NumberedList";
-import { Chips } from "@/components/Chips";
-import { TickList, TickItem } from "@/components/TickList";
-import { CrossList, CrossItem } from "@/components/CrossList";
-import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/DesignCard";
-import { BarChart } from "@/components/BarChart";
-import { ReviewDashboard } from "@/components/ReviewDashboard";
-import { TriageGraphDiagram } from "@/components/TriageGraphDiagram";
-import { Terminal } from "@/components/Terminal";
-import { ErrorBlock } from "@/components/ErrorBlock";
-import { RefLink } from "@/components/RefLink";
-import { LinkedInShare } from "@/components/LinkedInShare";
-import { PostToc } from "@/components/PostToc";
+import { CategoryBadge, TagList } from "@/components/blog/PostCard";
+import { MdxImage } from "@/components/mdx/MdxImage";
+import { Figure } from "@/components/mdx/Figure";
+import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
+import { CodeBlock } from "@/components/mdx/CodeBlock";
+import { MarkAsRead } from "@/components/blog/MarkAsRead";
+import { PostTabs } from "@/components/blog/PostTabs";
+import { TldrCard, VerdictCard, CtaCard } from "@/components/mdx/CalloutCard";
+import { Accordion } from "@/components/mdx/Accordion";
+import { Terms, Calculations, References } from "@/components/mdx/EndMatter";
+import { Timeline, TimelineEntry } from "@/components/mdx/Timeline";
+import { DownloadsChart } from "@/components/mdx/DownloadsChart";
+import { NumberedList, NumberedItem } from "@/components/mdx/NumberedList";
+import { Chips } from "@/components/mdx/Chips";
+import { TickList, TickItem } from "@/components/mdx/TickList";
+import { CrossList, CrossItem } from "@/components/mdx/CrossList";
+import { DesignCardGrid, DesignCard, DesignCardMore } from "@/components/mdx/DesignCard";
+import { BarChart } from "@/components/mdx/BarChart";
+import { ReviewDashboard } from "@/components/mdx/ReviewDashboard";
+import { TriageGraphDiagram } from "@/components/mdx/TriageGraphDiagram";
+import { Terminal } from "@/components/mdx/Terminal";
+import { ErrorBlock } from "@/components/mdx/ErrorBlock";
+import { RefLink } from "@/components/mdx/RefLink";
+import { LinkedInShare } from "@/components/blog/LinkedInShare";
+import { PostToc } from "@/components/chrome/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 
 const mdxComponents = {
   img: MdxImage,
   MdxImage,
   Figure,
+  Republished,
+  PullQuote,
+  Callout,
   pre: CodeBlock,
   TldrCard,
   VerdictCard,
