@@ -17,7 +17,7 @@
     "url": "https://github.com/GoldenPassport/goldenpassport-blog/issues"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": "22.x",
     "pnpm": ">=9.0.0"
   },
   "scripts": {
@@ -71,6 +71,10 @@
   "pnpm": {
     "overrides": {
       "postcss@<8.5.10": ">=8.5.10"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
   }
 }
