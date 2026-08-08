@@ -7,7 +7,7 @@ import { ImageResponse } from "next/og";
  * privacy, blog index, and any blog post without a `hero` field).
  */
 
-export const alt = "Golden Passport — writing on automation by Luke Audie";
+export const alt = "Golden Passport: writing on automation by Luke Audie";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
