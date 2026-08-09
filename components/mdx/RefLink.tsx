@@ -20,6 +20,9 @@ export function RefLink({ href, label = "link" }: Props) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      // The visible text is a terse "link"; give assistive tech a meaningful
+      // accessible name and flag that it opens a new tab.
+      aria-label={`${label === "link" ? "Reference source" : label} (opens in a new tab)`}
       className="not-prose inline-flex items-center gap-1 align-baseline font-sans text-sm font-medium text-gold-deep underline underline-offset-2 decoration-gold/60 hover:decoration-gold-deep transition-colors"
     >
       {label}

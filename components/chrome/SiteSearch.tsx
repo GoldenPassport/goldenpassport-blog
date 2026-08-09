@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 
 /**
  * Header search: a magnifying-glass button that opens a command-palette style
@@ -62,9 +63,13 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   // Portal target (document.body) is only safe to reference after mount.
   useEffect(() => setMounted(true), []);
+
+  // Keep Tab focus inside the open palette.
+  useFocusTrap(dialogRef, open);
 
   // Global ⌘K / Ctrl+K toggles the palette.
   useEffect(() => {
@@ -183,6 +188,7 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
           className="fixed inset-0 z-50 flex items-start justify-center bg-ink/40 backdrop-blur-sm p-4 pt-[12vh]"
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="Search posts"
@@ -203,6 +209,10 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="site-search-results"
+                aria-autocomplete="list"
+                aria-activedescendant={
+                  results.length > 0 ? `site-search-opt-${activeIndex}` : undefined
+                }
                 autoComplete="off"
                 spellCheck={false}
                 className="w-full bg-transparent py-4 font-serif text-lg text-ink placeholder:text-ink-mute focus:outline-none"
@@ -221,7 +231,12 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
             {results.length > 0 ? (
               <ul id="site-search-results" ref={listRef} role="listbox" className="max-h-[52vh] overflow-y-auto p-2">
                 {results.map((p, i) => (
-                  <li key={p.slug} role="option" aria-selected={i === activeIndex}>
+                  <li
+                    key={p.slug}
+                    id={`site-search-opt-${i}`}
+                    role="option"
+                    aria-selected={i === activeIndex}
+                  >
                     <Link
                       href={`/blog/${p.slug}`}
                       onClick={() => setOpen(false)}

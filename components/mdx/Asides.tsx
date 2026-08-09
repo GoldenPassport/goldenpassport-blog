@@ -45,6 +45,7 @@ export function Republished({ href, date }: { href: string; date: string }) {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="LinkedIn (opens in a new tab)"
         className="font-semibold text-gold-deep underline underline-offset-2 decoration-gold/60 hover:decoration-gold-deep"
       >
         LinkedIn

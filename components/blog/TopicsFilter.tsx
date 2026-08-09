@@ -67,6 +67,7 @@ export function TopicsFilter({
             <Link
               key={label}
               href={href}
+              aria-current={active ? "true" : undefined}
               className={`text-[11px] px-2 py-1 rounded-md border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-deep/40 focus-visible:ring-offset-2 ${
                 active
                   ? "bg-ink text-cream border-ink"

@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en-GB" data-scroll-behavior="smooth">
       <head>
         {/* MCP / LLM agent discovery (llms.txt convention). Crawlers that
             support the standard find /llms.txt without these hints; the

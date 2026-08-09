@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 
 /**
  * Drop-in replacement for `<img>` in MDX content. Renders the image inline
@@ -27,6 +28,10 @@ export function MdxImage({ src, alt, className, ...rest }: Props) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Keep Tab focus inside the open lightbox.
+  useFocusTrap(dialogRef, open);
 
   // Manage focus + scroll lock + Escape while the lightbox is open.
   useEffect(() => {
@@ -73,6 +78,7 @@ export function MdxImage({ src, alt, className, ...rest }: Props) {
 
       {open ? (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={alt || "Enlarged image"}

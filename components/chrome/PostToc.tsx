@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 
 /**
  * Table of contents for long-form posts with two presentations:
@@ -41,6 +42,11 @@ export function PostToc() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const sheetTriggerRef = useRef<HTMLButtonElement>(null);
+
+  // Keep Tab focus inside the open mobile TOC sheet.
+  useFocusTrap(sheetRef, isSheetOpen);
 
   // Fade out the mobile floating button once the site footer scrolls into
   // view, so it never sits over the footer content.
@@ -127,14 +133,19 @@ export function PostToc() {
     };
   }, []);
 
-  // Lock body scroll while the mobile sheet is open so the page underneath
-  // does not scroll behind the panel.
+  // Lock body scroll while the mobile sheet is open, move focus into it, and
+  // restore focus to the trigger on close.
   useEffect(() => {
     if (!isSheetOpen) return;
+    const trigger = sheetTriggerRef.current;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    sheetRef.current
+      ?.querySelector<HTMLElement>('button:not([tabindex="-1"]), a[href]')
+      ?.focus();
     return () => {
       document.body.style.overflow = prev;
+      trigger?.focus();
     };
   }, [isSheetOpen]);
 
@@ -212,6 +223,7 @@ export function PostToc() {
 
       {/* ---------- Mobile floating button (below xl) ---------- */}
       <button
+        ref={sheetTriggerRef}
         type="button"
         aria-label="Open table of contents"
         aria-expanded={isSheetOpen}
@@ -241,14 +253,17 @@ export function PostToc() {
       {/* ---------- Mobile sheet (below xl, only rendered when open) ---------- */}
       {isSheetOpen ? (
         <div
+          ref={sheetRef}
           className="xl:hidden fixed inset-0 z-40"
           role="dialog"
           aria-modal="true"
           aria-label="Table of contents"
         >
-          {/* Backdrop */}
+          {/* Backdrop (mouse-only close affordance; keyboard users use Escape
+              or the header close button, so it stays out of the tab order). */}
           <button
             type="button"
+            tabIndex={-1}
             aria-label="Close table of contents"
             onClick={() => setIsSheetOpen(false)}
             className="absolute inset-0 bg-ink/40 backdrop-blur-sm"

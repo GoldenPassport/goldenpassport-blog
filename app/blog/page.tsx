@@ -150,6 +150,9 @@ function FilterLink({ href, label, active }: { href: string; label: string; acti
   return (
     <Link
       href={href}
+      // aria-current exposes the applied filter to assistive tech, which the
+      // colour-only active state otherwise hides.
+      aria-current={active ? "true" : undefined}
       className={`px-3 py-1.5 rounded-full border transition-colors ${
         active
           ? "bg-ink text-cream border-ink"
