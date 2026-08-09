@@ -37,11 +37,13 @@ export function PostList({ posts, limit }: { posts: PostMeta[]; limit?: number }
 
   const visible = limit ? sorted.slice(0, limit) : sorted;
 
+  // Single column on small screens; two columns from lg up so the list fills
+  // the page's max-width instead of stranding content in a wide single column.
   return (
-    <>
+    <div className="grid gap-x-12 lg:grid-cols-2">
       {visible.map((p) => (
         <PostCard key={p.slug} post={p} read={readSet.has(p.slug)} />
       ))}
-    </>
+    </div>
   );
 }

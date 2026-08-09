@@ -222,7 +222,7 @@ export function PostCard({ post, read = false }: { post: PostMeta; read?: boolea
   const showPinned = post.pinned && !read;
   return (
     <article className="group">
-      <Link href={`/blog/${post.slug}`} className="block py-6 border-b border-gold/15">
+      <Link href={`/blog/${post.slug}`} className="block h-full py-6 border-b border-gold/15">
         <div className="flex items-center flex-wrap gap-3 mb-3">
           {showPinned ? <PinnedBadge /> : null}
           <CategoryBadge category={post.category} />
