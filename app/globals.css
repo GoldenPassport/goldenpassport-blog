@@ -86,6 +86,26 @@ select:focus-visible {
   outline-offset: 2px;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Pointer cursor on interactive elements.                                    */
+/*                                                                            */
+/* Safari's UA stylesheet does not show the hand cursor on links that are     */
+/* display:block / inline-flex or wrap block content (post cards, the pill    */
+/* buttons, etc.) the way Chrome does, and neither browser shows it on        */
+/* <button>. Set it explicitly so interactive elements are consistent.        */
+/* Kept in `base` so component-level cursor-* utilities (e.g. MdxImage's      */
+/* zoom cursor, disabled states) still override it.                           */
+/* -------------------------------------------------------------------------- */
+@layer base {
+  a[href],
+  button:not(:disabled),
+  [role="button"],
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+}
+
 /* Respect users who have asked their OS to reduce motion. */
 @media (prefers-reduced-motion: reduce) {
   html {
