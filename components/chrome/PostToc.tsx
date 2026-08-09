@@ -34,6 +34,11 @@ type Section = { id: string; title: string };
 export function PostToc() {
   const [sections, setSections] = useState<Section[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Text-highlight target set on click. It lets the clicked section's LABEL
+  // highlight immediately, while the dots and connecting line keep following
+  // the real scroll position — so clicking a far section no longer flashes
+  // its dot on, off, then on again as the page scrolls there.
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
 
@@ -143,6 +148,15 @@ export function PostToc() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isSheetOpen]);
 
+  // Once the scroll settles on the clicked section, drop the manual selection
+  // so the label is driven by the scrollspy again (and a later manual scroll is
+  // not left highlighting the clicked row).
+  useEffect(() => {
+    if (selectedId !== null && activeId === selectedId) {
+      setSelectedId(null);
+    }
+  }, [activeId, selectedId]);
+
   if (sections.length === 0) return null;
 
   const scrollToSection = (id: string) => {
@@ -157,7 +171,9 @@ export function PostToc() {
       const target = document.getElementById(id);
       if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    setActiveId(id);
+    // Highlight the clicked label immediately; the dots/line stay on the real
+    // scroll position and the scrollspy catches up as the page scrolls.
+    setSelectedId(id);
   };
 
   const handleClick = (
@@ -169,6 +185,9 @@ export function PostToc() {
     scrollToSection(id);
     if (closeSheet) setIsSheetOpen(false);
   };
+
+  // Label follows the clicked target immediately; dots/line follow scroll.
+  const textActiveId = selectedId ?? activeId;
 
   return (
     <>
@@ -186,6 +205,7 @@ export function PostToc() {
         <Stepper
           sections={sections}
           activeId={activeId}
+          textActiveId={textActiveId}
           onClick={(e, id) => handleClick(e, id, false)}
         />
       </nav>
@@ -264,6 +284,7 @@ export function PostToc() {
             <Stepper
               sections={sections}
               activeId={activeId}
+              textActiveId={textActiveId}
               onClick={(e, id) => handleClick(e, id, true)}
             />
           </div>
@@ -302,10 +323,16 @@ export function PostToc() {
 function Stepper({
   sections,
   activeId,
+  textActiveId,
   onClick,
 }: {
   sections: Section[];
+  /** Drives the dots and connecting line: the real scroll position. */
   activeId: string | null;
+  /** Drives which label is bold: the clicked target (set immediately), or the
+   *  scroll position once no click is pending. Decoupled from `activeId` so a
+   *  clicked section's label highlights before the page finishes scrolling. */
+  textActiveId: string | null;
   onClick: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
 }) {
   const activeIndex = sections.findIndex((s) => s.id === activeId);
@@ -318,6 +345,9 @@ function Stepper({
     <ol className="relative">
       {sections.map((s, i) => {
         const isActive = s.id === activeId;
+        // The label bolds on the clicked target immediately; the dot uses
+        // `isActive` (scroll position) so it does not flash ahead of the page.
+        const isTextActive = s.id === textActiveId;
         const isVisited = activeIndex >= 0 && i < activeIndex;
         const isFirst = i === 0;
         const isLast = i === sections.length - 1;
@@ -373,7 +403,7 @@ function Stepper({
               href={s.id === INTRO_ID ? "#" : `#${s.id}`}
               onClick={(e) => onClick(e, s.id)}
               className={
-                isActive
+                isTextActive
                   ? "block text-sm font-semibold text-ink leading-snug"
                   : isVisited
                   ? "block text-sm text-ink-soft hover:text-gold-deep leading-snug transition-colors"
