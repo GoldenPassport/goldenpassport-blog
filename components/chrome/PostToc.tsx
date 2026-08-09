@@ -55,9 +55,21 @@ export function PostToc() {
     );
     const verdictEl = document.querySelector<HTMLElement>("article #verdict");
 
+    const headingSections = headings.map((h) => ({
+      id: h.id,
+      title: h.textContent ?? h.id,
+    }));
+    // Posts now open with an actual "## Introduction" heading. When present,
+    // use that as the intro row instead of prepending a synthetic one, so the
+    // stepper does not list "Introduction" twice.
+    const hasIntroHeading =
+      headingSections.length > 0 &&
+      headingSections[0].title.trim().toLowerCase() === "introduction";
+    const introId = hasIntroHeading ? headingSections[0].id : INTRO_ID;
+
     const list: Section[] = [
-      { id: INTRO_ID, title: "Introduction" },
-      ...headings.map((h) => ({ id: h.id, title: h.textContent ?? h.id })),
+      ...(hasIntroHeading ? [] : [{ id: INTRO_ID, title: "Introduction" }]),
+      ...headingSections,
       ...(verdictEl ? [{ id: VERDICT_ID, title: "Verdict" }] : []),
     ];
     setSections(list);
@@ -76,7 +88,7 @@ export function PostToc() {
       // Verdict), Introduction is always active. The stepper still
       // renders as a single-row indicator.
       if (scrollTargets.length === 0) {
-        setActiveId(INTRO_ID);
+        setActiveId(introId);
         return;
       }
 
@@ -85,7 +97,7 @@ export function PostToc() {
         scrollTargets[0].getBoundingClientRect().top + window.scrollY;
 
       if (trigger < firstTop) {
-        setActiveId(INTRO_ID);
+        setActiveId(introId);
         return;
       }
 
@@ -161,9 +173,12 @@ export function PostToc() {
   return (
     <>
       {/* ---------- Desktop right-rail (xl+) ---------- */}
+      {/* In-flow sticky sidebar: sits in the article grid's second column so
+          it shares the page's max-width. `self-start` keeps it at natural
+          height while the tall article column gives it room to stick. */}
       <nav
         aria-label="Table of contents"
-        className="hidden xl:block fixed top-32 right-6 2xl:right-12 w-56 max-h-[70vh] overflow-y-auto"
+        className="hidden xl:block xl:sticky xl:top-28 xl:self-start w-full max-h-[calc(100vh-9rem)] overflow-y-auto"
       >
         <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold mb-4">
           On this page

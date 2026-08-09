@@ -164,11 +164,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <>
-    {/* PostToc is a fixed-positioned client component and only renders on
-        ≥xl viewports, so it sits as a sibling of the article rather than
-        inside it. */}
-    <PostToc />
-    <article className="mx-auto max-w-3xl px-6 pt-16 pb-20">
+    {/* Article + TOC share one max-w-5xl container so the content aligns with
+        the header and footer. On xl+ the TOC is an in-flow sticky sidebar in
+        the second grid column; below xl it collapses to a floating button and
+        the article fills the full container width. */}
+    <div className="mx-auto max-w-5xl px-6 pt-16 pb-20 xl:grid xl:grid-cols-[minmax(0,1fr)_14rem] xl:gap-12">
+    <article className="min-w-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
@@ -263,6 +264,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </Link>
       </footer>
     </article>
+    <PostToc />
+    </div>
     </>
   );
 }

@@ -70,7 +70,7 @@ export default async function BlogIndex({
   ).sort((a, b) => a.localeCompare(b));
 
   return (
-    <section className="mx-auto max-w-3xl px-6 pt-16 pb-12">
+    <section className="mx-auto max-w-5xl px-6 pt-16 pb-12">
       <h1 className="font-serif text-5xl text-ink">Writing</h1>
       <p className="mt-3 text-ink-soft max-w-prose">
         Notes on automation, operations, and the tools that make modern businesses run. Split into{" "}

@@ -37,7 +37,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
       />
-      <section className="mx-auto max-w-4xl px-6 pt-20 pb-16">
+      <section className="mx-auto max-w-5xl px-6 pt-20 pb-16">
         <p className="text-xs tracking-[0.22em] uppercase text-gold-deep">Luke Audie · Golden Passport</p>
         <h1 className="mt-5 font-serif text-5xl md:text-6xl text-ink leading-[1.05] max-w-3xl">
           Business automation, <span className="text-gold-deep italic">built well.</span>
@@ -63,9 +63,9 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="gold-rule mx-auto max-w-4xl" />
+      <div className="gold-rule mx-auto max-w-5xl" />
 
-      <section className="mx-auto max-w-3xl px-6 pt-12 pb-16">
+      <section className="mx-auto max-w-5xl px-6 pt-12 pb-16">
         <div className="flex items-end justify-between">
           <h2 className="font-serif text-3xl text-ink">Recent writing</h2>
           <Link href="/blog" className="text-sm text-ink-soft hover:text-gold-deep">
