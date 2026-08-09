@@ -51,6 +51,9 @@ type BrandProps = {
   className?: string;
   /** Override classes applied to the wordmark span (e.g. for responsive show/hide). */
   wordmarkClassName?: string;
+  /** Small label rendered under the wordmark, e.g. "Blog". Ignored when
+   *  `markOnly` (there is no wordmark to sit beneath). */
+  subLabel?: string;
 };
 
 export function Brand({
@@ -59,6 +62,7 @@ export function Brand({
   stacked = false,
   className = "",
   wordmarkClassName = "",
+  subLabel,
 }: BrandProps) {
   const preset = SIZE_PRESETS[size];
   return (
@@ -74,10 +78,21 @@ export function Brand({
           <span className="block text-gold-deep">Passport</span>
         </span>
       ) : (
-        <span
-          className={`font-serif ${preset.wordmark} text-ink tracking-tight leading-none ${wordmarkClassName}`}
-        >
-          Golden <span className="text-gold-deep">Passport</span>
+        // `relative` wordmark with the subLabel absolutely positioned below it,
+        // so the subLabel does not add to the lockup's height. That keeps the
+        // mark vertically centred on the "Golden Passport" line (via the outer
+        // items-center) instead of sagging to the centre of name + subLabel.
+        <span className="relative inline-flex">
+          <span
+            className={`font-serif ${preset.wordmark} text-ink tracking-tight leading-none ${wordmarkClassName}`}
+          >
+            Golden <span className="text-gold-deep">Passport</span>
+          </span>
+          {subLabel ? (
+            <span className="absolute left-0 top-full mt-1 font-sans text-[0.6rem] font-bold uppercase tracking-[0.28em] text-ink-mute">
+              {subLabel}
+            </span>
+          ) : null}
         </span>
       )}
     </span>
@@ -103,21 +118,28 @@ export const BrandHero = (p: Omit<BrandProps, "size">) => <Brand size="hero" {..
 /* unused presets at build time, so the cost at runtime is one render.        */
 /* -------------------------------------------------------------------------- */
 
-export function BrandResponsive({ className = "" }: { className?: string }) {
+export function BrandResponsive({
+  className = "",
+  subLabel,
+}: {
+  className?: string;
+  subLabel?: string;
+}) {
   return (
     <span className={`inline-flex items-center ${className}`}>
       {/* < 640px: mark only. The "Golden Passport" wordmark is dropped here to
-          keep the header uncluttered; it still appears in the footer. */}
+          keep the header uncluttered; it still appears in the footer. The
+          subLabel needs the wordmark to sit under, so it is omitted here too. */}
       <span className="inline-flex sm:hidden">
         <Brand size="md" markOnly />
       </span>
       {/* 640px – 1023px: full lockup, md */}
       <span className="hidden sm:inline-flex lg:hidden">
-        <Brand size="md" />
+        <Brand size="md" subLabel={subLabel} />
       </span>
       {/* 1024px+: full lockup, slightly larger */}
       <span className="hidden lg:inline-flex">
-        <Brand size="lg" />
+        <Brand size="lg" subLabel={subLabel} />
       </span>
     </span>
   );

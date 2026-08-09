@@ -52,7 +52,7 @@ export function Footer() {
         <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-xs">
             <Link href="/" className="group inline-flex">
-              <Brand size="sm" />
+              <Brand size="sm" subLabel="Blog" />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-ink-mute">
               Writing on business automation, agentic AI, and process
@@ -62,6 +62,7 @@ export function Footer() {
               href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn (opens in a new tab)"
               className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-gold-deep hover:text-gold transition-colors"
             >
               <svg
@@ -84,11 +85,8 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col gap-2 border-t border-gold/15 pt-6 text-xs text-ink-mute sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 border-t border-gold/15 pt-6 text-xs text-ink-mute">
           <p>© {year} Luke Audie. All rights reserved.</p>
-          <p className="font-serif tracking-wide text-ink-soft">
-            Golden <span className="text-gold-deep">Passport</span>
-          </p>
         </div>
       </div>
     </footer>

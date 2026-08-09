@@ -32,7 +32,7 @@ export default function ContactPage() {
 
       <div className="gold-rule mt-12" />
       <p className="mt-6 text-sm text-ink-mute">
-        Based remote · Available for consulting, advisory, and select build engagements.
+        Open to travel · Available for consulting, advisory, and select build engagements.
       </p>
     </section>
   );
