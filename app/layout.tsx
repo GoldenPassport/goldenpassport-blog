@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ReactDOM from "react-dom";
 import "./globals.css";
 import { Header } from "@/components/chrome/Header";
 import { Footer } from "@/components/chrome/Footer";
@@ -51,6 +52,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Preload the above-the-fold fonts so they are ready at first paint. Without
+  // this they load after the CSS and swap in a few seconds later (font-display:
+  // swap), which reflows the page and, on Safari, drops the author cursor on
+  // links after the repaint. Inter-italic is rarely above the fold, so it is
+  // left to load on demand. Using react-dom's preload emits a single, deduped
+  // <link> (a raw <link> in <head> gets duplicated by React's resource system).
+  const fontPreload = { as: "font", type: "font/woff2", crossOrigin: "anonymous" } as const;
+  ReactDOM.preload("/fonts/cormorant-garamond-variable.woff2", fontPreload);
+  ReactDOM.preload("/fonts/cormorant-garamond-italic-variable.woff2", fontPreload);
+  ReactDOM.preload("/fonts/inter-variable.woff2", fontPreload);
+
   return (
     <html lang="en-GB" data-scroll-behavior="smooth">
       <head>
