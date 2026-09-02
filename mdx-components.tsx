@@ -5,6 +5,7 @@ import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
 import { CodeBlock } from "@/components/mdx/CodeBlock";
 import { TldrCard, VerdictCard, CtaCard } from "@/components/mdx/CalloutCard";
 import { Accordion } from "@/components/mdx/Accordion";
+import { ProcessSteps, ProcessStep } from "@/components/mdx/ProcessSteps";
 import { Terms, Calculations, References } from "@/components/mdx/EndMatter";
 import { Timeline, TimelineEntry } from "@/components/mdx/Timeline";
 import { DownloadsChart } from "@/components/mdx/DownloadsChart";
@@ -45,6 +46,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     VerdictCard,
     CtaCard,
     Accordion,
+    ProcessSteps,
+    ProcessStep,
     Terms,
     Calculations,
     References,
