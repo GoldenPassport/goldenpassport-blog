@@ -17,20 +17,20 @@ ogImage: "/posts/n8n-ai-assistant-first-impressions/og.png"
 
 ## Introduction
 
-Years ago I modelled a university admissions process for a client in Australia. It took workshops and specialist tooling, and the deliverable was a whole suite of process models that our webMethods team then built. Recently, with that old work as inspiration, I gave n8n's new AI assistant, currently in preview, a brief for a simpler admissions flow and had it running in about two hours.
+Around a decade ago I modelled a university admissions process for a client in Australia. It took workshops and specialist tooling, and the deliverable was a whole suite of process models that our webMethods team then built. Recently, with that old work as inspiration, I gave n8n's new AI assistant, currently in preview, a brief for a simpler admissions flow and had it running in about two hours.
 
-That gap is the subject of this post. It is a first-impressions piece on n8n, a tool I had never opened before, but what stayed with me was less the tool than what it implies for the analyst using it. Rapid prototyping, token costs recorded per step and a business case you can build inside the workflow itself point at a different job: not a business analyst handing over a specification, but what I have started calling an Agentic Analyst.
+I wanted to see how far things have moved in that decade. I had seen and heard a lot about n8n, and it was time to have a look for myself. This is a first-impressions piece, but what stayed with me was less the tool than what it implies for the analyst using it. Rapid prototyping, token costs recorded per step and a business case you can build inside the workflow itself point to a different job: not a business analyst handing over a specification, but what I have started calling an Agentic Analyst.
 
 The short version is that I was impressed. The longer version, including where I think a human still has to sign, follows.
 
 ## What I set out to build
 
-The brief was that same admissions space, application through to enrolment. The original models were drawn out by hand in specialist tooling, every level of them, and reviewed in workshops before the build. The Level 3 view below is one of that suite, included here for an overview of the key stages.
+The brief was the same admissions space, application through to enrolment. The original models, every level of them, were drawn out by hand in specialist tooling and reviewed in workshops before the build. The Level 3 view below is one of the models in that suite, included for an overview of the key stages.
 
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/original-level3-admissions-process.png"
   alt="A Level 3 BPMN model of an Admissions Processing process, showing Application Received, Initial Application Processing, Assess Admission Eligibility and Credit, Issue Offer and Process Applicant's Decision, with gateways branching out to Application Accepted, Declined, Deferred and Cancelled."
-  caption="The before, and the inspiration: the Level 3 view from the original admissions process suite, showing the key stages. One artefact of many, all produced by hand."
+  caption="The before, and the inspiration: the Level 3 view from the original admissions suite, showing the key stages. One artefact of many, all drawn by hand."
 />
 
 And here is the after: a simpler admissions flow, inspired by that work rather than copied from it, stood up in n8n from a plain-language conversation with its AI assistant.
@@ -57,14 +57,14 @@ I did not place a single node by hand to get going. I described the process in o
 
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/prompt-skeleton-process.png"
-  className="block mx-auto max-w-2xl h-auto rounded-lg ring-1 ring-gold/10"
+  className="block w-full mx-auto max-w-2xl h-auto rounded-lg ring-1 ring-gold/10"
   alt="The n8n AI assistant chat: a one-line brief about a university admissions team, then the assistant's clarifying questions with the answers, an n8n-hosted form, the built-in n8n Data Table, Slack for staff and email for applicants, the stages to automate, and a mix of auto-screen then human decision."
   caption="The plain-language front door: one line in, then the assistant interrogates the brief before it builds anything."
 />
 
 From those answers and a handful of follow-up prompts, about two hours later I had a working first cut: the form, the applicant emails (an acknowledgement carrying an application ID, then an offer that fired a trigger on acceptance), the Slack summaries for staff, a centralised rule set to screen against and the routing for clear passes, clear fails and everything in between. The AI steps that read and cross-checked the transcript slotted into the same flow.
 
-For a first sitting with a tool I had never opened before, that is a striking amount of working process for the effort.
+For a first sitting with a tool I had only read about, that is a striking amount of working process for the effort.
 
 ## Following one application through
 
@@ -84,7 +84,13 @@ The applicant fills in the n8n-hosted form: name, contact details, programme, hi
 
 </ProcessStep>
 
-<ProcessStep title="Transcript read and verified">
+<ProcessStep
+  title="Transcript read and verified"
+  image="/posts/n8n-ai-assistant-first-impressions/llm-steps.png"
+  imageClassName="mx-auto max-w-md"
+  imageAlt="Two n8n AI nodes in sequence, AI Extract Transcript and Compare and Verify, each wired to its own DeepSeek model beneath it, all four showing green completion ticks."
+  caption="The two AI steps, each with its own DeepSeek model attached."
+>
 
 Two AI steps take over. The first extracts the content from the uploaded transcript, the second cross-checks what it found. I ran both on DeepSeek models, one to extract, one to compare and verify.
 
@@ -98,7 +104,7 @@ Two AI steps take over. The first extracts the content from the uploaded transcr
   caption="The decision-ready summary in the admissions Slack channel."
 >
 
-The flow loads the admission rules and matches the application against them: does it clear the minimum thresholds, the overall score and the key modules the course requires. It summarises the personal statement, posts the decision-ready summary to the admissions team's Slack channel with the transcript attached and sends the applicant a thank-you acknowledgement email.
+The flow loads the admission rules and matches the application against them: does the overall score clear the minimum, and are the key modules the course requires in place. It summarises the personal statement, posts the decision-ready summary to the admissions team's Slack channel with the transcript attached and sends the applicant a thank-you acknowledgement email.
 
 </ProcessStep>
 
@@ -110,7 +116,7 @@ The flow loads the admission rules and matches the application against them: doe
   caption="The offer email, with accept or decline built in."
 >
 
-Clear cases route automatically; the rest the team approves or rejects with the buttons in the Slack message itself. On approval the applicant gets an offer email with accept or decline built in. Accepting advances the flow into the enrolment subprocess, where the student is registered and confirmed.
+A simple pre-screen catches the obvious gaps first, missing information and the like. The diagram does not show a correction loop for those, but nobody is turned away for an honest mistake: the team can restart an application from their end, and adding a step that asks for what is missing is a few minutes' work in n8n. Everything substantive goes to the team, who approve or reject with the buttons in the Slack message itself. On approval the applicant gets an offer email with accept or decline built in. Accepting advances the flow into the enrolment subprocess, where the student is registered and confirmed.
 
 </ProcessStep>
 
@@ -130,25 +136,25 @@ The second was the build experience itself. It felt like a Figma for workflow de
 
 One capability deserves its own mention: observability. n8n gives you step-by-step visibility into every node, the data going in and the data coming out, so you can see exactly what each step received and produced.
 
-The part that caught my attention was cost. A business analyst has to put a benefit case behind a design, and the long-standing tool for that is activity-based costing: the end-to-end cost of a single process instance, historically dominated by systems, people and materials. In an agentic process, a meaningful slice of that cost moves to tokens.
+The part that caught my attention was cost. A business analyst has to put a benefit case behind a design, and the long-standing tool for that is activity-based costing, which assigns the cost of systems, people and materials to the activities that consume them, and from there to each product, service or process instance. In an agentic process, tokens become a new cost driver.
 
-n8n's experimentation mode fits this neatly. Each run records the tokens used, both the total for the whole workflow and the count for every individual node.
+The execution log fits this neatly. Each test run records the tokens used, both the total for the whole workflow and the count for every AI step.
 
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/token-recording.png"
   alt="The n8n execution log for a workflow run. The left panel lists each node and shows a whole-workflow total of 1,694 tokens. The selected DeepSeek verification node shows its input prompt and an output token breakdown of 127 completion tokens, 532 prompt tokens and 659 total."
-  caption="Token usage recorded per run: the whole-workflow total on the left, and the per-node breakdown on the right, here 532 prompt tokens, 127 completion and 659 in total for a single AI step."
+  caption="Token usage recorded per run: the whole-workflow total on the left, and the per-step breakdown on the right, here 532 prompt tokens, 127 completion and 659 in total for a single AI step."
 />
 
-That changes when the costing happens. Instead of estimating token spend in a spreadsheet after the fact, an analyst can watch it accumulate node by node and tune the process for cost in real time, before the business case is even written.
+That changes when the costing happens. Token counts are not money on their own, but multiply them by the model's per-token price and you have the running cost of each AI step. Instead of estimating that spend in a spreadsheet after the fact, an analyst can watch it accumulate across the AI steps and tune the process for cost in real time, before the business case is even written.
 
 ## The role shift: from Business Analyst to Agentic Analyst
 
 The takeaway I keep coming back to is what this does to the analyst's job.
 
-Classic business analysis produces documents: requirements, process maps and specifications that someone else then builds. The Level 3 model earlier in this post is exactly that kind of artefact, precise and inert until a delivery team turns it into something real. Here, the same plain-language description of a process became the working process. The gap between describing it and running it collapsed.
+In traditional delivery models, business analysts are often expected to produce documents: requirements, process maps and specifications that someone else then builds. The Level 3 model earlier in this post is exactly that kind of artefact, precise and inert until a delivery team turns it into something real. Here, the same plain-language description of a process became the working process. The gap between describing it and running it collapsed.
 
-That points at a role I would call the Agentic Analyst (AA). The skill is still analysis, understanding the outcome, the boundaries, the rules and the exceptions, but the deliverable is a live, agentic workflow rather than a specification handed downstream. The analyst who can describe a process clearly and orchestrate AI and human steps into something that actually runs is going to be valuable, and quickly.
+That points to a role I would call the Agentic Analyst (AA). The skill is still analysis, understanding the outcome, the boundaries, the rules and the exceptions, but the deliverable is a live, agentic workflow rather than a specification handed downstream. The analyst who can describe a process clearly and orchestrate AI and human steps into something that actually runs is going to be valuable, and quickly.
 
 ## You still need to be technical, for now
 
@@ -156,48 +162,42 @@ I would not oversell the assistant. To get a result you would trust, you still n
 
 Knowing what a good process looks like, how data should flow, where a human belongs in the loop and what an integration or a credential actually needs still matters, and the assistant assumes a fair bit of it. The conversational front door is real, but the room behind it still rewards someone who understands the plumbing.
 
-It will help you across that plumbing, to be fair. When I hit the Slack credentials, I just asked, and it walked me through OAuth2 against an access token and which one each Slack node needs.
+It will help you across that plumbing, to be fair. When I hit the Slack credentials, I just asked, and it walked me through OAuth2 versus a bot access token and which one each Slack node needs.
 
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/using-ai-problem-solve.png"
-  className="block mx-auto max-w-lg h-auto rounded-lg ring-1 ring-gold/10"
-  alt="The n8n AI assistant answering a question about setting up Slack API credentials, explaining when to use OAuth2 against an API access token and which Slack nodes each one suits."
+  className="block w-full mx-auto max-w-lg h-auto rounded-lg ring-1 ring-gold/10"
+  alt="The n8n AI assistant answering a question about setting up Slack API credentials, explaining when to use OAuth2 versus an API access token and which Slack nodes each one suits."
   caption="The assistant doubles as in-context help: here, untangling which Slack credential each node needs. Useful, but you still have to follow the answer."
 />
 
 This is a preview, so I expect that bar to keep dropping. For now, it lowers the effort, not the expertise.
 
-## What about non-deterministic processing?
+## Non-deterministic processes, and where a human belongs
 
-The obvious question, for anyone who works in a regulated process, is non-determinism. AI steps are not deterministic. The same transcript could be read slightly differently on two runs, and in admissions, where fairness and auditability matter, that is not a small thing.
+The talk of the town right now is non-determinism, and alongside it the shift away from pre-defined process definitions towards goal-centric, dynamic flows, where an agent is handed an objective and left to find its own way there. There is real value in that. But the further the shift goes, the sharper the questions get, nowhere more than in a regulated process. Who owns the decision being made? And if the goal is the same for every applicant but the journey to it is not, will people see that as fair and appropriate?
 
-What reassured me is that the design does not let the AI make the call. The consequential gates are deterministic or human: the admission rules screen against fixed thresholds, and the admissions decision is a person clicking approve or reject in Slack. The AI extracts and cross-checks the transcript, and the verify step exists precisely to flag where the extraction and the form disagree. The judgement sits with the rules and the people, not the model.
+Set aside for a moment that applicants in the EU are covered by GDPR, whose Article 22 restricts decisions made solely by automated processing where they significantly affect someone, and wherever such decisions are allowed at all demands safeguards, including a right to human intervention. The UK has just rewritten its own version: the Data (Use and Access) Act 2025 replaces Article 22 with Articles 22A to 22D, which permit more automated decision-making but keep those safeguards. Even without the regulation, there is a simpler test.
 
-That does not make non-determinism free. AI steps still need guardrails: constrained prompts, structured outputs, a verification pass and a human in the loop for anything material. n8n makes those easy to place, but deciding where determinism is non-negotiable is a design decision, not a default. Knowing where a process can tolerate variation and where it absolutely cannot is exactly the judgement the Agentic Analyst has to bring.
+Picture yourself as the head of admissions. A mother is in front of you, in tears, asking why her child was declined. In the same breath she tells you her child's best friend, same school, same classes, lower grades, got in, and her own child, after twelve years of hard work, did not. Now try telling her that the AI made the call, and that this is the fairest way to do it. Hard to justify, is it not? Someone has to be able to stand behind that decision, understand it and explain it to the person it lands on.
 
-## Goal-centric processes, and where a human belongs
-
-That question gets bigger. There is a lot of energy right now behind goal-centric, dynamic processes, agents handed an objective and the freedom to reach it, in place of fixed deterministic flows. I agree there is real value there. But it sharpens the question of who owns a decision rather than removing it.
-
-Set aside for a moment that European students fall under GDPR, which gives people the right not to be subject to decisions made solely by automated processing where those decisions significantly affect them, and a right to human intervention. Even without the regulation, there is a simpler test.
-
-Picture yourself as the head of admissions. A mother is in front of you, in tears, asking why her child was declined. In the same breath she tells you the child's best friend, same school, same classes, lower grades, was accepted, and her own child, after twelve years of hard work, was not. Now try telling her that the AI made the call. You cannot. Someone has to be able to stand behind that decision, understand it and explain it to the person it lands on.
-
-That is the balance. Automate the gathering, the checking, the routing and the drudgery, and let a process run goal-first where the stakes are low. But keep a human accountable for the decisions that change a life. These tools are ready to help with far more than most people expect. The judgement about where to draw that line is the human's job, and I would argue it always will be.
+That is the balance. These tools are ready to take on far more than most people expect: automate the gathering, the checking, the routing and the drudgery, and let a process run goal-first where the stakes are low. But keep a human accountable for the decisions that change a life.
 
 ## Conclusion
 
-Go back to the two pictures. The Level 3 map I drew years ago is still a good map, and the running workflow at the top of this post is the simpler flow it inspired, a couple of hours after describing it. What changed is not the analysis. It is that the analyst can now make it run.
+I set out to see how far things had moved in a decade, so go back to the two pictures. The Level 3 overview and its Level 4 sub-processes I drew back then are still a perfectly valid way to capture a process. The running workflow at the top of this post is the simpler flow they inspired, live a couple of hours after I described it. What changed is not the analysis. It is that the analyst can now stress-test the design, build a better business case and ultimately make it run.
 
-That is why n8n suits the Agentic Analyst so well. It is a genuinely full lifecycle tool: design, build, run, observe and cost, all in one place. You can take an idea from a sentence to a running, costed workflow and walk into the room with a business case built on real token numbers rather than estimates.
+That is what the title is pointing at. Rapid prototyping: a sentence becomes a running workflow in an afternoon. Token costing: every AI step reports what it spent, so the business case rests on real numbers rather than estimates. And n8n turned out to be a genuinely full-lifecycle tool: design, build, run, observe and cost in one place, which is exactly what that kind of analyst needs.
 
-None of that moves the human line. The rules still gate. A person still decides. And someone still has to be able to explain the outcome to the mother standing in front of them. Get that balance right and the plain-language front door is not a shortcut around good analysis. It is what good analysis produces now. I will be using it again.
+None of it moves the human line, which is where a human still has to sign. The rules still gate. A person still has to own the decision. And someone still has to be able to explain the outcome to the mother standing in front of them. Get that balance right and the plain-language front door is not a shortcut around good analysis. It is what good analysis produces now.
+
+A decade on, the map is the same and the job is not. From business analyst to Agentic Analyst, in the space of an afternoon. I will be using n8n again.
 
 <Terms>
 
 Plain-English definitions for the terms and tooling in this post, listed alphabetically.
 
-**Activity-based costing (ABC).** A costing method that builds up the end-to-end cost of a single process instance from the activities it consumes, traditionally systems, people and materials. In agentic processes a growing share of that cost is token usage.
+**Activity-based costing (ABC).** A costing method that assigns the cost of resources, traditionally systems, people and materials, to the activities that consume them, then on to outputs such as a product, a service or a single process instance, using cost drivers. In agentic processes, token usage becomes one of those drivers.
 
 **Agentic Analyst (AA).** My term for where the business analyst role is heading: the same analysis skill (outcome, boundaries, rules and exceptions), but the deliverable is a live, agentic workflow rather than a specification handed to someone else to build.
 
@@ -207,7 +207,7 @@ Plain-English definitions for the terms and tooling in this post, listed alphabe
 
 **DeepSeek.** A family of large language models, used here for the two AI steps that read and cross-check the transcript.
 
-**GDPR.** The EU's General Data Protection Regulation. Among other things, Article 22 gives people the right not to be subject to decisions based solely on automated processing where those decisions significantly affect them, along with a right to human intervention.
+**GDPR.** The EU's General Data Protection Regulation. Article 22 restricts decisions based solely on automated processing that produce legal or similarly significant effects, allows them only in limited cases such as contract necessity or explicit consent, and where they are allowed requires safeguards including the right to obtain human intervention. In the UK, the Data (Use and Access) Act 2025 replaced UK GDPR Article 22 with Articles 22A to 22D, which permit more automated decision-making while keeping those safeguards.
 
 **Level 3 process map (L3).** One level in a process hierarchy: a model showing the sub-processes and phases within a business process. Typically one of a full suite of models a process architect produces and hands to a delivery team.
 
@@ -225,10 +225,12 @@ External sources referenced in this post.
 
 **Regulation**
 
-- GDPR, Article 22: automated individual decision-making, including profiling. <RefLink href="https://gdpr-info.eu/art-22-gdpr/" />
+- EU GDPR (Regulation 2016/679), including Article 22 on automated individual decision-making. <RefLink href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" />
+- UK Data (Use and Access) Act 2025: factsheet on the changes to UK GDPR, including the replacement of Article 22 with Articles 22A to 22D. <RefLink href="https://www.gov.uk/government/publications/data-use-and-access-act-2025-factsheets/data-use-and-access-act-factsheet-uk-gdpr-and-dpa" />
 
 **Tooling**
 
+- n8n: introducing the AI Assistant, the workflow-building agent inside n8n. <RefLink href="https://community.n8n.io/t/introducing-the-ai-assistant-the-workflow-building-agent-inside-n8n/302667" />
 - n8n: workflow automation platform. <RefLink href="https://n8n.io/" />
 
 </References>

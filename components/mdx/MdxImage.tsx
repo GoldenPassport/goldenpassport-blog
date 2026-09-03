@@ -24,7 +24,9 @@ import { useFocusTrap } from "@/lib/use-focus-trap";
 
 type Props = React.ImgHTMLAttributes<HTMLImageElement>;
 
-export function MdxImage({ src, alt, className, ...rest }: Props) {
+// Inline post images default to lazy loading so screenshots below the fold
+// (and inside closed <details> steps) are not all fetched on page load.
+export function MdxImage({ src, alt, className, loading = "lazy", decoding = "async", ...rest }: Props) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -72,6 +74,8 @@ export function MdxImage({ src, alt, className, ...rest }: Props) {
           src={typeof src === "string" ? src : undefined}
           alt={alt ?? ""}
           className={className}
+          loading={loading}
+          decoding={decoding}
           {...rest}
         />
       </button>

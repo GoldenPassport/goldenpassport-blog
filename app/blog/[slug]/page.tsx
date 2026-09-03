@@ -200,6 +200,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             src={post.hero}
             alt={post.heroAlt ?? post.title}
             className="w-full h-auto sm:rounded-xl shadow-sm ring-1 ring-gold/10"
+            // Above the fold and usually the LCP element: keep it eager and
+            // high priority (MdxImage defaults inline post images to lazy).
+            loading="eager"
+            fetchPriority="high"
           />
         </figure>
       ) : null}
