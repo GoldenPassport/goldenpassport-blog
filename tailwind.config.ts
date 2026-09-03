@@ -34,6 +34,16 @@ const config: Config = {
       maxWidth: {
         prose: "68ch",
       },
+      keyframes: {
+        // Panel content easing in when a process step is selected.
+        "step-in": {
+          from: { opacity: "0", transform: "translateX(0.75rem)" },
+          to: { opacity: "1", transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        "step-in": "step-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both",
+      },
       typography: () => ({
         DEFAULT: {
           css: {

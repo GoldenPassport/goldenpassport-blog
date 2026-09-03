@@ -27,15 +27,41 @@
  */
 import React from "react";
 import { MdxImage } from "./MdxImage";
+import { ChevronSteps } from "./ChevronSteps";
 
-export function ProcessSteps({ children }: { children: React.ReactNode }) {
-  const items = React.Children.toArray(children).filter(React.isValidElement);
+type ProcessStepsProps = {
+  children: React.ReactNode;
+  /**
+   * "accordion" (default): vertical numbered <details> disclosures.
+   * "chevron": a horizontal chevron process strip with the selected step's
+   * description and image in a panel beneath (see ChevronSteps).
+   */
+  variant?: "accordion" | "chevron";
+  /** Accessible name for the chevron tablist. Ignored for the accordion. */
+  label?: string;
+};
+
+export function ProcessSteps({ children, variant = "accordion", label }: ProcessStepsProps) {
+  const items = React.Children.toArray(children).filter(
+    React.isValidElement,
+  ) as React.ReactElement<ProcessStepProps>[];
+
+  if (variant === "chevron") {
+    const steps = items.map((el) => ({
+      title: el.props.title,
+      image: el.props.image,
+      imageAlt: el.props.imageAlt,
+      imageClassName: el.props.imageClassName,
+      caption: el.props.caption,
+      content: el.props.children,
+    }));
+    return <ChevronSteps steps={steps} label={label} />;
+  }
+
   return (
     <ol className="not-prose my-8 list-none space-y-3 pl-0">
       {items.map((child, i) =>
-        React.cloneElement(child as React.ReactElement<ProcessStepProps>, {
-          number: (child as React.ReactElement<ProcessStepProps>).props.number ?? i + 1,
-        }),
+        React.cloneElement(child, { number: child.props.number ?? i + 1 }),
       )}
     </ol>
   );
