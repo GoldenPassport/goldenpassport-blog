@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { MdxImage } from "./MdxImage";
+import { StepShots, type Shot } from "./StepShots";
 
 /**
  * Horizontal chevron process strip with a detail panel beneath it.
@@ -25,6 +26,7 @@ export type ChevronStepData = {
   /** Wrapper classes to cap the image width, e.g. "mx-auto max-w-sm". */
   imageClassName?: string;
   caption?: React.ReactNode;
+  shots?: Shot[];
   content: React.ReactNode;
 };
 
@@ -141,9 +143,10 @@ export function ChevronSteps({
         aria-labelledby={`${baseId}-tab-${active}`}
         className="mt-4 rounded-lg border border-gold/25 bg-cream-50 px-5 py-5 motion-safe:animate-step-in"
       >
-        <div className="prose prose-lg max-w-none font-serif [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
+        <div className="prose prose-lg max-w-none font-serif [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-1.5 [&_li]:pl-1 [&_li::marker]:text-gold-deep">
           {step.content}
         </div>
+        {step.shots?.length ? <StepShots shots={step.shots} /> : null}
         {step.image ? (
           <figure className={`mt-5 mb-0 ${step.imageClassName ?? ""}`}>
             <MdxImage

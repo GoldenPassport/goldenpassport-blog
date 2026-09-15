@@ -13,6 +13,12 @@ tags:
 hero: "/posts/n8n-ai-assistant-first-impressions/n8n-admissions-process-run.png"
 heroAlt: "The n8n University Admissions workflow after a successful test run, the accepted path green from the application form through screening, decision, offer and enrolment."
 ogImage: "/posts/n8n-ai-assistant-first-impressions/og.png"
+supersededBy: "digital-branch-concierge"
+recommend:
+  slug: "digital-branch-concierge"
+  heading: "There is a richer agentic build"
+  reason: "This article is a first look at n8n's AI assistant. The digital branch concierge goes much further: a real AI agent with bounded skills, guardrails, human approval before it acts and an audit trail of every decision, with a step-by-step n8n build to follow."
+  cta: "Read the concierge article"
 ---
 
 ## Introduction
@@ -21,7 +27,11 @@ Around a decade ago I modelled a university admissions process for a client in A
 
 I wanted to see how far things have moved in that decade. I had seen and heard a lot about n8n, and it was time to have a look for myself. This is a first-impressions piece, but what stayed with me was less the tool than what it implies for the analyst using it. Rapid prototyping, token costs recorded per step and a business case you can build inside the workflow itself point to a different job: not a business analyst handing over a specification, but what I have started calling an Agentic Analyst.
 
-The short version is that I was impressed. The longer version, including where I think a human still has to sign, follows.
+<TldrCard label="The short version">
+
+n8n's AI assistant turned a one-line brief into a working admissions workflow in about two hours. Every AI step reports the tokens it used, so the cost case can rest on real numbers. You still need to be technical, and a person still has to own the decisions that change a life.
+
+</TldrCard>
 
 ## What I set out to build
 
@@ -45,9 +55,27 @@ It is not a like-for-like rebuild, and it was never meant to be. But the contras
 
 I was not trying to ship a production system in an afternoon. I wanted to see how much of a working admissions flow I could stand up as a first test. It breaks into three stages:
 
-- **Intake and understanding.** Gather the applicant's details, whether they arrive by form, email, another workflow or even social media, then read their transcript.
-- **Screening and decision.** Match the application against the admission rules, then let a human make the call on anything that is not clear-cut.
-- **Offer and enrolment.** Make the offer, wait for the applicant's response, then register and confirm the accepted student.
+<NumberedList>
+
+<NumberedItem>
+
+**Intake and understanding.** Gather the applicant's details, whether they arrive by form, email, another workflow or even social media, then read their transcript.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**Screening and decision.** Match the application against the admission rules, then let a human make the call on anything that is not clear-cut.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**Offer and enrolment.** Make the offer, wait for the applicant's response, then register and confirm the accepted student.
+
+</NumberedItem>
+
+</NumberedList>
 
 Throughout, the flow keeps applicant records in n8n's built-in Data Table and notifies staff over Slack and applicants over Gmail at each meaningful step. It is deliberately a mix of deterministic rules, AI-assisted judgement and human sign-off, rather than a straight-through automation.
 
@@ -58,7 +86,7 @@ I did not place a single node by hand to get going. I described the process in o
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/prompt-skeleton-process.png"
   className="block w-full mx-auto max-w-2xl h-auto rounded-lg ring-1 ring-gold/10"
-  alt="The n8n AI assistant chat: a one-line brief about a university admissions team, then the assistant's clarifying questions with the answers, an n8n-hosted form, the built-in n8n Data Table, Slack for staff and email for applicants, the stages to automate, and a mix of auto-screen then human decision."
+  alt="The n8n AI assistant chat: a one-line brief about a university admissions team, then the assistant's clarifying questions with the answers, an n8n-hosted form, the built-in n8n Data Table, Slack for staff and email for applicants, the stages to automate and a mix of auto-screen then human decision."
   caption="The plain-language front door: one line in, then the assistant interrogates the brief before it builds anything."
 />
 
@@ -100,7 +128,7 @@ Two AI steps take over. The first extracts the content from the uploaded transcr
   title="Screened and summarised to Slack"
   image="/posts/n8n-ai-assistant-first-impressions/slack-application-summary.png"
   imageClassName="mx-auto max-w-lg"
-  imageAlt="A Slack message to the admissions team summarising an application: automated checks showing the score meets the minimum and the required modules are met, a short summary of the personal statement, the full personal statement, the transcript attached, and Reject and Make Offer buttons."
+  imageAlt="A Slack message to the admissions team summarising an application: automated checks showing the score meets the minimum and the required modules are met, a short summary of the personal statement, the full personal statement, the transcript attached and Reject and Make Offer buttons."
   caption="The decision-ready summary in the admissions Slack channel."
 >
 
@@ -128,9 +156,23 @@ Run as a test, the accepted path goes green the whole way, from the form through
 
 My honest first reaction was, simply, wow.
 
-Two things drove it. The first was the sheer reach for so little input. Everything in the walkthrough above, the form, the live email and Slack integrations, the rules and the routing, came from a conversation rather than a build manual.
+Two things drove it.
 
-The second was the build experience itself. It felt like a Figma for workflow design and build: fast, visual and forgiving, where you shape the thing in front of you rather than fight the tool. As someone who has spent years in and around process work, that immediacy is the part that stayed with me.
+<NumberedList>
+
+<NumberedItem>
+
+**The reach for so little input.** Everything in the walkthrough above, the form, the live email and Slack integrations, the rules and the routing, came from a conversation rather than a build manual.
+
+</NumberedItem>
+
+<NumberedItem>
+
+**The build experience itself.** It felt like a Figma for workflow design and build: fast, visual and forgiving, where you shape the thing in front of you rather than fight the tool. As someone who has spent years in and around process work, that immediacy is the part that stayed with me.
+
+</NumberedItem>
+
+</NumberedList>
 
 ## Data and cost observability
 
@@ -148,13 +190,25 @@ The execution log fits this neatly. Each test run records the tokens used, both 
 
 That changes when the costing happens. Token counts are not money on their own, but multiply them by the model's per-token price and you have the running cost of each AI step. Instead of estimating that spend in a spreadsheet after the fact, an analyst can watch it accumulate across the AI steps and tune the process for cost in real time, before the business case is even written.
 
+<Callout>
+
+**The cost of one AI step** is its prompt tokens multiplied by the model's input price, plus its completion tokens multiplied by the output price. In the run above, that single step used 532 prompt tokens and 127 completion tokens.
+
+</Callout>
+
 ## The role shift: from Business Analyst to Agentic Analyst
 
 The takeaway I keep coming back to is what this does to the analyst's job.
 
 In traditional delivery models, business analysts are often expected to produce documents: requirements, process maps and specifications that someone else then builds. The Level 3 model earlier in this post is exactly that kind of artefact, precise and inert until a delivery team turns it into something real. Here, the same plain-language description of a process became the working process. The gap between describing it and running it collapsed.
 
-That points to a role I would call the Agentic Analyst (AA). The skill is still analysis, understanding the outcome, the boundaries, the rules and the exceptions, but the deliverable is a live, agentic workflow rather than a specification handed downstream. The analyst who can describe a process clearly and orchestrate AI and human steps into something that actually runs is going to be valuable, and quickly.
+<PullQuote label="The Agentic Analyst">
+
+The skill is still analysis. The deliverable is a live, agentic workflow rather than a specification handed downstream.
+
+</PullQuote>
+
+That points to a role I would call the Agentic Analyst (AA): someone who understands the outcome, the boundaries, the rules and the exceptions, and turns them into something that runs. The analyst who can describe a process clearly and orchestrate AI and human steps into something that actually runs is going to be valuable, and quickly.
 
 ## You still need to be technical, for now
 
@@ -187,7 +241,29 @@ That is the balance. These tools are ready to take on far more than most people 
 
 I set out to see how far things had moved in a decade, so go back to the two pictures. The Level 3 overview and its Level 4 sub-processes I drew back then are still a perfectly valid way to capture a process. The running workflow at the top of this post is the simpler flow they inspired, live a couple of hours after I described it. What changed is not the analysis. It is that the analyst can now stress-test the design, build a better business case and ultimately make it run.
 
-That is what the title is pointing at. Rapid prototyping: a sentence becomes a running workflow in an afternoon. Token costing: every AI step reports what it spent, so the business case rests on real numbers rather than estimates. And n8n turned out to be a genuinely full-lifecycle tool: design, build, run, observe and cost in one place, which is exactly what that kind of analyst needs.
+That is what the title is pointing at.
+
+<TickList>
+
+<TickItem>
+
+**Rapid prototyping.** A sentence becomes a running workflow in an afternoon.
+
+</TickItem>
+
+<TickItem>
+
+**Token costing.** Every AI step reports what it spent, so the business case rests on real numbers rather than estimates.
+
+</TickItem>
+
+<TickItem>
+
+**A full-lifecycle tool.** Design, build, run, observe and cost in one place, which is exactly what that kind of analyst needs.
+
+</TickItem>
+
+</TickList>
 
 None of it moves the human line, which is where a human still has to sign. The rules still gate. A person still has to own the decision. And someone still has to be able to explain the outcome to the mother standing in front of them. Get that balance right and the plain-language front door is not a shortcut around good analysis. It is what good analysis produces now.
 

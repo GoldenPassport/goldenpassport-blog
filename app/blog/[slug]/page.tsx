@@ -8,6 +8,7 @@ import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
 import { CodeBlock } from "@/components/mdx/CodeBlock";
 import { MarkAsRead } from "@/components/blog/MarkAsRead";
 import { PostTabs } from "@/components/blog/PostTabs";
+import { RecommendModal } from "@/components/blog/RecommendModal";
 import { TldrCard, VerdictCard, CtaCard } from "@/components/mdx/CalloutCard";
 import { Accordion } from "@/components/mdx/Accordion";
 import { Terms, Calculations, References } from "@/components/mdx/EndMatter";
@@ -24,12 +25,26 @@ import { TriageGraphDiagram } from "@/components/mdx/TriageGraphDiagram";
 import { Terminal } from "@/components/mdx/Terminal";
 import { ErrorBlock } from "@/components/mdx/ErrorBlock";
 import { RefLink } from "@/components/mdx/RefLink";
+import { ProcessSteps, ProcessStep } from "@/components/mdx/ProcessSteps";
+import { DemoLinks, DemoLink } from "@/components/mdx/DemoLinks";
+import { StepShots, Shot } from "@/components/mdx/StepShots";
+import { AgentWorkflowEquation } from "@/components/mdx/AgentWorkflowEquation";
+import { ScrollCards, ScrollCard } from "@/components/mdx/ScrollCards";
+import { TestConversations, TestConversation } from "@/components/mdx/TestConversations";
+import { Scorecard, ScorecardRow, ScorecardSummary } from "@/components/mdx/Scorecard";
+import { TestId } from "@/components/mdx/TestId";
+import { HeadingH2, HeadingH3 } from "@/components/mdx/HeadingAnchor";
+import { EvidenceRecord } from "@/components/mdx/EvidenceRecord";
+import { ToolComparison, ToolCard } from "@/components/mdx/ToolComparison";
+import { DefinitionGrid, DefinitionItem } from "@/components/mdx/DefinitionGrid";
 import { LinkedInShare } from "@/components/blog/LinkedInShare";
 import { PostToc } from "@/components/chrome/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 
 const mdxComponents = {
   img: MdxImage,
+  h2: HeadingH2,
+  h3: HeadingH3,
   MdxImage,
   Figure,
   Republished,
@@ -62,6 +77,26 @@ const mdxComponents = {
   Terminal,
   ErrorBlock,
   RefLink,
+  ProcessSteps,
+  ProcessStep,
+  DemoLinks,
+  DemoLink,
+  StepShots,
+  Shot,
+  AgentWorkflowEquation,
+  ScrollCards,
+  ScrollCard,
+  TestConversations,
+  TestConversation,
+  Scorecard,
+  ScorecardRow,
+  ScorecardSummary,
+  TestId,
+  EvidenceRecord,
+  ToolComparison,
+  ToolCard,
+  DefinitionGrid,
+  DefinitionItem,
 };
 
 export function generateStaticParams() {
@@ -132,6 +167,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
+  // A post can be superseded by a newer one; only render if it exists.
+  const superseding = post.supersededBy
+    ? getAllPosts().find((p) => p.slug === post.supersededBy)
+    : undefined;
+  // A post can recommend a newer or richer one; only render if it exists.
+  const recommended = post.recommend
+    ? getAllPosts().find((p) => p.slug === post.recommend?.slug)
+    : undefined;
+
   const postUrl = `${SITE_URL}/blog/${slug}`;
   // Same precedence as generateMetadata: ogImage wins over hero for the
   // structured-data image.
@@ -175,6 +219,18 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
       />
       <MarkAsRead slug={slug} />
+      {post.recommend && recommended ? (
+        <RecommendModal
+          fromSlug={slug}
+          href={`/blog/${recommended.slug}`}
+          title={recommended.title}
+          excerpt={recommended.excerpt}
+          image={recommended.ogImage ?? recommended.hero}
+          heading={post.recommend.heading}
+          reason={post.recommend.reason}
+          cta={post.recommend.cta}
+        />
+      ) : null}
       <Link href="/blog" className="text-sm text-ink-mute hover:text-gold-deep">
         ← All writing
       </Link>
@@ -191,6 +247,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           Unlisted
         </div>
       ) : null}
+
+      {/* Group tab nav (e.g. Article / Demo) sits above the hero, so every
+          tab in a group opens on the same navigation before its own image.
+          Returns null when there are no siblings, so single posts keep their
+          original layout. */}
+      <div className="mt-6">
+        <PostTabs
+          siblings={getGroupSiblings(post.group)}
+          currentSlug={post.slug}
+        />
+      </div>
 
       {post.hero ? (
         <figure className="mt-8 -mx-6 sm:mx-0">
@@ -218,13 +285,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       ) : null}
 
       <header className="mt-6">
-        {/* Render tab nav if this post is part of a group (e.g. Article / Demo).
-            Returns null when there are no siblings, so single-tab posts get
-            their original layout unchanged. */}
-        <PostTabs
-          siblings={getGroupSiblings(post.group)}
-          currentSlug={post.slug}
-        />
         <div className="flex items-center flex-wrap gap-3">
           <CategoryBadge category={post.category} />
           {/* SeriesBadge intentionally not rendered: series posts carry the
@@ -237,6 +297,23 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <h1 className="mt-3 font-serif text-4xl md:text-5xl text-ink leading-tight">{post.title}</h1>
         {post.excerpt ? (
           <p className="mt-4 text-lg text-ink-soft">{post.excerpt}</p>
+        ) : null}
+        {superseding ? (
+          <p
+            role="note"
+            className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-gold/30 bg-gold/5 px-4 py-2.5 text-sm text-ink-soft"
+          >
+            <span className="rounded-full border border-gold-deep/40 px-2 py-0.5 font-sans text-[0.625rem] font-semibold uppercase leading-none tracking-[0.12em] text-gold-deep">
+              Superseded
+            </span>
+            <span>
+              A newer, fuller build is in{" "}
+              <Link href={`/blog/${superseding.slug}`} className="font-medium text-gold-deep underline underline-offset-2 hover:text-ink">
+                {superseding.title}
+              </Link>
+              .
+            </span>
+          </p>
         ) : null}
         <TagList tags={post.tags} linkable truncate />
       </header>

@@ -31,22 +31,54 @@ export function PostTabs({
       {/* -mb-px pulls each tab's bottom border down 1px so it visually overlaps
           the parent <nav>'s bottom border, giving that clean "tab sits on the
           line" appearance familiar from docs sites. */}
-      <ul className="-mb-px flex flex-wrap items-center gap-8">
+      <ul className="-mb-px flex items-center gap-6 sm:gap-8 overflow-x-auto whitespace-nowrap">
         {siblings.map((post) => {
           const isActive = post.slug === currentSlug;
+          const label = post.groupLabel || post.title;
+          const isDemo = /\s+demo$/i.test(label);
+          const tabName = isDemo ? label.replace(/\s+demo$/i, "") : label;
+          const badgeText = post.comingSoon ? "Coming soon" : "Demo";
+          const tabClassName = `inline-flex shrink-0 items-center gap-2 whitespace-nowrap py-3 text-sm tracking-wide border-b-2 transition-colors ${
+            post.comingSoon
+              ? "cursor-not-allowed border-transparent text-ink-mute/65"
+              : isActive
+                ? "border-gold-deep text-ink font-medium"
+                : "border-transparent text-ink-mute hover:text-ink-soft hover:border-gold/40"
+          }`;
+          const tabContent = (
+            <>
+              <span>{tabName}</span>
+              {isDemo ? (
+                <span
+                  className={`rounded-full border px-2 py-0.5 font-sans text-[0.625rem] font-semibold uppercase leading-none tracking-[0.12em] ${
+                    post.comingSoon
+                      ? "border-ink/15 bg-ink/5 text-ink-mute"
+                      : isActive
+                        ? "border-gold-deep bg-gold-deep text-cream"
+                        : "border-gold/35 bg-gold/10 text-gold-deep"
+                  }`}
+                >
+                  {badgeText}
+                </span>
+              ) : null}
+            </>
+          );
+
           return (
             <li key={post.slug}>
-              <Link
-                href={`/blog/${post.slug}`}
-                aria-current={isActive ? "page" : undefined}
-                className={`inline-block py-3 text-sm tracking-wide border-b-2 transition-colors ${
-                  isActive
-                    ? "border-gold-deep text-ink font-medium"
-                    : "border-transparent text-ink-mute hover:text-ink-soft hover:border-gold/40"
-                }`}
-              >
-                {post.groupLabel || post.title}
-              </Link>
+              {post.comingSoon ? (
+                <span aria-disabled="true" title="Coming soon" className={tabClassName}>
+                  {tabContent}
+                </span>
+              ) : (
+                <Link
+                  href={`/blog/${post.slug}`}
+                  aria-current={isActive ? "page" : undefined}
+                  className={tabClassName}
+                >
+                  {tabContent}
+                </Link>
+              )}
             </li>
           );
         })}

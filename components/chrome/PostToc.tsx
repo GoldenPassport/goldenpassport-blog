@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 
 /**
@@ -14,8 +15,12 @@ import { useFocusTrap } from "@/lib/use-focus-trap";
  *     a row scrolls and closes the sheet; tapping the backdrop closes it.
  *
  * Behaviour shared by both modes:
- *   - On mount, queries the surrounding article for `h2[id]` elements
- *     (auto-tagged by rehype-slug) and builds the section list.
+ *   - Queries the surrounding article for `h2[id]` elements and top-level
+ *     `h3[id]` sub-headings (auto-tagged by rehype-slug) and builds the
+ *     section list, with sub-headings indented under their section. The list
+ *     is rebuilt whenever the route changes (switching tabs in a post group
+ *     reuses this component) or the article content changes, so it always
+ *     matches the headings on the page.
  *   - Prepends a synthetic "Introduction" row that scrolls to the top of
  *     the article.
  *   - Appends a "Verdict" row when a `#verdict` element is found in the
@@ -30,9 +35,10 @@ import { useFocusTrap } from "@/lib/use-focus-trap";
 const INTRO_ID = "__intro";
 const VERDICT_ID = "verdict";
 
-type Section = { id: string; title: string };
+type Section = { id: string; title: string; level: 2 | 3 };
 
 export function PostToc() {
+  const pathname = usePathname();
   const [sections, setSections] = useState<Section[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   // Text-highlight target set on click. It lets the clicked section's LABEL
@@ -61,14 +67,27 @@ export function PostToc() {
   }, []);
 
   useEffect(() => {
-    const headings = Array.from(
-      document.querySelectorAll<HTMLHeadingElement>("article .prose h2[id]")
-    );
-    const verdictEl = document.querySelector<HTMLElement>("article #verdict");
+    // Rebuilt by build() below; kept in the effect scope for the scrollspy.
+    let headings: HTMLHeadingElement[] = [];
+    let verdictEl: HTMLElement | null = null;
+    let scrollTargets: HTMLElement[] = [];
+    let introId = INTRO_ID;
+    let lastSignature = "";
 
-    const headingSections = headings.map((h) => ({
+    const build = () => {
+    // H2s anywhere in the post body, plus H3s that sit directly in the body
+    // (sub-sections such as Setup / Run it), not headings inside cards.
+    headings = Array.from(
+      document.querySelectorAll<HTMLHeadingElement>(
+        "article .prose h2[id], article .prose > h3[id]"
+      )
+    );
+    verdictEl = document.querySelector<HTMLElement>("article #verdict");
+
+    const headingSections: Section[] = headings.map((h) => ({
       id: h.id,
       title: h.textContent ?? h.id,
+      level: h.tagName === "H3" ? 3 : 2,
     }));
     // Posts now open with an actual "## Introduction" heading. When present,
     // use that as the intro row instead of prepending a synthetic one, so the
@@ -76,21 +95,26 @@ export function PostToc() {
     const hasIntroHeading =
       headingSections.length > 0 &&
       headingSections[0].title.trim().toLowerCase() === "introduction";
-    const introId = hasIntroHeading ? headingSections[0].id : INTRO_ID;
+    introId = hasIntroHeading ? headingSections[0].id : INTRO_ID;
 
     const list: Section[] = [
-      ...(hasIntroHeading ? [] : [{ id: INTRO_ID, title: "Introduction" }]),
+      ...(hasIntroHeading ? [] : [{ id: INTRO_ID, title: "Introduction", level: 2 as const }]),
       ...headingSections,
-      ...(verdictEl ? [{ id: VERDICT_ID, title: "Verdict" }] : []),
+      ...(verdictEl ? [{ id: VERDICT_ID, title: "Verdict", level: 2 as const }] : []),
     ];
-    setSections(list);
+    // Only update state when the headings actually changed, so unrelated DOM
+    // mutations (dialogs, copy buttons) do not re-render the stepper.
+    const signature = list.map((x) => `${x.level}:${x.id}:${x.title}`).join("|");
+    if (signature !== lastSignature) {
+      lastSignature = signature;
+      setSections(list);
+    }
 
-    // Scrollspy iterates over real anchored elements only (H2s + Verdict).
+    // Scrollspy iterates over real anchored elements only (headings + Verdict).
     // The synthetic Introduction is the active state when scrolled above
     // the first real target.
-    const scrollTargets: HTMLElement[] = verdictEl
-      ? [...headings, verdictEl]
-      : headings;
+    scrollTargets = verdictEl ? [...headings, verdictEl] : headings;
+    };
 
     const TRIGGER_OFFSET = 100; // 96px scroll-padding + 4px buffer
 
@@ -124,14 +148,31 @@ export function PostToc() {
       setActiveId(current);
     };
 
+    build();
     updateActive();
+    setSelectedId(null);
+
+    // Rebuild when the article body changes (client navigation, hot reload).
+    let frame = 0;
+    const observer = new MutationObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        build();
+        updateActive();
+      });
+    });
+    const body = document.querySelector("article .prose");
+    if (body) observer.observe(body, { childList: true, subtree: true, characterData: true });
+
     window.addEventListener("scroll", updateActive, { passive: true });
     window.addEventListener("resize", updateActive);
     return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
       window.removeEventListener("scroll", updateActive);
       window.removeEventListener("resize", updateActive);
     };
-  }, []);
+  }, [pathname]);
 
   // Lock body scroll while the mobile sheet is open, move focus into it, and
   // restore focus to the trigger on close.
@@ -210,7 +251,7 @@ export function PostToc() {
         aria-label="Table of contents"
         className="hidden xl:block xl:sticky xl:top-28 xl:self-start w-full max-h-[calc(100vh-9rem)] overflow-y-auto"
       >
-        <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold mb-4">
+        <p className="pl-7 text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold mb-4">
           On this page
         </p>
         <Stepper
@@ -271,7 +312,7 @@ export function PostToc() {
           {/* Sheet */}
           <div className="absolute left-0 right-0 bottom-0 bg-cream-50 border-t border-gold/30 rounded-t-xl shadow-xl p-6 max-h-[80vh] overflow-y-auto">
             <header className="flex items-center justify-between mb-4">
-              <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold">
+              <p className="pl-7 text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold">
                 On this page
               </p>
               <button
@@ -374,7 +415,7 @@ function Stepper({
         const belowColour = isVisited ? "bg-gold-deep" : "bg-gold/25";
 
         return (
-          <li key={s.id} className="relative pl-7 pb-5 last:pb-0">
+          <li key={s.id} className={`relative ${s.level === 3 ? "pl-10 pb-3" : "pl-7 pb-5"} last:pb-0`}>
             {/* Line segment above the dot (top:0 → dot centre). */}
             {!isFirst ? (
               <span
@@ -417,13 +458,13 @@ function Stepper({
             <a
               href={s.id === INTRO_ID ? "#" : `#${s.id}`}
               onClick={(e) => onClick(e, s.id)}
-              className={
+              className={`${s.level === 3 ? "text-[0.8125rem]" : "text-sm"} ${
                 isTextActive
-                  ? "block text-sm font-semibold text-ink leading-snug"
+                  ? "block font-semibold text-ink leading-snug"
                   : isVisited
-                  ? "block text-sm text-ink-soft hover:text-gold-deep leading-snug transition-colors"
-                  : "block text-sm text-ink-mute hover:text-gold-deep leading-snug transition-colors"
-              }
+                  ? "block text-ink-soft hover:text-gold-deep leading-snug transition-colors"
+                  : "block text-ink-mute hover:text-gold-deep leading-snug transition-colors"
+              }`}
             >
               {s.title}
             </a>

@@ -35,6 +35,10 @@ type Props = {
   downloadLabel?: string;
 };
 
+type AsideProps = Pick<Props, "src" | "alt" | "caption" | "className"> & {
+  children: React.ReactNode;
+};
+
 export function Figure({
   src,
   alt,
@@ -69,5 +73,30 @@ export function Figure({
         </figcaption>
       ) : null}
     </figure>
+  );
+}
+
+/**
+ * Editorial copy paired with a smaller supporting figure. It stacks on narrow
+ * screens and moves the image into a right-hand column once there is enough
+ * room for both parts to remain readable.
+ */
+export function FigureAside({ src, alt, caption, className, children }: AsideProps) {
+  return (
+    <section className="not-prose my-8 grid items-start gap-8 md:grid-cols-[minmax(0,1.25fr)_minmax(15rem,0.75fr)]">
+      <div className="prose prose-lg max-w-none font-serif text-ink">{children}</div>
+      <figure className="m-0">
+        <MdxImage
+          src={src}
+          alt={alt}
+          className={className ?? "h-auto w-full rounded-lg ring-1 ring-gold/10"}
+        />
+        {caption ? (
+          <figcaption className="mt-3 text-left font-sans text-sm leading-relaxed text-ink-mute italic">
+            {caption}
+          </figcaption>
+        ) : null}
+      </figure>
+    </section>
   );
 }

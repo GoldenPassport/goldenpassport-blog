@@ -35,3 +35,16 @@ export function Chips({ label, items }: Props) {
     </div>
   );
 }
+
+type BadgeProps = {
+  children: React.ReactNode;
+};
+
+/** A compact inline identifier for test cases and other short references. */
+export function Badge({ children }: BadgeProps) {
+  return (
+    <span className="mr-1 inline-flex items-center rounded-full border border-gold/35 bg-gold/[0.08] px-2.5 py-1 align-middle font-sans text-[0.675rem] font-semibold uppercase leading-none tracking-[0.08em] text-gold-deep">
+      {children}
+    </span>
+  );
+}

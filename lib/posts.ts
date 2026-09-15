@@ -62,6 +62,8 @@ export type PostMeta = {
   groupLabel?: string;
   /** Sort order within the group. Lower numbers come first. */
   groupOrder?: number;
+  /** Keep a grouped post visible as a disabled "Coming soon" tab. */
+  comingSoon?: boolean;
   /**
    * Publish state:
    * - undefined / false: standard, listed everywhere.
@@ -77,6 +79,26 @@ export type PostMeta = {
   unlisted?: boolean;
   draft?: boolean;
   readingTime?: string;
+  /**
+   * Point readers at a newer or richer post. The post page opens a dismissible
+   * modal on first visit recommending `slug`, with the option to keep reading
+   * this one. Dismissal is remembered per post in the reader's browser.
+   */
+  recommend?: RecommendData;
+  /** Slug of a newer post that supersedes this one. Shown as a note in the
+   *  post header. Ignored if that post does not exist. */
+  supersededBy?: string;
+};
+
+export type RecommendData = {
+  /** Slug of the recommended post. Ignored if that post does not exist. */
+  slug: string;
+  /** Modal heading. */
+  heading?: string;
+  /** One or two sentences on why the other post is worth reading instead. */
+  reason?: string;
+  /** Label for the primary button. */
+  cta?: string;
 };
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
@@ -115,6 +137,11 @@ export function getAllPosts(): PostMeta[] {
     const group = typeof data.group === "string" ? data.group : undefined;
     const groupLabel = typeof data.groupLabel === "string" ? data.groupLabel : undefined;
     const groupOrder = typeof data.groupOrder === "number" ? data.groupOrder : undefined;
+    const comingSoon = data.comingSoon === true;
+    const recommend =
+      data.recommend && typeof data.recommend === "object" && typeof data.recommend.slug === "string"
+        ? (data.recommend as RecommendData)
+        : undefined;
 
     return {
       slug,
@@ -133,8 +160,11 @@ export function getAllPosts(): PostMeta[] {
       group,
       groupLabel,
       groupOrder,
+      comingSoon,
       unlisted,
       draft,
+      recommend,
+      supersededBy: typeof data.supersededBy === "string" ? data.supersededBy : undefined,
       readingTime: estimateReadingTime(content),
     } satisfies PostMeta;
   });
