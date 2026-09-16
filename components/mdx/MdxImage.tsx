@@ -26,7 +26,9 @@ type Props = React.ImgHTMLAttributes<HTMLImageElement>;
 
 // Inline post images default to lazy loading so screenshots below the fold
 // (and inside closed <details> steps) are not all fetched on page load.
-export function MdxImage({ src, alt, className, loading = "lazy", decoding = "async", ...rest }: Props) {
+// Pass `children` to replace the inline <img> (the hero uses next/image);
+// the lightbox still opens the original `src`.
+export function MdxImage({ src, alt, className, loading = "lazy", decoding = "async", children, ...rest }: Props) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -69,15 +71,17 @@ export function MdxImage({ src, alt, className, loading = "lazy", decoding = "as
         // as a bare `<img>` would. Keeps the layout in MDX unchanged.
         className="block w-full p-0 m-0 bg-transparent border-0 cursor-zoom-in"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={typeof src === "string" ? src : undefined}
-          alt={alt ?? ""}
-          className={className}
-          loading={loading}
-          decoding={decoding}
-          {...rest}
-        />
+        {children ?? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={typeof src === "string" ? src : undefined}
+            alt={alt ?? ""}
+            className={className}
+            loading={loading}
+            decoding={decoding}
+            {...rest}
+          />
+        )}
       </button>
 
       {open ? (

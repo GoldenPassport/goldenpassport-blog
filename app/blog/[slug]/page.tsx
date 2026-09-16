@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllPosts, getGroupSiblings, getPostSlugs } from "@/lib/posts";
+import { getPublicImageSize } from "@/lib/image-size";
 import { CategoryBadge, TagList } from "@/components/blog/PostCard";
 import { MdxImage } from "@/components/mdx/MdxImage";
 import { Figure } from "@/components/mdx/Figure";
 import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
 import { CodeBlock } from "@/components/mdx/CodeBlock";
+import { HeroImage } from "@/components/blog/HeroImage";
 import { MarkAsRead } from "@/components/blog/MarkAsRead";
 import { PostTabs } from "@/components/blog/PostTabs";
 import { RecommendModal } from "@/components/blog/RecommendModal";
@@ -156,6 +158,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = getAllPosts().find((p) => p.slug === slug);
   if (!post) notFound();
 
+  // Read the hero's intrinsic size at build time so its frame can be
+  // reserved before the image loads.
+  const heroSize = post.hero ? getPublicImageSize(post.hero) : null;
+
   // The MDX module's default export accepts a `components` prop at runtime;
   // typing it loosely keeps us out of MDX's internal type maze.
   let MDXContent: React.ComponentType<{ components?: Record<string, unknown> }>;
@@ -262,16 +268,22 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {post.hero ? (
         <figure className="mt-8 -mx-6 sm:mx-0">
           {/* Hero is a scene-setting banner, not a captioned figure: the
-              alt text stays for accessibility, but no visible figcaption. */}
-          <MdxImage
-            src={post.hero}
-            alt={post.heroAlt ?? post.title}
-            className="w-full h-auto sm:rounded-xl shadow-sm ring-1 ring-gold/10"
-            // Above the fold and usually the LCP element: keep it eager and
-            // high priority (MdxImage defaults inline post images to lazy).
-            loading="eager"
-            fetchPriority="high"
-          />
+              alt text stays for accessibility, but no visible figcaption.
+              When the file's size is known, HeroImage reserves the space,
+              shows a shimmer and fades the optimised image in. */}
+          {heroSize ? (
+            <HeroImage src={post.hero} alt={post.heroAlt ?? post.title} width={heroSize.width} height={heroSize.height} />
+          ) : (
+            <MdxImage
+              src={post.hero}
+              alt={post.heroAlt ?? post.title}
+              className="w-full h-auto sm:rounded-xl shadow-sm ring-1 ring-gold/10"
+              // Above the fold and usually the LCP element: keep it eager and
+              // high priority (MdxImage defaults inline post images to lazy).
+              loading="eager"
+              fetchPriority="high"
+            />
+          )}
         </figure>
       ) : null}
 

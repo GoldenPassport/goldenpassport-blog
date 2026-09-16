@@ -10,7 +10,7 @@ tags:
   - Agentic AI
   - DeepSeek
   - Process Automation
-hero: "/posts/n8n-ai-assistant-first-impressions/n8n-admissions-process-run.png"
+hero: "/posts/n8n-ai-assistant-first-impressions/n8n-admissions-process-run.webp"
 heroAlt: "The n8n University Admissions workflow after a successful test run, the accepted path green from the application form through screening, decision, offer and enrolment."
 ogImage: "/posts/n8n-ai-assistant-first-impressions/og.png"
 supersededBy: "digital-branch-concierge"
@@ -38,7 +38,7 @@ n8n's AI assistant turned a one-line brief into a working admissions workflow in
 The brief was the same admissions space, application through to enrolment. The original models, every level of them, were drawn out by hand in specialist tooling and reviewed in workshops before the build. The Level 3 view below is one of the models in that suite, included for an overview of the key stages.
 
 <Figure
-  src="/posts/n8n-ai-assistant-first-impressions/original-level3-admissions-process.png"
+  src="/posts/n8n-ai-assistant-first-impressions/original-level3-admissions-process.webp"
   alt="A Level 3 BPMN model of an Admissions Processing process, showing Application Received, Initial Application Processing, Assess Admission Eligibility and Credit, Issue Offer and Process Applicant's Decision, with gateways branching out to Application Accepted, Declined, Deferred and Cancelled."
   caption="The before, and the inspiration: the Level 3 view from the original admissions suite, showing the key stages. One artefact of many, all drawn by hand."
 />
@@ -46,7 +46,7 @@ The brief was the same admissions space, application through to enrolment. The o
 And here is the after: a simpler admissions flow, inspired by that work rather than copied from it, stood up in n8n from a plain-language conversation with its AI assistant.
 
 <Figure
-  src="/posts/n8n-ai-assistant-first-impressions/n8n-admissions-process.png"
+  src="/posts/n8n-ai-assistant-first-impressions/n8n-admissions-process.webp"
   alt="The n8n University Admissions workflow: an application form trigger, transcript extraction with two DeepSeek AI steps to extract and verify, loading admission rules, an auto-screen gate, Slack review and decision, then an offer and enrolment stage with accept or decline. Data Table, Gmail and Slack nodes run throughout."
   caption="The after: the n8n flow the assistant helped me build, from application form through transcript checks, screening and a human decision to offer and enrolment."
 />
@@ -84,7 +84,7 @@ Throughout, the flow keeps applicant records in n8n's built-in Data Table and no
 I did not place a single node by hand to get going. I described the process in one line, a university admissions team from application through to enrolment, and rather than guessing, the assistant asked the shaping questions back: how applications arrive, where records should live, how people get notified, which stages to automate and how the decision should be made.
 
 <Figure
-  src="/posts/n8n-ai-assistant-first-impressions/prompt-skeleton-process.png"
+  src="/posts/n8n-ai-assistant-first-impressions/prompt-skeleton-process.webp"
   className="block w-full mx-auto max-w-2xl h-auto rounded-lg ring-1 ring-gold/10"
   alt="The n8n AI assistant chat: a one-line brief about a university admissions team, then the assistant's clarifying questions with the answers, an n8n-hosted form, the built-in n8n Data Table, Slack for staff and email for applicants, the stages to automate and a mix of auto-screen then human decision."
   caption="The plain-language front door: one line in, then the assistant interrogates the brief before it builds anything."
@@ -102,7 +102,7 @@ The clearest way to show what it built is to follow a single application through
 
 <ProcessStep
   title="Application submitted"
-  image="/posts/n8n-ai-assistant-first-impressions/step1-application-form.png"
+  image="/posts/n8n-ai-assistant-first-impressions/step1-application-form.webp"
   imageClassName="mx-auto max-w-[240px]"
   imageAlt="A filled-in Degree Programme Application form hosted on n8n Cloud, applying to BSc Computer Science, with fields for name, email, phone, programme, highest qualification and overall score, plus an academic transcript PDF upload."
   caption="The test application form the assistant generated."
@@ -114,7 +114,7 @@ The applicant fills in the n8n-hosted form: name, contact details, programme, hi
 
 <ProcessStep
   title="Transcript read and verified"
-  image="/posts/n8n-ai-assistant-first-impressions/llm-steps.png"
+  image="/posts/n8n-ai-assistant-first-impressions/llm-steps.webp"
   imageClassName="mx-auto max-w-md"
   imageAlt="Two n8n AI nodes in sequence, AI Extract Transcript and Compare and Verify, each wired to its own DeepSeek model beneath it, all four showing green completion ticks."
   caption="The two AI steps, each with its own DeepSeek model attached."
@@ -126,7 +126,7 @@ Two AI steps take over. The first extracts the content from the uploaded transcr
 
 <ProcessStep
   title="Screened and summarised to Slack"
-  image="/posts/n8n-ai-assistant-first-impressions/slack-application-summary.png"
+  image="/posts/n8n-ai-assistant-first-impressions/slack-application-summary.webp"
   imageClassName="mx-auto max-w-lg"
   imageAlt="A Slack message to the admissions team summarising an application: automated checks showing the score meets the minimum and the required modules are met, a short summary of the personal statement, the full personal statement, the transcript attached and Reject and Make Offer buttons."
   caption="The decision-ready summary in the admissions Slack channel."
@@ -138,7 +138,7 @@ The flow loads the admission rules and matches the application against them: doe
 
 <ProcessStep
   title="Decision, offer and enrolment"
-  image="/posts/n8n-ai-assistant-first-impressions/offer-accept-email.png"
+  image="/posts/n8n-ai-assistant-first-impressions/offer-accept-email.webp"
   imageClassName="mx-auto max-w-sm"
   imageAlt="An offer email to the applicant congratulating them on a place on BSc Computer Science, quoting the application reference, with Decline offer and Accept offer and enrol buttons, footed with the line Automated with n8n."
   caption="The offer email, with accept or decline built in."
@@ -183,7 +183,7 @@ The part that caught my attention was cost. A business analyst has to put a bene
 The execution log fits this neatly. Each test run records the tokens used, both the total for the whole workflow and the count for every AI step.
 
 <Figure
-  src="/posts/n8n-ai-assistant-first-impressions/token-recording.png"
+  src="/posts/n8n-ai-assistant-first-impressions/token-recording.webp"
   alt="The n8n execution log for a workflow run. The left panel lists each node and shows a whole-workflow total of 1,694 tokens. The selected DeepSeek verification node shows its input prompt and an output token breakdown of 127 completion tokens, 532 prompt tokens and 659 total."
   caption="Token usage recorded per run: the whole-workflow total on the left, and the per-step breakdown on the right, here 532 prompt tokens, 127 completion and 659 in total for a single AI step."
 />
@@ -219,7 +219,7 @@ Knowing what a good process looks like, how data should flow, where a human belo
 It will help you across that plumbing, to be fair. When I hit the Slack credentials, I just asked, and it walked me through OAuth2 versus a bot access token and which one each Slack node needs.
 
 <Figure
-  src="/posts/n8n-ai-assistant-first-impressions/using-ai-problem-solve.png"
+  src="/posts/n8n-ai-assistant-first-impressions/using-ai-problem-solve.webp"
   className="block w-full mx-auto max-w-lg h-auto rounded-lg ring-1 ring-gold/10"
   alt="The n8n AI assistant answering a question about setting up Slack API credentials, explaining when to use OAuth2 versus an API access token and which Slack nodes each one suits."
   caption="The assistant doubles as in-context help: here, untangling which Slack credential each node needs. Useful, but you still have to follow the answer."

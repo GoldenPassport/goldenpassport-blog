@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import ReactDOM from "react-dom";
 import "./globals.css";
 import { Header } from "@/components/chrome/Header";
@@ -83,7 +84,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <Header />
-        <main id="main-content" className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">
+          {/* Page changes are transitions in the App Router, so this boundary
+              plays a short fade when the page inside it changes. Only this
+              "update" animates: default="none" keeps other transitions still.
+              The header and footer sit outside and stay put. */}
+          <ViewTransition update="page-swap" default="none">
+            {children}
+          </ViewTransition>
+        </main>
         <Footer />
         <CookieConsent />
         <ConsentedAnalytics />

@@ -24,7 +24,11 @@ export function Header() {
   }));
 
   return (
-    <header className="border-b border-gold/20 bg-cream-50/80 backdrop-blur sticky top-0 z-10">
+    <header
+      className="border-b border-gold/20 bg-cream-50/80 backdrop-blur sticky top-0 z-10"
+      // Named so page transitions leave the header still (see globals.css).
+      style={{ viewTransitionName: "site-header" }}
+    >
       <div className="mx-auto max-w-5xl px-6 py-5 flex items-center justify-between">
         <Link href="/" className="group">
           <BrandResponsive subLabel="Blog" />

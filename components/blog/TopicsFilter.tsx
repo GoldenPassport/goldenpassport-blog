@@ -9,7 +9,7 @@ import Link from "next/link";
  * is active.
  *
  * Collapsed by default: the chip row is clipped to one row's height
- * (`max-h-8`, see COLLAPSED_MAX_PX below). A fade-out gradient hints at
+ * (COLLAPSED_MAX_PX below). A fade-out gradient hints at
  * hidden content. A "Show all topics" toggle expands the row to its
  * natural height; clicking again collapses it.
  *
@@ -18,7 +18,7 @@ import Link from "next/link";
  * categories with few tags don't see a pointless button.
  */
 
-const COLLAPSED_MAX_PX = 32; // must match the `max-h-8` Tailwind class below
+const COLLAPSED_MAX_PX = 32; // one row of chips; the collapsed max-height
 
 export type TopicChip = { label: string; href: string; active: boolean };
 
@@ -32,6 +32,7 @@ export function TopicsFilter({
   const navRef = useRef<HTMLElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [hasOverflow, setHasOverflow] = useState(false);
+  const [fullHeight, setFullHeight] = useState<number | null>(null);
 
   useEffect(() => {
     const el = navRef.current;
@@ -39,7 +40,10 @@ export function TopicsFilter({
     // scrollHeight reports the natural (uncliped) content height, regardless
     // of the max-height we apply. Compare against the collapsed clip target
     // to know whether there's anything hidden.
-    const measure = () => setHasOverflow(el.scrollHeight > COLLAPSED_MAX_PX + 1);
+    const measure = () => {
+      setHasOverflow(el.scrollHeight > COLLAPSED_MAX_PX + 1);
+      setFullHeight(el.scrollHeight);
+    };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
@@ -59,9 +63,10 @@ export function TopicsFilter({
         <nav
           ref={navRef}
           aria-label="Filter by tag"
-          className={`flex flex-wrap items-center gap-1.5 ${
-            expanded ? "" : "max-h-8 overflow-hidden"
-          }`}
+          // max-height animates between the one-row clip and the measured
+          // full height, so Show all / Show fewer open and close smoothly.
+          style={{ maxHeight: expanded && fullHeight ? fullHeight : COLLAPSED_MAX_PX }}
+          className="flex flex-wrap items-center gap-1.5 overflow-hidden transition-[max-height] duration-300 ease-out motion-reduce:transition-none"
         >
           {topics.map(({ label, href, active }) => (
             <Link
@@ -78,10 +83,12 @@ export function TopicsFilter({
             </Link>
           ))}
         </nav>
-        {!expanded && hasOverflow ? (
+        {hasOverflow ? (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-gradient-to-b from-transparent to-cream"
+            className={`pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-gradient-to-b from-transparent to-cream transition-opacity duration-300 ${
+              expanded ? "opacity-0" : "opacity-100"
+            }`}
           />
         ) : null}
       </div>

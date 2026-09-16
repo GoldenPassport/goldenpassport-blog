@@ -41,8 +41,12 @@ export function PostList({ posts, limit }: { posts: PostMeta[]; limit?: number }
   // the page's max-width instead of stranding content in a wide single column.
   return (
     <div className="grid gap-x-12 lg:grid-cols-2">
-      {visible.map((p) => (
-        <PostCard key={p.slug} post={p} read={readSet.has(p.slug)} />
+      {visible.map((p, i) => (
+        // Each card fades up in turn when it first appears: on page load and
+        // when a filter brings new posts in. Capped so long lists never wait.
+        <div key={p.slug} className="list-item-in" style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}>
+          <PostCard post={p} read={readSet.has(p.slug)} />
+        </div>
       ))}
     </div>
   );

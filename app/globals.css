@@ -134,6 +134,98 @@ select:focus-visible {
   }
 }
 
+/* Hero loading shimmer: a soft band of light sweeping across the frame
+   until the image has loaded (see components/blog/HeroImage.tsx). */
+.hero-shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(254, 252, 248, 0) 20%,
+    rgba(254, 252, 248, 0.75) 50%,
+    rgba(254, 252, 248, 0) 80%
+  );
+  background-size: 200% 100%;
+  animation: hero-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes hero-shimmer {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+
+/* Post lists: each card fades up in turn (see components/blog/PostList.tsx). */
+.list-item-in {
+  animation: list-item-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes list-item-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Native <details> (Accordion, ProcessSteps, DesignCard): open and close
+   smoothly by animating the content height. Browsers without
+   ::details-content or interpolate-size simply open instantly, as before. */
+:root {
+  interpolate-size: allow-keywords;
+}
+details::details-content {
+  height: 0;
+  overflow: clip;
+  transition:
+    height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    content-visibility 300ms allow-discrete;
+}
+details[open]::details-content {
+  height: auto;
+}
+
+/* Page transitions (React ViewTransition in app/layout.tsx). The old page
+   fades out quickly, the new one fades in with a slight rise. The header is
+   named and held still, the rest of the document does not crossfade, and
+   clicks pass through while the short animation runs. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+::view-transition-group(.page-swap) {
+  animation-duration: 0s;
+}
+::view-transition-old(.page-swap) {
+  animation: 120ms ease-in both page-fade reverse;
+}
+::view-transition-new(.page-swap) {
+  animation:
+    220ms ease-out 100ms both page-fade,
+    320ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both page-rise;
+}
+@keyframes page-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes page-rise {
+  from { transform: translateY(8px); }
+  to { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 /* Respect users who have asked their OS to reduce motion. */
 @media (prefers-reduced-motion: reduce) {
   html {
