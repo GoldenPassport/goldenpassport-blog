@@ -22,13 +22,13 @@ import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-// sharp lives inside pnpm's store (as a Next.js dependency); resolve it
-// explicitly so the script works whether or not sharp is hoisted.
+// sharp is a Next.js dependency inside pnpm's store; resolve it through Next
+// so the script keeps working when either package is upgraded.
 function loadSharp() {
   try {
     return require("sharp");
   } catch {
-    return require(path.join(ROOT, "node_modules/.pnpm/sharp@0.34.5/node_modules/sharp"));
+    return createRequire(require.resolve("next/package.json"))("sharp");
   }
 }
 const sharp = loadSharp();
