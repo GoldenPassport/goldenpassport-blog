@@ -62,46 +62,6 @@ Getting it working is only the start. This walkthrough follows twelve test conve
 
 </TickList>
 
-## Before you start
-
-- **n8n 2.x**, cloud or self-hosted. The Guardrails node, Data Tables and Evaluations all need a recent release. The workflows were built and run on n8n cloud 2.39.
-- **A DeepSeek credential** for the two chat models, configured here as deepseek-flash. Check the available model names when importing. The series aims to use the same model where possible, keeping token costs low and the comparison consistent.
-- **A Slack workspace** you can add a bot to, for the two approval steps, with a channel called #concierge-approvals. Other review channels are possible, but their response fields and decision records need adapting.
-- **[The repository](https://github.com/GoldenPassport/digital-branch-concierge)**, which holds the five workflow files, the four demo customers, the knowledge documents and the twelve test conversations. It is linked in Setup files below.
-
-Use the supplied demo records, not real customer data. This is a learning build, not a production banking service or a certification of regulatory compliance. Model responses may vary, so compare each run with the expected route rather than expecting identical wording.
-
-## Setup files
-
-The files below reproduce the build tested on n8n cloud 2.39 with DeepSeek, Slack and Data Tables. Follow the setup first, then use the Observations steps and scorecard to inspect the recorded results.
-
-<DownloadCallout
-  href="https://github.com/GoldenPassport/digital-branch-concierge"
-  title="Digital branch concierge on GitHub"
->
-  Clone or download the five workflows, the demo data, the knowledge documents and the README.
-</DownloadCallout>
-
-<Accordion title="Files">
-
-Everything in the repository, file by file.
-
-<div className="overflow-x-auto" role="region" aria-label="Project files" tabIndex={0}>
-
-| File | Where | What it is for |
-| --- | --- | --- |
-| README.md | repository root | What the series is and how the repository is laid out |
-| README.md | n8n | Setup and import guide for the n8n build |
-| 01 to 04 skill workflows | n8n/workflows | The four bounded skills, each with its authorisation check as the first node after the trigger |
-| 05-concierge-main.json | n8n/workflows | The outer process: triggers, identification, guardrails, agent, gate, human decision, decision record, replies and evaluation |
-| customers.csv | shared/data | Four demo customers with flags (open complaint, vulnerability) |
-| fees-and-product-terms.md, branch-policies-and-faqs.md | shared/knowledge | What the concierge may answer from |
-| test-conversations.csv | shared/evaluations | Twelve conversations with the expected route |
-
-</div>
-
-</Accordion>
-
 ## The shape on the canvas
 
 The article's diagram maps onto five workflows.
@@ -149,6 +109,46 @@ Two vocabulary points help when moving between the article and n8n.
 **Skills.** n8n's "skills" template uses the Agent Skills convention: instruction files pulled from a repository into the system prompt to guide how the model approaches a task. Here, skills are bounded sub-workflows that control what the model can do. The two approaches are complementary: instruction skills guide behaviour; sub-workflow skills limit reach.
 
 **Human review.** The approval before a tool runs is n8n's native human review step, added from the agent node's Tools panel (n8n 2.6 and later). It sits between the agent and the tool, so the reviewer sees the proposed call before the skill runs. This demo uses it before the contact-detail skill, which changes customer data.
+
+## Before you start
+
+- **n8n 2.x**, cloud or self-hosted. The Guardrails node, Data Tables and Evaluations all need a recent release. The workflows were built and run on n8n cloud 2.39.
+- **A DeepSeek credential** for the two chat models, configured here as deepseek-flash. Check the available model names when importing. The series aims to use the same model where possible, keeping token costs low and the comparison consistent.
+- **A Slack workspace** you can add a bot to, for the two approval steps, with a channel called #concierge-approvals. Other review channels are possible, but their response fields and decision records need adapting.
+- **[The repository](https://github.com/GoldenPassport/digital-branch-concierge)**, which holds the five workflow files, the four demo customers, the knowledge documents and the twelve test conversations. It is linked in Setup files below.
+
+Use the supplied demo records, not real customer data. This is a learning build, not a production banking service or a certification of regulatory compliance. Model responses may vary, so compare each run with the expected route rather than expecting identical wording.
+
+## Setup files
+
+The files below reproduce the build tested on n8n cloud 2.39 with DeepSeek, Slack and Data Tables. Follow the setup first, then use the Observations steps and scorecard to inspect the recorded results.
+
+<DownloadCallout
+  href="https://github.com/GoldenPassport/digital-branch-concierge"
+  title="Digital branch concierge on GitHub"
+>
+  Clone or download the five workflows, the demo data, the knowledge documents and the README.
+</DownloadCallout>
+
+<Accordion title="Files">
+
+Everything in the repository, file by file.
+
+<div className="overflow-x-auto" role="region" aria-label="Project files" tabIndex={0}>
+
+| File | Where | What it is for |
+| --- | --- | --- |
+| README.md | repository root | What the series is and how the repository is laid out |
+| README.md | n8n | Setup and import guide for the n8n build |
+| 01 to 04 skill workflows | n8n/workflows | The four bounded skills, each with its authorisation check as the first node after the trigger |
+| 05-concierge-main.json | n8n/workflows | The outer process: triggers, identification, guardrails, agent, gate, human decision, decision record, replies and evaluation |
+| customers.csv | shared/data | Four demo customers with flags (open complaint, vulnerability) |
+| fees-and-product-terms.md, branch-policies-and-faqs.md | shared/knowledge | What the concierge may answer from |
+| test-conversations.csv | shared/evaluations | Twelve conversations with the expected route |
+
+</div>
+
+</Accordion>
 
 ## Build it
 
