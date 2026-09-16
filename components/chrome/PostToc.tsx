@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useFocusTrap } from "@/lib/use-focus-trap";
+import { usePresence } from "@/lib/use-presence";
 
 /**
  * Table of contents for long-form posts with two presentations:
@@ -47,6 +48,7 @@ export function PostToc() {
   // its dot on, off, then on again as the page scrolls there.
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const sheet = usePresence(isSheetOpen, 300);
   const [footerVisible, setFooterVisible] = useState(false);
   const sheetRef = useRef<HTMLDivElement>(null);
   const sheetTriggerRef = useRef<HTMLButtonElement>(null);
@@ -291,8 +293,8 @@ export function PostToc() {
         </svg>
       </button>
 
-      {/* ---------- Mobile sheet (below xl, only rendered when open) ---------- */}
-      {isSheetOpen ? (
+      {/* ---------- Mobile sheet (below xl, rendered while open or closing) ---------- */}
+      {sheet.mounted ? (
         <div
           ref={sheetRef}
           className="xl:hidden fixed inset-0 z-40"
@@ -307,10 +309,10 @@ export function PostToc() {
             tabIndex={-1}
             aria-label="Close table of contents"
             onClick={() => setIsSheetOpen(false)}
-            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+            className={`absolute inset-0 bg-ink/40 backdrop-blur-sm transition-opacity duration-300 ease-out ${sheet.shown ? "opacity-100" : "pointer-events-none opacity-0"}`}
           />
           {/* Sheet */}
-          <div className="absolute left-0 right-0 bottom-0 bg-cream-50 border-t border-gold/30 rounded-t-xl shadow-xl p-6 max-h-[80vh] overflow-y-auto">
+          <div className={`absolute left-0 right-0 bottom-0 bg-cream-50 border-t border-gold/30 rounded-t-xl shadow-xl p-6 max-h-[80vh] overflow-y-auto transition-transform duration-300 ease-out ${sheet.shown ? "translate-y-0" : "translate-y-full"}`}>
             <header className="flex items-center justify-between mb-4">
               <p className="pl-7 text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold">
                 On this page

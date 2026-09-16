@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { usePresence } from "@/lib/use-presence";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useFocusTrap } from "@/lib/use-focus-trap";
@@ -58,6 +59,7 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const presence = usePresence(open);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -180,12 +182,12 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
         <SearchIcon />
       </button>
 
-      {mounted && open
+      {mounted && presence.mounted
         ? createPortal(
         <div
           role="presentation"
           onClick={() => setOpen(false)}
-          className="fixed inset-0 z-50 flex items-start justify-center bg-ink/40 backdrop-blur-sm p-4 pt-[12vh]"
+          className={`fixed inset-0 z-50 flex items-start justify-center bg-ink/40 backdrop-blur-sm p-4 pt-[12vh] transition-opacity duration-200 ease-out ${presence.shown ? "opacity-100" : "pointer-events-none opacity-0"}`}
         >
           <div
             ref={dialogRef}
@@ -193,7 +195,7 @@ export function SiteSearch({ posts }: { posts: SearchDoc[] }) {
             aria-modal="true"
             aria-label="Search posts"
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-xl overflow-hidden rounded-xl border border-gold/25 bg-cream-50 shadow-2xl ring-1 ring-gold/10"
+            className={`w-full max-w-xl overflow-hidden rounded-xl border border-gold/25 bg-cream-50 shadow-2xl ring-1 ring-gold/10 transition duration-200 ease-out ${presence.shown ? "translate-y-0 scale-100 opacity-100" : "-translate-y-2 scale-[0.98] opacity-0"}`}
           >
             {/* Search input row */}
             <div className="flex items-center gap-3 border-b border-gold/20 px-4">

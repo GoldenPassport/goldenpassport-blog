@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePresence } from "@/lib/use-presence";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 
 /**
@@ -34,6 +35,7 @@ export function RecommendModal({
 }) {
   const storageKey = `gp-recommend-dismissed:${fromSlug}`;
   const [open, setOpen] = useState(false);
+  const { mounted, shown } = usePresence(open);
   const dialogRef = useRef<HTMLDivElement>(null);
   const primaryRef = useRef<HTMLAnchorElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -84,11 +86,11 @@ export function RecommendModal({
     };
   }, [open, close]);
 
-  if (!open) return null;
+  if (!mounted) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-ink/60 backdrop-blur-sm p-4"
+      className={`fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-ink/60 backdrop-blur-sm p-4 transition-opacity duration-200 ease-out ${shown ? "opacity-100" : "pointer-events-none opacity-0"}`}
       onClick={close}
     >
       <div
@@ -98,7 +100,7 @@ export function RecommendModal({
         aria-labelledby="recommend-heading"
         aria-describedby="recommend-reason"
         onClick={(e) => e.stopPropagation()}
-        className="not-prose w-full max-w-lg rounded-2xl bg-cream shadow-2xl ring-1 ring-gold/30 overflow-hidden font-sans"
+        className={`not-prose w-full max-w-lg rounded-2xl bg-cream shadow-2xl ring-1 ring-gold/30 overflow-hidden font-sans transition duration-200 ease-out ${shown ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"}`}
       >
         {image ? (
           // eslint-disable-next-line @next/next/no-img-element

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusTrap } from "@/lib/use-focus-trap";
+import { usePresence } from "@/lib/use-presence";
 
 /**
  * Drop-in replacement for `<img>` in MDX content. Renders the image inline
@@ -30,6 +31,7 @@ type Props = React.ImgHTMLAttributes<HTMLImageElement>;
 // the lightbox still opens the original `src`.
 export function MdxImage({ src, alt, className, loading = "lazy", decoding = "async", children, ...rest }: Props) {
   const [open, setOpen] = useState(false);
+  const { mounted, shown } = usePresence(open);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -84,21 +86,21 @@ export function MdxImage({ src, alt, className, loading = "lazy", decoding = "as
         )}
       </button>
 
-      {open ? (
+      {mounted ? (
         <div
           ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={alt || "Enlarged image"}
           onClick={close}
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/80 backdrop-blur-sm p-4 sm:p-8 cursor-zoom-out"
+          className={`fixed inset-0 z-[60] flex items-center justify-center bg-ink/80 backdrop-blur-sm p-4 sm:p-8 cursor-zoom-out transition-opacity duration-200 ease-out ${shown ? "opacity-100" : "pointer-events-none opacity-0"}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={typeof src === "string" ? src : undefined}
             alt={alt ?? ""}
             onClick={(e) => e.stopPropagation()}
-            className="max-w-full max-h-full w-auto h-auto rounded-lg shadow-2xl cursor-default"
+            className={`max-w-full max-h-full w-auto h-auto rounded-lg shadow-2xl cursor-default transition-transform duration-200 ease-out ${shown ? "scale-100" : "scale-[0.97]"}`}
           />
           <button
             ref={closeRef}

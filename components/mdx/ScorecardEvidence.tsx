@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useFocusTrap } from "@/lib/use-focus-trap";
+import { usePresence } from "@/lib/use-presence";
 
 /** The "Evidence" button and the dialog it opens. Escape, the close button or
  *  a backdrop click closes it, and focus returns to the button. */
@@ -11,6 +12,7 @@ export function EvidenceButton({ title, children }: { title: string; children: R
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const headingId = useId();
+  const { mounted, shown } = usePresence(open);
 
   useFocusTrap(dialogRef, open);
   const close = useCallback(() => setOpen(false), []);
@@ -50,15 +52,15 @@ export function EvidenceButton({ title, children }: { title: string; children: R
         Evidence
       </button>
 
-      {open ? (
-        <div className="fixed inset-0 z-[70] flex items-end justify-center bg-ink/60 p-4 backdrop-blur-sm sm:items-center" onClick={close}>
+      {mounted ? (
+        <div className={`fixed inset-0 z-[70] flex items-end justify-center bg-ink/60 p-4 backdrop-blur-sm transition-opacity duration-200 ease-out sm:items-center ${shown ? "opacity-100" : "pointer-events-none opacity-0"}`} onClick={close}>
           <div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={headingId}
             onClick={(e) => e.stopPropagation()}
-            className="flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-cream shadow-2xl ring-1 ring-gold/30"
+            className={`flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-cream shadow-2xl ring-1 ring-gold/30 transition duration-200 ease-out ${shown ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-[0.98] opacity-0"}`}
           >
             <div className="flex items-start justify-between gap-4 border-b border-gold/20 px-6 py-4">
               <div>
