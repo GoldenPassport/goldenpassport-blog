@@ -23,10 +23,17 @@ import { EvidenceButton } from "./ScorecardEvidence";
  *   </Scorecard>
  *
  * Desktop shows three columns with headers; phones stack each row as a card.
+ *
+ * In plan mode, `scoreColumn` adds a narrow column of scores from a finished
+ * build (for example the n8n demo), filled by each row's `toolScore`:
+ *
+ *   <Scorecard plan scoreColumn={{ label: "n8n", href: "/blog/some-demo#scorecard" }}>
+ *   <ScorecardRow concern="Drift." answer="..." toolScore={7} />
  */
 export function Scorecard({
   plan = false,
   answerLabel,
+  scoreColumn,
   children,
 }: {
   /** Plan mode: concern and answer only, no verdict column. Use it where the
@@ -34,17 +41,31 @@ export function Scorecard({
   plan?: boolean;
   /** Header for the answer column. */
   answerLabel?: string;
+  /** Plan mode only: a score column for one finished build, linked to its page. */
+  scoreColumn?: { label: string; href?: string };
   children: React.ReactNode;
 }) {
+  const scored = plan && scoreColumn;
   return (
     <div className="not-prose my-10 overflow-hidden rounded-xl border border-gold/30 bg-cream-50 ring-1 ring-gold/10 font-sans">
       <div
-        aria-hidden="true"
-        className={`hidden md:grid ${plan ? PLAN_COLS : VERDICT_COLS} gap-6 border-b border-gold/25 bg-gold/[0.07] px-6 py-3 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-gold-deep`}
+        aria-hidden={scored ? undefined : true}
+        className={`hidden md:grid ${scored ? PLAN_SCORE_COLS : plan ? PLAN_COLS : VERDICT_COLS} gap-6 border-b border-gold/25 bg-gold/[0.07] px-6 py-3 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-gold-deep`}
       >
         <span>Business concern</span>
         <span>{answerLabel ?? (plan ? "Technical answer" : "Technical answer in this build")}</span>
         {plan ? null : <span>Position and evidence</span>}
+        {scored ? (
+          <span className="text-center normal-case tracking-[0.08em]">
+            {scoreColumn.href ? (
+              <a href={scoreColumn.href} className="underline decoration-gold-deep/40 underline-offset-4 hover:decoration-gold-deep">
+                {scoreColumn.label}
+              </a>
+            ) : (
+              scoreColumn.label
+            )}
+          </span>
+        ) : null}
       </div>
       <ul className="m-0 list-none divide-y divide-gold/20 p-0">{children}</ul>
     </div>
@@ -55,6 +76,7 @@ type Verdict = "pass" | "partial" | "fail";
 
 const VERDICT_COLS = "md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.5fr)_minmax(0,1.25fr)]";
 const PLAN_COLS = "md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)]";
+const PLAN_SCORE_COLS = "md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)_5.5rem]";
 
 const VERDICT = {
   pass: { label: "Pass", pill: "bg-emerald-700 text-cream", ring: "ring-emerald-700/25 bg-emerald-50/60" },
@@ -101,6 +123,8 @@ export function ScorecardRow({
   plus,
   minus,
   evidenceTitle,
+  toolScore,
+  toolLabel,
   children,
 }: {
   concern: string;
@@ -112,11 +136,17 @@ export function ScorecardRow({
   plus?: string;
   minus?: string;
   evidenceTitle?: string;
+  /** Plan rows only: this concern's score in the finished build named by the
+   *  scorecard's `scoreColumn`. */
+  toolScore?: number;
+  /** Name of that build, used for the phone layout and screen readers. */
+  toolLabel?: string;
   children?: React.ReactNode;
 }) {
   const v = verdict ? VERDICT[verdict] : null;
+  const hasToolScore = !v && toolScore !== undefined;
   return (
-    <li className={`grid gap-4 px-5 py-6 ${v ? VERDICT_COLS : PLAN_COLS} md:gap-6 md:px-6`}>
+    <li className={`grid gap-4 px-5 py-6 ${v ? VERDICT_COLS : hasToolScore ? PLAN_SCORE_COLS : PLAN_COLS} md:gap-6 md:px-6`}>
       <div>
         <p className="m-0 font-serif text-lg font-semibold leading-snug text-ink">{concern}</p>
         {question ? <p className="m-0 mt-1 font-serif text-base italic leading-snug text-ink-mute">{question}</p> : null}
@@ -128,6 +158,19 @@ export function ScorecardRow({
         </p>
         <p className="m-0 font-serif text-base leading-relaxed text-ink-soft">{answer}</p>
       </div>
+
+      {hasToolScore ? (
+        <p
+          className="m-0 flex items-baseline gap-2 leading-none md:justify-center md:pt-0.5"
+          aria-label={`${toolLabel ?? "Build"} score ${toolScore} out of 10`}
+        >
+          <span className="text-[0.6875rem] font-semibold tracking-[0.08em] text-gold-deep md:hidden">
+            {toolLabel ?? "Score"}
+          </span>
+          <span className={`font-serif text-3xl font-semibold tabular-nums ${scoreTone(toolScore)}`}>{toolScore}</span>
+          <span className="text-sm font-semibold text-ink-mute">/10</span>
+        </p>
+      ) : null}
 
       {v && verdict ? (
       <div className={`rounded-lg p-4 ring-1 ${v.ring}`}>

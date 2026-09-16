@@ -27,6 +27,7 @@ function withCode(text: string) {
 
 export function TestConversation({ testId, message, expect, children }: ConversationProps) {
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
@@ -35,13 +36,14 @@ export function TestConversation({ testId, message, expect, children }: Conversa
   const spoken = tag ? message.replace(CUSTOMER_TAG, "") : message;
 
   const handleCopy = async () => {
+    setCopyFailed(false);
     try {
       await navigator.clipboard.writeText(message);
       setCopied(true);
       window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      // The message stays selectable if clipboard access is unavailable.
+      setCopyFailed(true);
     }
   };
 
@@ -80,6 +82,11 @@ export function TestConversation({ testId, message, expect, children }: Conversa
             {copied ? `${testId} message copied` : ""}
           </span>
         </div>
+        {copyFailed ? (
+          <p role="status" className="mt-2 font-sans text-sm text-ink-soft">
+            Clipboard access is unavailable. Select the message above and copy it manually.
+          </p>
+        ) : null}
         <div className="prose mt-2 max-w-none font-serif text-[1.0625rem] leading-relaxed text-ink-soft [&_p]:m-0 [&_strong]:text-ink">
           {expect ? (
             <p>

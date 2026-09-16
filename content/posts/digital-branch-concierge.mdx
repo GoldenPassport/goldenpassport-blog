@@ -6,7 +6,7 @@ unlisted: false
 group: "digital-branch-concierge"
 groupLabel: "Article"
 groupOrder: 1
-excerpt: "One digital service concierge, being built in n8n, Camunda and LangGraph to test how agentic AI can work safely inside a European enterprise process."
+excerpt: "One digital service concierge, being built in n8n, LangGraph and Camunda to test how agentic AI can work safely inside a European enterprise process."
 tags:
   - Agentic AI
   - Automated Decision-Making
@@ -20,8 +20,8 @@ tags:
   - Guardrails
   - Process Orchestration
   - Banking
-hero: "/posts/digital-branch-concierge/structure-edges-freedom-middle.svg"
-heroAlt: "Structure at the edges, freedom in the middle: deterministic process orchestration outside, bounded skills inside and the agent in between, with a deterministic impact and policy gate before the outcome."
+hero: "/posts/digital-branch-concierge/branch-concierge-welcome.png"
+heroAlt: "A bank branch concierge stands at the entrance, welcoming a customer and offering help with a tablet, while other customers use cash machines and wait at the counter."
 ogImage: "/posts/digital-branch-concierge/og.png"
 ---
 
@@ -33,14 +33,14 @@ ogImage: "/posts/digital-branch-concierge/og.png"
     href="/blog/digital-branch-concierge-n8n-demo"
   />
   <DemoLink
-    tool="Camunda"
-    title="The boundary drawn on the diagram"
-    blurb="BPMN outer process, AI Agent Task inside an ad-hoc sub-process, user tasks for every human decision."
-  />
-  <DemoLink
     tool="LangGraph"
     title="The engineer's version"
     blurb="Typed state graph, bound tools with risk ratings, interrupt and checkpointer for the human line."
+  />
+  <DemoLink
+    tool="Camunda"
+    title="The boundary drawn on the diagram"
+    blurb="BPMN outer process, AI Agent Task inside an ad-hoc sub-process, user tasks for every human decision."
   />
 </DemoLinks>
 
@@ -54,7 +54,7 @@ So why do so many enterprise AI assistants still stop at the greeting?
 
 This article is for architects, business analysts, process owners and engineers across European organisations who are being asked to put an agent inside a real process. The bank branch is the worked example, not the boundary of the argument. Its handovers are visible and its work ranges from routine administration to significant decisions. The same design problem appears in healthcare, employment, education, insurance, utilities, public services and many other sectors.
 
-At heart this is a technical comparison of one service agent built three ways. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n, Camunda and LangGraph because each tool draws the line between workflow and agent in a different place. The n8n build is finished. Its follow-along demo is linked above and its files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). Camunda and LangGraph are still to come, so treat the comparison here as the design argument with one build behind it.
+At heart this is a technical comparison of one service agent built three ways. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n, LangGraph and Camunda because each tool draws the line between workflow and agent in a different place. The n8n build is finished. Its follow-along demo is linked above and its files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). LangGraph and Camunda are still to come, so treat the comparison here as the design argument with one build behind it.
 
 It also takes enterprise hesitation seriously. McKinsey's 2026 State of AI survey found that nearly nine in ten organisations use AI somewhere and 47 per cent are scaling chatbots across the enterprise, yet only about two in ten are scaling AI agents. My working hypothesis, and it is an inference rather than a survey finding, is that this gap is more than the normal lag of a new technology. Organisations are comfortable letting AI talk, but far less comfortable letting it act. The survey hints at what unlocks adoption: its small group of high performers is much more likely to redesign workflows around AI and actively manage AI risk. That is the process-orchestration thesis of this article in survey form.
 
@@ -72,27 +72,21 @@ A workflow runs the model along paths drawn in advance: classify, look up, draft
 
 <ScrollCard number="02" title="The objections, and the law behind them">
 
-A model cannot own an outcome, answer a regulator or exercise professional judgement. Across the EU, GDPR applies to solely automated decisions with legal or similarly significant effects. The AI Act adds human oversight, logging and explanation duties for high-risk uses, while sector rules sharpen the obligation for a hospital, employer, university, public body, insurer or bank. The practical question is not simply whether a process contains AI. It is where the consequential decision is made, what the agent may do around it and who can intervene.
+A model cannot own an outcome, answer a regulator or exercise professional judgement. Across the EU, GDPR applies to solely automated decisions with legal or similarly significant effects. The AI Act adds human oversight and logging duties for high-risk uses, and in defined cases a right to an explanation, while sector rules sharpen the obligation for a hospital, employer, university, public body, insurer or bank. The practical question is not simply whether a process contains AI. It is where the consequential decision is made, what the agent may do around it and who can intervene.
 
 </ScrollCard>
 
 <ScrollCard number="03" title="The prescribed elements">
 
-A well-built agent is not a free-for-all. Around it sits a process orchestration wrapper: a deterministic, modelled process that owns every human task, draws the ADM line and keeps the lineage of what happened. Inside it sit skills: bounded, typed, risk-rated capabilities such as print a statement or book an appointment, which the agent may call but never rewrite. The agent's freedom lives between those two, and it is safe precisely because it is bounded on both sides.
+A well-built agent is not a free-for-all. Around it sits a deterministic process that owns every human task and the ADM line. Inside it sit governed skills, such as print a statement, that the agent may call but not modify. The agent's freedom lives between the two.
 
 </ScrollCard>
 
 </ScrollCards>
 
-My working answer is the headline. Structure at the edges, freedom in the middle.
+My working answer is the headline. Structure at the edges, freedom in the middle. I call the result **Enterprise Agency**: agentic AI an enterprise can stand behind, because it is free to act and still accountable for what it does.
 
 ## What the "branch concierge" actually does
-
-<FigureAside
-  src="/posts/digital-branch-concierge/branch-concierge-welcome.png"
-  alt="A bank branch concierge stands at the entrance, welcoming the customer and offering help with a tablet. Customers use cash machines on the left, while others wait for staff at the counter on the right."
-  caption="The branch concierge meets the customer first, handles the straightforward requests and makes sure anything else reaches the right person with the context already gathered."
->
 
 Strip the role back and it is four jobs:
 
@@ -100,8 +94,6 @@ Strip the role back and it is four jobs:
 - **Answer.** Deal with the questions that have a known answer: opening hours, what documents to bring, where a payment has got to.
 - **Do it yourself.** Handle the small, safe tasks on the spot: print a statement, update a phone number, book an appointment.
 - **Hand over well.** For anything that needs a specialist, such as a teller, mortgage adviser or complaints handler, take the customer there with the context already gathered, so they do not start from scratch.
-
-</FigureAside>
 
 The outcome is warm and personal, and above all fast: people are served more quickly and with less confusion, and specialists only see the cases that need them. That is the bar for the digital version too.
 
@@ -119,41 +111,42 @@ I group the picture slightly differently. The left column is workflows and the r
 
 The pattern names in that picture are Anthropic's, and every one of the three tools implements them under its own labels. They are collected here for reference, each with its concierge example, so the rest of the article can use the names without stopping to define them.
 
-<Accordion title="The augmented LLM, Anthropic's agent loop and the five workflow patterns, applied to the concierge">
+<Accordion title="Enterprise Agency: Anthropic's agent loop and five workflow patterns, applied to the concierge">
 
 <AgentWorkflowEquation />
 
 </Accordion>
 
-The shape I think works is a sandwich, not a dial. On the outside sits deterministic process orchestration, owning every human task and the line where automated decision-making stops. That is where accountability lives, with a named decision owner and an audit trail. On the inside sit skills, bounded capabilities with defined inputs, outputs and risk ratings that the agent can call but not rewrite. Between them, the agent has real leeway to reason, choose, loop and adapt until the goal is reached.
+The shape I think works is a sandwich, not a dial. On the outside sits deterministic process orchestration, owning every human task and the line where automated decision-making stops. That is where accountability lives, with a named decision owner and an audit trail. On the inside sit governed skills: bounded capabilities with defined inputs, outputs and risk ratings that the agent can call but not rewrite. Between them, the agent has real leeway to reason, choose, loop and adapt until the goal is reached.
 
-The freedom in the middle is safe precisely because it is bounded on both sides. The agent can be as dynamic as you like, because anything it changes goes through a skill, anything it reaches directly is read-only and all of it runs inside a process that has already decided what it is allowed to decide.
+The freedom in the middle is controllable because it is bounded on both sides, provided those bounds are enforced and tested. The agent can adapt its steps freely, because anything it changes goes through a skill, anything it reaches directly is read-only and all of it runs inside a process that has already decided what it is allowed to decide.
 
-Two gates guard different risks. Pre-action authorisation checks every proposed skill or tool call against its risk rating, relevant flags and the session's permissions before it runs. Anything high-risk, unknown or unauthorised stops there. The impact and policy gate then decides whether the result or communication needs a person before it reaches the individual. The first stops actions. The second stops outcomes. Both fail safe, so a missing or unrecognised classification routes to review rather than straight through.
+Two gates guard different risks. Pre-action authorisation checks every proposed skill or tool call against its risk rating, relevant flags and the session's permissions before it runs. Anything high-risk, unknown or unauthorised stops there, and the refusal goes back to the agent as a result to reason about. The impact and policy gate then decides whether a result or communication needs a person before it reaches the individual. The first stops actions. The second stops outcomes. Both fail safe, so a missing or unrecognised classification is refused or routed to review, never waved through.
+
+The design also has to get better over time without the agent teaching itself. Every run leaves a trace: the tools it chose, the sequences of steps that worked, the questions its knowledge could not answer. A learning loop on the outer band reads those traces, and a person reviews what should change. Any change is run against the evaluation set and only then promoted. A route that keeps working becomes a known path or a new skill, a gap becomes approved knowledge and a confusing tool gets a better description. The freedom in the middle finds the improvements. The structure at the edges decides which ones become permanent.
 
 <Figure
   src="/posts/digital-branch-concierge/structure-edges-freedom-middle.svg"
-  alt="Three nested layers with a customer request entering on the left as a process chevron. The agent's output leaves the middle band on the right and flows directly to the outcome chevron for straight-through items, while items that need review are escalated to a human decision and only then reach the outcome. A model symbol sits at the centre of the reason, act, observe loop. The outer band, process orchestration, owns human accountability and the automated decision-making line, along with process lineage and business observability. The inner core, skills, holds bounded, risk-rated capabilities such as print statement, fetch balance, book appointment and update contact details, reached from the agent through known paths, and beneath it a read-only tools layer reached via MCP and a knowledge layer reached via RAG, both through dynamic path discovery. Between them the agent reasons, acts and observes in a loop, and its output passes through a deterministic impact and policy gate on the outer band: straight-through items go directly to the outcome, items that need review go to a named decision owner for meaningful human review first."
+  alt="Three nested layers with a customer request entering on the left as a process chevron. The agent's output leaves the middle band on the right and passes through a deterministic impact and policy gate, the ADM? diamond on the outer band: straight-through items flow directly to the outcome chevron, while items that need review go up to a named decision owner for meaningful human review and only then reach the outcome. A model symbol sits at the centre of the reason, act, observe loop, with an Authorised? badge on act: only authorised calls run, and a refusal is a result the agent observes and reasons about again. The outer band, process orchestration, owns human accountability and the automated decision-making line, along with process lineage and business observability. The inner core, skills, holds bounded, typed, risk-rated capabilities the agent cannot modify, such as print statement, fetch balance, book appointment and update contact details, reached from the agent through known paths, and beneath it a read-only tools layer reached via MCP and a knowledge layer reached via RAG, both through dynamic step discovery. Traces from the output feed a learning loop box on the outer band below the gate, where changes are reviewed and evaluated before a dashed approved updates arrow promotes them back into skills, tools and knowledge."
   download="/posts/digital-branch-concierge/structure-edges-freedom-middle.svg"
   downloadLabel="Open full-size SVG"
-  caption="Structure at the edges, freedom in the middle: deterministic process orchestration outside, skills inside and dynamic agency in the middle. The agent's output passes through a deterministic impact and policy gate. Answers and low-risk tasks go straight through, while anything the law or organisational policy says needs a person goes to a named decision owner for meaningful human review before it becomes the outcome."
+  caption="Structure at the edges, freedom in the middle: a deterministic process outside, governed skills inside and dynamic agency in the middle. The agent's output passes through a deterministic impact and policy gate. Answers and low-risk tasks go straight through, while anything the law or organisational policy says needs a person goes to a named decision owner for meaningful human review before it becomes the outcome. A learning loop on the outer band reviews and evaluates what the traces reveal, then promotes approved updates back into skills, tools and knowledge."
 />
 
-<Accordion title="The diagram, element by element: process orchestration, the agent loop, skills, tools, knowledge and the gates">
+<Accordion title="A run-through of the diagram's elements">
 
-- **Process orchestration.** The outer band. A deterministic, modelled process, BPMN or its equivalent, that owns identity checks, every human task, the impact and policy gate and the record of what happened. This is where human accountability, the ADM line and process lineage live.
-- **The agent.** The middle band. The model plus its loop, its memory for the session and the routes to skills, tools and knowledge, free to choose its next step until the goal is reached or a runtime limit stops it. Its freedom is real, and it is bounded on every side.
-- **The agent loop: reason, act, observe (RAO).** The three circles, and the pattern every agent framework implements under its own name. It descends from ReAct, the reason-and-act prompting method from Yao and colleagues in 2022, which showed that interleaving reasoning with tool calls beats doing either alone. Reason: the model reads the goal, the conversation so far and what it has learned, and decides what to do next. Act: it calls a skill or a tool. Observe: it reads what came back and folds it into the next round of reasoning. The loop runs until the model judges the goal met, the customer is handed over or a set limit on iterations, time or cost stops it. Every turn is traced, which is what the outer band's lineage is built from.
-- **Skills.** The inner core. Bounded, business-meaningful units such as print a statement or book an appointment, each with a typed input, a typed output and a risk rating, built from one or more tools plus the rules around them. The agent can call a skill but never rewrite it. Anything that changes data goes through a skill, and it is the skill you test and audit as a unit, because the skill is what the business recognises.
-- **Tools.** Single actions the model can call: a name, a description and a typed input, such as get_balance. The platform runs it and returns the result. On this design the tools the agent reaches directly are read-only. Writes happen only inside skills.
+- **Process orchestration.** The outer band. A deterministic, modelled process, BPMN or its equivalent, that owns identity checks, every human task, the impact and policy gate, the learning loop and the record of what happened. This is where human accountability, the ADM line and process lineage live.
+- **The agent.** The middle band. The model plus its loop, its memory for the session and its routes: known paths to skills and dynamic step discovery across tools and knowledge, free to choose its next step until the goal is reached or a runtime limit stops it. Its freedom is real but bounded on every side.
+- **The agent loop: reason, act, observe (RAO).** The three circles, and the pattern every agent framework implements under its own name. It descends from ReAct, the reason-and-act prompting method from Yao and colleagues in 2022, which showed that interleaving reasoning with tool calls beats doing either alone. Reason: the model reads the goal, the conversation so far and what earlier steps returned, and decides what to do next. Act: it proposes a call to a skill or a tool, which runs only if authorised. Observe: it reads what came back and folds it into the next round of reasoning. The loop runs until the model judges the goal met, the customer is handed over or a set limit on iterations, time or cost stops it. Every turn is traced, which is what the outer band's lineage is built from.
+- **Skills.** The inner core. Bounded, business-meaningful units such as print a statement or book an appointment, each with a typed input, a typed output and a risk rating, built from one or more tools plus the rules around them. Governed does not have to mean deterministic: a skill may use a model inside, but its inputs, outputs, risk rating and owner are fixed. The agent can call a skill but cannot modify it. Skills change only through the reviewed learning loop and change management. Anything that changes data goes through a skill. The skill is what you test and audit as a unit, because it is what the business recognises.
+- **Tools.** A single action the model can call: a name, a description and a typed input, such as get_balance. The platform runs it and returns the result. In this design the tools the agent reaches directly are read-only. Writes happen only inside skills.
 - **MCP.** The Model Context Protocol, the open standard for how tools are plugged in. An MCP server publishes its tools and data, and any MCP-aware client can discover and call them. The connection, the schemas and the authentication stop being bespoke. MCP is how the hands are wired, not what the agent is allowed to do with them.
 - **Knowledge.** What the agent can consult rather than do: fees and product terms, branch policies and FAQs. Reached through RAG, retrieval-augmented generation, which fetches the relevant passage and places it in the prompt at the moment it is needed. RAG is to knowledge what MCP is to tools: how it gets in, not what the agent may do with it.
-- **The two gates.** Pre-action authorisation, on the path to skills, checks every proposed call before it runs. The impact and policy gate, the diamond on the outer band, checks the output before it becomes an outcome. Both are deterministic rules reading structured facts: the risk rating of what is proposed or what ran, flags on the customer record and the category of request. Both default to review when the facts are missing or unrecognised. The process makes these calls, never the agent.
+- **The two gates.** Pre-action authorisation, the "Authorised?" badge on act, checks every proposed call before it runs. An authorised call goes ahead. A refused one comes back to the agent as a result to observe and reason about again. The impact and policy gate, the ADM? diamond on the outer band, checks the output before it becomes an outcome. Both are deterministic rules reading structured facts: the risk rating of what is proposed or what ran, flags on the customer record and the category of request. Both fail safe when the facts are missing or unrecognised: the call is refused or the output goes to review. The process makes these calls, never the agent.
 - **Human decision.** The named decision owner, with the competence, context and authority to change the outcome. They see the case the agent prepared and make an independent judgement. That is what makes the review meaningful rather than a rubber stamp. Which cases require it depends on the law, sector rules and the organisation's own policy.
+- **Learning loop.** The box below the gate. Traces from every run feed it: step sequences that worked, tool errors and knowledge gaps. Nothing flows back automatically. A person reviews each proposed change, which must pass the evaluation set before it is promoted into skills, tools or knowledge, versioned so it can be rolled back. Agent memory is session-scoped, and nothing the agent does at runtime changes its own skills, tools or knowledge.
 
 </Accordion>
-
-For the concierge, the layers fall out naturally. The outer process owns identity checks, the ADM line, escalation routes and human decisions. The skills perform the small jobs: print a statement, update contact details, book an appointment or fetch a balance. Between them, the concierge holds the conversation, works out what the customer needs and chooses which skill or person comes next.
 
 ## Where automated decision-making has to stop
 
@@ -233,7 +226,7 @@ The party that initiates an action should not be the only party approving it. Fi
 
 <ScrollCard number="05" title="Nothing audits itself">
 
-Governance separates doing, challenging and assuring. The agent is a system operated by the first line, while the gate and decision owner are controls the agent cannot switch off. Risk and compliance monitor and challenge those controls. Internal audit needs a record that none of them wrote, which is what the process lineage on the outer band provides. At every layer, the thing being checked is not the thing doing the checking.
+Governance separates doing, challenging and assuring. The agent is a system operated by the first line, while the gate and decision owner are controls the agent cannot switch off. Risk and compliance monitor and challenge those controls. Internal audit needs a record it can rely on: complete, tamper-evident and access-controlled, which is what the process lineage on the outer band provides. At every layer, the thing being checked is not the thing doing the checking.
 
 <RefLink href="https://www.theiia.org/en/content/position-papers/2020/the-iias-three-lines-model-an-update-of-the-three-lines-of-defense/" label="IIA Three Lines" />
 
@@ -241,81 +234,85 @@ Governance separates doing, challenging and assuring. The agent is a system oper
 
 </ScrollCards>
 
+A deterministic gate is only as trustworthy as the facts it reads, so each fact needs a source the model cannot write to. In the n8n build, identity and the complaint and vulnerability flags come from the customer record found at identification. The risk rating comes from the result each skill returns. Policy keywords are matched against the customer's own message, and the rules live in the gate itself. The model's reply is checked only for being empty. It is never asked whether it needs review.
+
 Put together, the principle is short. The agent may be as clever as you like about what to do. It must never be the judge of whether it was allowed to.
 
 ## The pillars of a safe agent
 
+These pillars are the target design. The n8n build tested some of them, and the follow-along page has the evidence.
+
 <DefinitionGrid>
 
-<DefinitionItem term="Identity and authorisation first">
+<DefinitionItem term="Identity and authorisation first" icon="identity">
 
 No service data about a person is retrieved beyond what is needed to identify them and establish the session's permissions. Every call the agent proposes is then authorised against those permissions before it runs.
 
 </DefinitionItem>
 
-<DefinitionItem term="Guardrails, in and out">
+<DefinitionItem term="Guardrails, in and out" icon="shield">
 
 Input checks for relevance, jailbreak attempts and personal data. Output checks for tone, accuracy and rules compliance. Layered, because no single check is enough.
 
 </DefinitionItem>
 
-<DefinitionItem term="Controlled access to tools and skills">
+<DefinitionItem term="Controlled access to tools and skills" icon="wrench">
 
 An explicit, allow-listed toolbox, every tool and every skill risk-rated, each skill a bounded sub-process the agent can call but not rewrite. Direct tool access is read-only. Writes go through skills. The agent's reach is the toolbox, nothing more.
 
 </DefinitionItem>
 
-<DefinitionItem term="State and memory">
+<DefinitionItem term="State and memory" icon="memory">
 
-What the agent knows about the person and the interaction, held deliberately, scoped to the session and to an appropriate legal basis.
-
-</DefinitionItem>
-
-<DefinitionItem term="Observability, with privacy built in">
-
-Every step traced: what went in, what came out, which tool ran, what it cost in tokens. Not only for debugging, but also for audit. Agent traces can contain personal, financial, health, employment or other sensitive data, so the trace is minimised, redacted, access-controlled and retained to a schedule.
+What the agent knows about the person and the interaction, held deliberately and on an appropriate legal basis. Memory is kept separate for each session and customer, and how long anything is retained is set by a retention policy, not by the session ending. The agent never modifies its own knowledge or skills.
 
 </DefinitionItem>
 
-<DefinitionItem term="Meaningful human decision">
+<DefinitionItem term="Meaningful human decision" icon="person">
 
-Two triggers, both fired by the process rather than the agent: the agent has failed to understand after a set number of attempts, or the gate has found a high-risk action or consequential decision. The person receives the context, time and authority needed to reach an independent outcome.
-
-</DefinitionItem>
-
-<DefinitionItem term="Evaluation and outcome monitoring">
-
-A test set of realistic customer conversations, run on every change so the concierge cannot quietly get worse. Live outcomes are also monitored for fairness across customer groups, beyond route-based regression.
+Two triggers, both fired by the process rather than the agent: the agent has failed to understand after a set number of attempts, or a gate has found a high-risk action or consequential decision. The person receives the context, time and authority needed to reach an independent outcome.
 
 </DefinitionItem>
 
-<DefinitionItem term="Safe failure">
+<DefinitionItem term="Safe failure" icon="lifebuoy">
 
 Idempotent skills and a compensation step for the ones that can half-complete. A fixed fallback when the model, a tool or the human queue is unavailable. A stated review capacity and response time, so a pause is never indefinite.
 
 </DefinitionItem>
 
-<DefinitionItem term="Change management">
+<DefinitionItem term="Observability, with privacy built in" icon="eye">
 
-Model versions and suppliers treated as regulated change: a new model or a new provider is tested against the evaluation set before it reaches a customer.
+Every step traced: what went in, what came out, which tool ran, what it cost in tokens. For audit as well as debugging. Agent traces can contain personal, financial, health, employment or other sensitive data, so the trace is minimised, redacted, access-controlled and retained to a schedule.
+
+</DefinitionItem>
+
+<DefinitionItem term="Evaluation and outcome monitoring" icon="gauge">
+
+A test set of realistic conversations, run on every change so the agent cannot quietly get worse. Beyond route-based regression, live outcomes are monitored for fairness across the groups of people the agent serves. The test set grows from reviewed traces, while a fixed baseline catches drift that builds up across many small changes.
+
+</DefinitionItem>
+
+<DefinitionItem term="Learning loop, reviewed" icon="loop">
+
+Traces show where the agent could do better: step sequences that keep working, tools it misuses and questions its knowledge cannot answer. Each becomes a proposal, reviewed by a person and run against the evaluation set before it is promoted into knowledge, a tool, a known path or a skill. The agent never promotes its own changes, and the gate rules and the ADM line are never changed through the loop.
+
+</DefinitionItem>
+
+<DefinitionItem term="Change management" icon="layers">
+
+Every change to what the agent knows or does is a controlled change: a new model or provider, promoted knowledge, a tool, a known path or a skill. Each is versioned so it can be rolled back, approved by someone other than whoever proposed it and run against the evaluation set, with the level of approval set by risk.
 
 </DefinitionItem>
 
 </DefinitionGrid>
 
-Tools, MCP and skills are easy to conflate. The element-by-element guide to the diagram in the sandwich section keeps them apart: tools are the agent's hands, MCP is how the hands are wired and skills are what the agent is actually allowed to do with them.
+Tools, MCP and skills are easy to conflate. The run-through of the diagram's elements, in the sandwich section, keeps them apart: tools are the agent's hands, MCP is how the hands are wired and skills are what the agent is actually allowed to do with them.
 
 ## One concierge, three builds
 
-The three tools agree on the pillars but differ in which layer they make easiest. Camunda is built for the outer process. n8n and LangGraph begin with the agent in the middle. All three can express skills, which makes comparing the same concierge across them useful. The n8n follow-along page is linked at the top of this article.
+The three tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph begin with the agent in the middle. Camunda is built for the outer process. All three can express skills, which makes comparing the same concierge across them useful. The n8n follow-along page is linked at the top of this article.
 
 <ToolComparison>
-
-<ToolCard tool="Camunda" title="The boundary drawn on the diagram">
-
-The process is BPMN, so the fixed paths are literally fixed and every human decision is a user task. The agentic part lives inside an ad-hoc sub-process: Camunda's AI Agent Task connector runs the reasoning loop, and the ad-hoc sub-process acts as the toolbox, each tool a modelled task the agent may activate in any order but cannot invent. Camunda recommends this shape precisely when tool management and audit trails matter for compliance, which is the regulated case. Observability comes for free in Operate: you can see every tool the agent chose and every point where the process took the decision back.
-
-</ToolCard>
 
 <ToolCard tool="n8n" title="The fastest route to a working concierge">
 
@@ -323,9 +320,15 @@ The AI Agent node runs the loop, with tools attached as sub-workflows, which is 
 
 </ToolCard>
 
-<ToolCard tool="LangGraph" title="The engineer's version, with LangChain underneath">
+<ToolCard tool="LangGraph" title="The engineer's version, with LangChain underneath" status="Coming soon">
 
 The concierge is a typed state graph. Routing is a structured-output call feeding a conditional edge. Tools are bound to the model from an explicit list, each carrying its risk rating. The evaluator-optimiser loop is a conditional edge back to the generator. The human line is an interrupt: when the gate node flags a case for review, the graph stops, saves its state through a checkpointer and waits for a person to resume it with their decision. Tracing goes to LangSmith or any OpenTelemetry backend.
+
+</ToolCard>
+
+<ToolCard tool="Camunda" title="The boundary drawn on the diagram" status="Coming soon">
+
+The process is BPMN, so the fixed paths are literally fixed and every human decision is a user task. The agentic part lives inside an ad-hoc sub-process: Camunda's AI Agent Task connector runs the reasoning loop, and the ad-hoc sub-process acts as the toolbox, each tool a modelled task the agent may activate in any order but cannot invent. Camunda recommends this shape precisely when tool management and audit trails matter for compliance, which is the regulated case. Observability comes for free in Operate: you can see every tool the agent chose and every point where the process took the decision back.
 
 </ToolCard>
 
@@ -335,13 +338,13 @@ The concierge is a typed state graph. Routing is a structured-output call feedin
 
 All three builds run the same scenario so they can be compared like for like. A customer requests a statement for a rental application, mentions that they are considering a mortgage and asks about a complaint opened the previous month. That creates three levels of agency: self-service for the statement, a handover with context for the mortgage enquiry and no automated decision on the complaint.
 
-Each build is judged on the same six questions. Their answers roll up into the five business concerns scored in the table below.
+Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n build's score for each. LangGraph and Camunda scores will be added as those builds are finished.
 
 <NumberedList>
 
 <NumberedItem>
 
-**How the agent chose skills.** Which skill it called for the statement and the booking, and whether it tried to reach for anything it should not.
+**How the agent chose skills.** Which skill it called for the statement and the mortgage handover, and whether it tried to reach for anything it should not.
 
 </NumberedItem>
 
@@ -377,49 +380,59 @@ Each build is judged on the same six questions. Their answers roll up into the f
 
 </NumberedList>
 
-Each demo page records the evidence as its build is completed. The main scorecard stays focused on the business concern and the technical answer supplied by the sandwich.
+Each demo page records the evidence as its build is completed. The main scorecard stays focused on the business concerns and the technical answers supplied by the sandwich.
 
-<Scorecard plan>
+<Scorecard plan scoreColumn={{ label: "n8n", href: "/blog/digital-branch-concierge-n8n-demo#what-this-build-shows" }}>
 
 <ScorecardRow
   concern="Accountability."
+  toolLabel="n8n"
+  toolScore={8}
   question="Who answers when the agent acts?"
-  answer="A deterministic process wrapper owns every human task and the gate. A named decision owner can change the outcome before it reaches the affected person."
+  answer="A deterministic process wrapper owns every human task and both gates. A named decision owner can change the outcome before it reaches the affected person."
 />
 
 <ScorecardRow
   concern="Explainability."
+  toolLabel="n8n"
+  toolScore={9}
   question="Can we reconstruct how the outcome was reached?"
   answer="Lineage and observability on the outer band: every step, tool call, token and gate decision traced, so a reviewer can reconstruct the visit. That is execution lineage rather than an account of the model's reasoning."
 />
 
 <ScorecardRow
   concern="Containment."
+  toolLabel="n8n"
+  toolScore={8}
   question="What stops it doing something it should not?"
   answer="Guardrails in and out, an allow-listed toolbox, risk-rated tools and skills, pre-action authorisation on every call, writes only through skills and a hard limit on loop iterations."
 />
 
 <ScorecardRow
   concern="The decisions it must never make alone."
+  toolLabel="n8n"
+  toolScore={8}
   question="For example, employment, education, healthcare, credit, insurance or access to essential services."
   answer="The impact and policy gate reads structured facts, not the model's opinion, and routes anything the law or policy names to a person."
 />
 
 <ScorecardRow
   concern="Drift."
+  toolLabel="n8n"
+  toolScore={7}
   question="Will it quietly get worse?"
-  answer="A fixed evaluation set of realistic conversations, run on every change, asserting the expected route: answered, skill run or sent to a person."
+  answer="A fixed evaluation set of realistic conversations, run on every change, asserting the expected route: answered, skill run or sent to a person. New cases come from reviewed traces, and a fixed baseline catches drift that builds up across small changes."
 />
 
 </Scorecard>
 
 ## Conclusion
 
-The branch concierge is a useful test because it is neither a chatbot nor a back-office batch job. It talks to real people, acts inside real systems and encounters work ranging from routine administration to consequential decisions. Banking supplies the scenario, but the design applies to any European organisation putting an agent between a person and a service.
+The branch concierge is a useful test because it is neither a chatbot nor a back-office batch job. In production it would talk to real people, act inside real systems and meet work ranging from routine administration to consequential decisions. Banking supplies the scenario, but the design applies to any European organisation putting an agent between a person and a service.
 
-Building the concierge three times will test that claim. Each tool favours a different layer: Camunda the outer process, n8n and LangGraph the agent in the middle. Only the n8n build is finished, so what stands here is the design argument rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
+Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n build is finished and runs on demo customer records, not a live bank. Routine requests went straight through, the higher-impact ones paused for a person and the evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The learning loop, fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with one build behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
 
-So, who meets you at the door? An agent that can answer, do the small things and hand you over well, inside a process that knows which decisions it may never make. The ones that change a life stay with a rule and a person. That is not a limit on the concierge. It is what makes it safe to let one loose.
+So, who meets you at the door? An agent that can answer, do the small things and hand you over well, inside a process that knows which decisions it may never make. The ones that change a life stay with a rule and a person. That is not a limit on the concierge. It is what makes it safe to let one loose. That is Enterprise Agency.
 
 <Terms>
 
@@ -443,19 +456,27 @@ Plain-English definitions for the terms and tooling in this post, listed alphabe
 
 **EBA.** The European Banking Authority, whose guidelines on internal governance and on loan origination set the EU expectations for management body responsibility and for the use of automated models in credit decisions.
 
+**Enterprise Agency.** My name for agentic AI that an enterprise can stand behind: agents and workflows built from the augmented LLM, with structure at the edges and freedom in the middle. The agent chooses its next step, while the process owns authorisation, human decisions and what changes over time.
+
 **EU AI Act.** The EU's cross-industry, risk-based AI regulation (Regulation 2024/1689). Prohibited practices apply from February 2025 and general-purpose model rules from August 2025. The high-risk obligations, delayed by the Digital Omnibus, apply from December 2027 for standalone Annex III uses and from August 2028 for high-risk AI embedded in regulated products under Annex I.
 
 **Evaluator-optimiser.** A loop in which one model produces an output and another evaluates it, repeating until the output passes.
 
 **Guardrail.** A check on what goes into or comes out of a model: relevance, safety, personal data, tone, rules compliance. Best used in layers.
 
-**High-risk AI system.** Under the EU AI Act, a system used for one of the Annex III purposes, including creditworthiness, insurance pricing, recruitment, education admission and access to essential services. Such systems must be designed for effective human oversight and keep logs, and the organisation deploying one must explain individual decisions to the people they affect. This statutory category is separate from the high rating this design puts on a tool or skill.
+**High-risk AI system.** Under the EU AI Act, either a safety component of a product covered by the EU product safety laws listed in Annex I, or a system used for one of the Annex III purposes, such as creditworthiness, risk assessment and pricing for life and health insurance, recruitment, education admission and access to essential services. Such systems must be designed for effective human oversight and keep logs. In defined cases, a person affected by a decision based on an Annex III system can ask the deployer for a clear explanation (Article 86). This statutory category is separate from the high rating this design puts on a tool or skill.
+
+**Impact and policy gate.** The deterministic check on the outer band, drawn as the ADM? diamond, that reads structured facts about an agent's output and decides whether it goes straight through or to a named decision owner before it becomes an outcome. Missing or unrecognised facts route to review.
 
 **Interrupt.** LangGraph's mechanism for stopping a graph mid-run, saving state and waiting for a person to resume it, used here when the gate flags a case for review.
+
+**Learning loop.** The reviewed route by which an agent improves over time. Traces reveal step sequences that keep working, tools that are misused and gaps in knowledge. A person reviews each proposed change, it passes the evaluation set and only then is it promoted into skills, tools or knowledge. The agent never changes itself.
 
 **MCP (Model Context Protocol).** An open standard for connecting AI applications to tools and data. An MCP server publishes tools with typed schemas. An MCP-aware client such as n8n, LangGraph or Camunda can discover and call them without bespoke integration.
 
 **Orchestrator-workers.** A pattern where one model breaks a task into sub-tasks, delegates them to worker calls and synthesises the results.
+
+**Pre-action authorisation.** The deterministic process control on every call an agent proposes, checking the risk rating, relevant flags and the session's permissions before it runs. Only authorised calls run, and a refusal returns to the agent as a result to reason about.
 
 **Prompt chaining.** A task split into sequential model calls with a programmatic check between them.
 
@@ -469,11 +490,11 @@ Plain-English definitions for the terms and tooling in this post, listed alphabe
 
 **Segregation of duties.** The control principle that the party who initiates an action must not be the party who approves it. In banking, the maker-checker or four-eyes rule. Here, the agent proposes and the gate and decision owner approve.
 
-**Skill.** A bounded, structured capability an agent can call but not rewrite: a defined input, a defined output and a risk rating. Implemented as a sub-workflow in n8n, a modelled task inside an ad-hoc sub-process in Camunda or a typed tool in LangGraph.
+**Skill.** A bounded, governed capability an agent can call but not modify: a defined input, a defined output and a risk rating. Implemented as a sub-workflow in n8n, a modelled task inside an ad-hoc sub-process in Camunda or a typed tool in LangGraph.
 
 **SMCR.** The Senior Managers and Certification Regime, established under the Financial Services and Markets Act 2000 as amended in 2013. Every regulated activity sits within a named senior manager's statement of responsibilities, and the statutory duty of responsibility makes that person accountable for harm in their area, including harm caused through AI, if they did not take reasonable steps to prevent it.
 
-**Three lines model.** The Institute of Internal Auditors' governance model of organisational roles. The first line does the work and owns its risks and controls. The second line, risk and compliance, monitors and challenges. The third line, internal audit, gives independent assurance. The agent is a system operated by the first line and the gates and decision owner are first-line controls. The lineage on the outer band is what the second and third lines rely on.
+**Three lines model.** The Institute of Internal Auditors' governance model of organisational roles. The first line does the work and owns its risks and controls. The second line, risk and compliance, monitors and challenges. The third line, internal audit, gives independent assurance. The agent is a system operated by the first line, and the gates and decision owner are first-line controls. The lineage on the outer band is what the second and third lines rely on.
 
 **Tool.** A single action a model can call: a name, a description and a typed input. The platform runs it and returns the result. The atomic unit that skills are built from.
 

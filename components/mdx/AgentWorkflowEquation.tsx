@@ -31,13 +31,14 @@ export function AgentWorkflowEquation() {
     <div className="not-prose font-serif text-ink-soft">
       <section className="rounded-lg border border-gold/35 bg-cream-200/55 px-5 py-5 text-center sm:px-7">
         <p className="mb-2 font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-gold-deep">
-          The building block
+          The whole pattern
         </p>
         <h3 className="m-0 font-serif text-2xl font-semibold leading-tight text-ink sm:text-3xl">
-          The augmented LLM
+          Enterprise Agency
         </h3>
         <p className="mx-auto mb-0 mt-2 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg">
-          A model with retrieval, tools and memory attached. The building block for everything else.
+          Agents and workflows, governed by the process around them. Both are built from Anthropic&apos;s
+          augmented LLM: a model with retrieval, tools and memory attached.
         </p>
       </section>
 

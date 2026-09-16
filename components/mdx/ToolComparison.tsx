@@ -12,6 +12,9 @@
  *
  *   </ToolComparison>
  *
+ * Pass `status` (for example "Coming soon") to show a small pill beside the
+ * tool name for a build that does not exist yet.
+ *
  * Cards stack on phones and tablets and sit three-up on wide screens when
  * `columns={3}` is passed; the default is a single column for long bodies.
  */
@@ -39,17 +42,27 @@ export function ToolComparison({
 export function ToolCard({
   tool,
   title,
+  status,
   children,
 }: {
   /** Tool name, shown in small caps, e.g. "n8n". */
   tool: string;
   /** One-line position for this tool. */
   title: string;
+  /** Optional status pill beside the tool name, e.g. "Coming soon". */
+  status?: string;
   children: React.ReactNode;
 }) {
   return (
     <article className="rounded-lg border border-gold/25 bg-cream-50 p-5 ring-1 ring-gold/10 sm:p-6">
-      <p className="m-0 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-gold-deep">{tool}</p>
+      <p className="m-0 flex flex-wrap items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.18em] text-gold-deep">
+        {tool}
+        {status ? (
+          <span className="inline-flex rounded-full border border-ink/15 bg-ink/5 px-2.5 py-1 text-[0.625rem] leading-none tracking-[0.12em] text-ink-mute">
+            {status}
+          </span>
+        ) : null}
+      </p>
       <p className="m-0 mt-1 font-serif text-xl leading-tight text-ink">{title}</p>
       <div className="mt-3 font-serif text-[1.0625rem] leading-relaxed text-ink-soft [&_p]:my-3 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-ink">
         {children}

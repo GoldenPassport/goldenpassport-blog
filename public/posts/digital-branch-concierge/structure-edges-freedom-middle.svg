@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">Structure at the edges, freedom in the middle</title>
-  <desc id="desc">Three nested layers with a customer request entering on the left. The outer band is process orchestration: human accountability, the automated decision-making line, process lineage and business observability. The middle band is the agent: a reason, act, observe loop around the model, reaching skills through known paths with a pre-action authorisation gate on every call, and read-only tools and knowledge through dynamic path discovery. The inner core is skills: bounded, typed, risk-rated capabilities. The agent's output passes through a deterministic impact and policy gate on the outer band: straight-through items go directly to the outcome chevron, items that need review go to a named human decision owner and reach the outcome only after meaningful human review.</desc>
+  <desc id="desc">Three nested layers with a customer request entering on the left. The outer band is process orchestration: human accountability, the automated decision-making line, process lineage and business observability. The middle band is the agent: a reason, act, observe loop around the model, with a pre-action authorisation check on act: only authorised calls run, and a refusal is a result the agent observes and reasons about again. It reaches skills through known paths and read-only tools and knowledge through dynamic step discovery. The inner core is skills: bounded, typed, risk-rated capabilities. The agent's output passes through a deterministic impact and policy gate on the outer band: straight-through items go directly to the outcome chevron, items that need review go to a named human decision owner and reach the outcome only after meaningful human review. Traces from each run feed a learning loop on the outer band, where step sequences that worked, tool issues and knowledge gaps are reviewed, evaluated and only then promoted back into skills, tools and knowledge as approved updates.</desc>
   <defs>
     <style>
       .h1 { fill:#0F1B2D; font:600 44px Georgia, serif }
@@ -26,7 +26,7 @@
   <rect width="1200" height="675" fill="#FBF7EF"/>
 
   <text class="h1" x="64" y="70">Structure at the edges, freedom in the middle.</text>
-  <text class="h2" x="64" y="108" style="font-size:21px">Deterministic process orchestration outside and skills inside. Dynamic agency in the middle.</text>
+  <text class="h2" x="64" y="108" style="font-size:21px">Deterministic process outside. Governed skills inside. Dynamic agency in the middle.</text>
   <line x1="64" y1="134" x2="1136" y2="134" stroke="#B8893B" stroke-width="1.5" stroke-opacity="0.35"/>
 
   <!-- ===== OUTER: process orchestration (structure) ===== -->
@@ -45,8 +45,8 @@
   <text class="pill" x="984" y="243">Human decision</text>
   <text class="pillsub" x="984" y="261">NAMED DECISION OWNER</text>
   <text class="pillsub" x="984" y="276">CAN CHANGE THE OUTCOME</text>
-  <text class="note" x="984" y="295" style="font-size:11px">by policy: lending, complaints,</text>
-  <text class="note" x="984" y="309" style="font-size:11px">closures and vulnerability</text>
+  <text class="note" x="984" y="295" style="font-size:12px">by policy: lending, complaints,</text>
+  <text class="note" x="984" y="309" style="font-size:12px">closures and vulnerability</text>
 
   <!-- ===== MIDDLE: the agent (freedom) ===== -->
   <rect x="120" y="222" width="740" height="360" rx="18" fill="#FBF7EF" stroke="#B8893B" stroke-width="2" stroke-dasharray="9 7"/>
@@ -59,15 +59,18 @@
     <text class="node" x="238" y="335">reason</text>
     <circle cx="328" cy="470" r="34" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
     <text class="node" x="328" y="475">act</text>
+    <rect x="286" y="425" width="84" height="20" rx="10" fill="#F5EDDC" stroke="#8C661F" stroke-width="2"/>
+    <text x="328" y="439" text-anchor="middle" fill="#8C661F" font-family="Arial, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.03em">AUTHORISED?</text>
     <circle cx="160" cy="470" r="34" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
     <text class="node" x="160" y="475">observe</text>
-    <path d="M262 354 Q300 400 306 444" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M262 356 Q292 388 300 422" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
+    <!-- pre-action authorisation sits on act: a deterministic process control, so only authorised calls run; a refusal is a result the agent observes -->
     <path d="M294 478 Q244 494 196 478" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
     <path d="M184 446 Q194 396 214 356" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
     <!-- the model at the centre of the loop: AI sparkles plus label -->
-    <path d="M242 382 L248 398 L264 404 L248 410 L242 426 L236 410 L220 404 L236 398 Z" fill="#8C661F"/>
-    <path d="M266 380 L268.5 386.5 L275 389 L268.5 391.5 L266 398 L263.5 391.5 L257 389 L263.5 386.5 Z" fill="#B8893B"/>
-    <text x="242" y="452" text-anchor="middle" fill="#0F1B2D" font-family="Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="0.1em">LLM</text>
+    <path d="M242 386 L248 402 L264 408 L248 414 L242 430 L236 414 L220 408 L236 402 Z" fill="#8C661F"/>
+    <path d="M264 382 L266.5 388.5 L273 391 L266.5 393.5 L264 400 L261.5 393.5 L255 391 L261.5 388.5 Z" fill="#B8893B"/>
+    <text x="242" y="455" text-anchor="middle" fill="#0F1B2D" font-family="Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="0.1em">LLM</text>
   </g>
   <!-- request in (left port) -->
   <polygon points="16,340 92,340 116,378 92,416 16,416" fill="#8C661F" stroke="#8C661F" stroke-width="2" stroke-linejoin="round"/>
@@ -76,8 +79,7 @@
 
   <!-- ===== INNER: skills (structure) ===== -->
   <!-- known paths: the agent reaches skills only through bounded, allow-listed routes -->
-  <text class="note" x="396" y="416" font-size="12" style="text-anchor:end;paint-order:stroke;stroke:#FBF7EF;stroke-width:5px;stroke-linejoin:round">known paths</text>
-  <text class="note" x="396" y="430" font-size="11" style="text-anchor:end;paint-order:stroke;stroke:#FBF7EF;stroke-width:5px;stroke-linejoin:round">each call authorised</text>
+  <text class="note" x="397" y="416" font-size="12" style="text-anchor:end;paint-order:stroke;stroke:#FBF7EF;stroke-width:5px;stroke-linejoin:round">known paths</text>
   <rect x="400" y="290" width="400" height="170" rx="14" fill="#FEFCF8" stroke="#8C661F" stroke-width="2.5"/>
   <text class="band" x="420" y="318">SKILLS</text>
   <!-- skill chips with risk ratings -->
@@ -98,11 +100,11 @@
     <text class="pill" x="698" y="403">Update contact details</text>
     <text class="pillsub" x="698" y="420">WRITES DATA · MEDIUM</text>
   </g>
-  <text class="note" x="600" y="450" font-size="12">bounded, typed and risk-rated; callable, never rewritable</text>
+  <text class="note" x="600" y="450" font-size="12">bounded, typed and risk-rated; not modifiable by the agent</text>
 
   <!-- dynamic discovery: the agent finds and calls tools at runtime, from an allow-listed registry -->
   <path d="M354 494 L398 516" fill="none" stroke="#8C661F" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-  <text class="note" x="314" y="530" font-size="12">dynamic path discovery</text>
+  <text class="note" x="314" y="530" font-size="12">dynamic step discovery</text>
 
   <!-- TOOLS (what the agent can do, via MCP) and KNOWLEDGE (what it can consult, via RAG) -->
   <rect x="400" y="478" width="400" height="94" rx="14" fill="#FEFCF8" stroke="#8C661F" stroke-width="2.5"/>
@@ -111,22 +113,21 @@
   <text class="tag" x="604" y="498" style="font-size:12px">read-only, via MCP</text>
   <g>
     <rect x="412" y="506" width="92" height="22" rx="6" fill="#F5EDDC" stroke="#B8893B" stroke-width="1.2"/>
-    <text class="pill" x="458" y="521" style="font-size:11px">get_statement</text>
+    <text class="pill" x="458" y="521" style="font-size:11.5px">get_statement</text>
     <rect x="508" y="506" width="92" height="22" rx="6" fill="#F5EDDC" stroke="#B8893B" stroke-width="1.2"/>
-    <text class="pill" x="554" y="521" style="font-size:11px">get_balance</text>
+    <text class="pill" x="554" y="521" style="font-size:12px">get_balance</text>
     <rect x="412" y="534" width="92" height="22" rx="6" fill="#F5EDDC" stroke="#B8893B" stroke-width="1.2"/>
-    <text class="pill" x="458" y="549" style="font-size:11px">find_slots</text>
+    <text class="pill" x="458" y="549" style="font-size:12px">find_slots</text>
     <rect x="508" y="534" width="92" height="22" rx="6" fill="#F5EDDC" stroke="#B8893B" stroke-width="1.2"/>
-    <text class="pill" x="554" y="549" style="font-size:11px">opening_hours</text>
+    <text class="pill" x="554" y="549" style="font-size:11.5px">opening_hours</text>
   </g>
-  <text class="note" x="508" y="566" style="font-size:10px">writes only inside skills</text>
   <text class="band" x="630" y="498" style="letter-spacing:0.1em">KNOWLEDGE</text>
   <text class="tag" x="784" y="498" style="font-size:12px">via RAG</text>
   <g>
     <rect x="628" y="506" width="160" height="22" rx="6" fill="#F5EDDC" stroke="#B8893B" stroke-width="1.2"/>
-    <text class="pill" x="708" y="521" style="font-size:11px">fees and product terms</text>
+    <text class="pill" x="708" y="521" style="font-size:12px">fees and product terms</text>
     <rect x="628" y="534" width="160" height="22" rx="6" fill="#F5EDDC" stroke="#B8893B" stroke-width="1.2"/>
-    <text class="pill" x="708" y="549" style="font-size:11px">branch policies and FAQs</text>
+    <text class="pill" x="708" y="549" style="font-size:12px">branch policies and FAQs</text>
   </g>
 
   <!-- act -> skills -->
@@ -135,27 +136,37 @@
   <!-- escalation: anything that changes a life leaves the agent's band -->
 
   <!-- output (agent's right edge) -> outcome (process's right edge) -->
-  <rect x="812" y="460" width="96" height="52" rx="10" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
-  <text class="pill" x="860" y="491">Output</text>
-  <path d="M908 486 L1014 486" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="846" y="440" width="88" height="52" rx="10" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+  <text class="pill" x="890" y="471">Output</text>
+  <path d="M934 466 L1014 466" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
   <!-- deterministic impact and policy gate on the outer band (a BPMN-style gateway): the process, not the agent, decides what is ADM -->
-  <polygon points="1040,462 1064,486 1040,510 1016,486" fill="#F5EDDC" stroke="#8C661F" stroke-width="2.5" stroke-linejoin="round"/>
-  <text x="1040" y="490" text-anchor="middle" fill="#8C661F" font-family="Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">ADM?</text>
-  <text class="note" x="1040" y="532" style="font-size:12px">impact and policy gate</text>
-  <text class="note" x="1040" y="547" style="font-size:11px">deterministic</text>
-  <path d="M1040 462 L1040 320" fill="none" stroke="#9B3A32" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowred)"/>
-  <path d="M1064 486 Q1120 486 1120 428" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
-  <text class="callout" x="1096" y="502" style="text-anchor:middle;font-size:11px;fill:#8C661F">STRAIGHT</text>
-  <text class="callout" x="1096" y="515" style="text-anchor:middle;font-size:11px;fill:#8C661F">THROUGH</text>
+  <polygon points="1040,442 1064,466 1040,490 1016,466" fill="#F5EDDC" stroke="#8C661F" stroke-width="2.5" stroke-linejoin="round"/>
+  <text x="1040" y="470" text-anchor="middle" fill="#8C661F" font-family="Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">ADM?</text>
+  <text class="note" x="1040" y="512" style="font-size:12px">impact and policy gate</text>
+  <text class="note" x="1040" y="527" style="font-size:11px">deterministic</text>
+  <path d="M1040 442 L1040 320" fill="none" stroke="#9B3A32" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowred)"/>
+  <path d="M1064 466 Q1120 466 1120 428" fill="none" stroke="#8C661F" stroke-width="2" marker-end="url(#arrow)"/>
+  <text class="callout" x="1096" y="482" style="text-anchor:middle;font-size:11px;fill:#8C661F">STRAIGHT</text>
+  <text class="callout" x="1096" y="495" style="text-anchor:middle;font-size:11px;fill:#8C661F">THROUGH</text>
 
   <!-- review leg label, beside the gate like STRAIGHT THROUGH on the other leg -->
-  <text class="callout" x="1030" y="436" style="text-anchor:end;font-size:11px">MEANINGFUL</text>
-  <text class="callout" x="1030" y="450" style="text-anchor:end;font-size:11px">HUMAN REVIEW</text>
+  <text class="callout" x="1030" y="410" style="text-anchor:end;font-size:11px">MEANINGFUL</text>
+  <text class="callout" x="1030" y="424" style="text-anchor:end;font-size:11px">HUMAN REVIEW</text>
 
   <!-- ADM route: human decision -> outcome, only after a person has signed -->
   <path d="M1084 258 Q1110 258 1110 290 L1110 344" fill="none" stroke="#9B3A32" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowred)"/>
   <polygon points="1068,348 1164,348 1188,386 1164,424 1068,424 1092,386" fill="#8C661F" stroke="#8C661F" stroke-width="2" stroke-linejoin="round"/>
   <text class="pill" x="1130" y="391" style="fill:#FBF7EF;font-size:14px">Outcome</text>
+
+  <!-- learning loop on the outer band: traces are reviewed and evaluated, and only then promoted back into skills, tools and knowledge -->
+  <path d="M900 492 L900 556" fill="none" stroke="#8C661F" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <text class="note" x="906" y="528" style="text-anchor:start;font-size:11px">traces</text>
+  <rect x="868" y="558" width="252" height="46" rx="10" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+  <text class="pill" x="994" y="578">Learning loop</text>
+  <text class="pillsub" x="994" y="595" style="font-size:10.5px">REVIEWED · EVALUATED · PROMOTED</text>
+  <path d="M868 594 L828 594 L828 375 L804 375" fill="none" stroke="#8C661F" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <path d="M828 525 L804 525" fill="none" stroke="#8C661F" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <text class="note" x="0" y="0" transform="translate(846 380) rotate(-90)" style="font-size:12px;font-style:italic;fill:#8C661F;font-weight:700">approved updates</text>
 
   <text class="note" x="64" y="646" style="text-anchor:start;font-size:12px">* ADM: a solely automated decision with legal or similarly significant effects. EU: GDPR Article 22.</text>
   <text class="brand" x="1136" y="646" style="text-anchor:end">goldenpassport.blog</text>
