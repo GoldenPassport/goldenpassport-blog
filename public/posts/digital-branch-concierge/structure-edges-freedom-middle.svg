@@ -168,6 +168,6 @@
   <path d="M828 525 L804 525" fill="none" stroke="#8C661F" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
   <text class="note" x="0" y="0" transform="translate(846 380) rotate(-90)" style="font-size:12px;font-style:italic;fill:#8C661F;font-weight:700">approved updates</text>
 
-  <text class="note" x="64" y="646" style="text-anchor:start;font-size:12px">* ADM: a solely automated decision with legal or similarly significant effects. EU: GDPR Article 22.</text>
+  <text class="note" x="64" y="646" style="text-anchor:start;font-size:12px">* ADM (automated decision-making): a solely automated decision with legal or similarly significant effects. EU: GDPR Article 22.</text>
   <text class="brand" x="1136" y="646" style="text-anchor:end">goldenpassport.blog</text>
 </svg>
