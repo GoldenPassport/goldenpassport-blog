@@ -24,7 +24,12 @@ export function PostHeader({ posts }: { posts: PostHeaderData }) {
   if (!slug || !post) return null;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 pt-16">
+    // The inner element is named for the page transition, like the site
+    // header, so the fade between posts (app/layout.tsx) leaves it still. The
+    // outer wrapper matters: React names the direct children of its
+    // ViewTransition during a transition, which would override this name.
+    <div>
+    <div className="mx-auto max-w-5xl px-6 pt-16" style={{ viewTransitionName: "post-header" }}>
       <Link href="/blog" className="text-sm text-ink-mute hover:text-gold-deep">
         ← All writing
       </Link>
@@ -49,6 +54,7 @@ export function PostHeader({ posts }: { posts: PostHeaderData }) {
           <PostTabs siblings={post.tabs} currentSlug={slug} />
         </div>
       ) : null}
+    </div>
     </div>
   );
 }

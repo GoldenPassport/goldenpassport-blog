@@ -246,6 +246,18 @@ details[open]::details-content {
 ::view-transition-new(site-header) {
   animation: none;
 }
+/* The back link and group tabs above a post (PostHeader) stay still too, so
+   moving between an article and its demos only fades the post below. */
+::view-transition-group(post-header) {
+  animation: none;
+  z-index: 99;
+}
+::view-transition-old(post-header) {
+  display: none;
+}
+::view-transition-new(post-header) {
+  animation: none;
+}
 ::view-transition-group(.page-swap) {
   animation-duration: 0s;
 }
