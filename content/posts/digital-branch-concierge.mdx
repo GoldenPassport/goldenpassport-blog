@@ -345,7 +345,7 @@ The process is BPMN, so the fixed paths are literally fixed and every human deci
 
 ## What we will focus on and score
 
-All three builds run the same scenario so they can be compared like for like. A customer requests a statement for a rental application, mentions that they are considering a mortgage and asks about a complaint opened the previous month. That creates three levels of agency: self-service for the statement, a handover with context for the mortgage enquiry and no automated decision on the complaint.
+Every build is judged against the same scenario and the same twelve test conversations, so they can be compared on the same terms. In the scenario, a customer requests a statement for a rental application, mentions that they are considering a mortgage and asks about a complaint opened the previous month. The test conversations cover each of those moments, plus the actions, handovers and attacks around them. That creates three levels of agency: self-service for the statement, a handover with context for the mortgage enquiry and no automated decision on the complaint.
 
 Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n and LangGraph builds' scores for each. Camunda's scores will be added when that build is finished.
 
@@ -442,7 +442,7 @@ The branch concierge is a useful test because it is neither a chatbot nor a back
 
 Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n and LangGraph builds are finished and run on demo customer records, not a live bank. In both, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test.
 
-Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with two builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
+A later code review of both builds found boundaries that held for one message but not a whole conversation, such as a follow-up that could slip past the gate. They are now fixed and covered by tests in the repository. Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with two builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
 
 So, who meets you at the door? An agent that can answer, do the small things and hand you over well, inside a process that knows which decisions it may never make. The ones that change a life stay with a rule and a person. That is not a limit on the concierge. It is what makes it safe to let one loose. That is Enterprise Agency.
 

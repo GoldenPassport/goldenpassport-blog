@@ -118,7 +118,7 @@ Two vocabulary points help when moving between the article and n8n.
 - **A Slack workspace** you can add a bot to, for the two approval steps, with a channel called #concierge-approvals. Other review channels are possible, but their response fields and decision records need adapting.
 - **[The repository](https://github.com/GoldenPassport/digital-branch-concierge)**, which holds the five workflow files, the four demo customers, the knowledge documents and the twelve test conversations. It is linked in Setup files below.
 
-Use the supplied demo records, not real customer data. This is a learning build, not a production banking service or a certification of regulatory compliance. Model responses may vary, so compare each run with the expected route rather than expecting identical wording.
+Use the supplied demo records, not real customer data. The skills simulate their actions: they return a confirmation but do not change a record or store a booking, so the build tests authorisation, pauses and routing, not persistence, reversal or integration with banking systems. This is a learning build, not a production banking service or a certification of regulatory compliance. Model responses may vary, so compare each run with the expected route rather than expecting identical wording.
 
 ## Setup files
 
@@ -146,6 +146,7 @@ Everything in the repository, file by file.
 | customers.csv | shared/data | Four demo customers with flags (open complaint, vulnerability) |
 | fees-and-product-terms.md, branch-policies-and-faqs.md | shared/knowledge | What the concierge may answer from |
 | test-conversations.csv | shared/evaluations | Twelve conversations with the expected route |
+| code-nodes.test.mjs | n8n/tests | Local tests of the Code nodes' rules and the embedded demo data, run with `node --test` |
 
 </div>
 
@@ -276,7 +277,7 @@ This is the setting the whole safety argument rests on.
 Now the evidence. Each conversation is designed to exercise one of the five concerns on the scorecard.
 
 - Click Open chat on the main process and send the conversations on this page, one at a time. <Shot src="/posts/digital-branch-concierge/n8n-steps/09-chat-and-logs.webp" alt="The editor with the chat panel on the left and the logs panel on the right after a test conversation." caption="Chat and logs side by side" />
-- Tag a message with [customer:C1001] to switch to the customer with an open complaint, or [customer:C1002] for the vulnerable customer. <Shot src="/posts/digital-branch-concierge/n8n-steps/09-chat-customer-tag.webp" alt="The n8n chat box with a message ending in [customer:C1001], the tag highlighted." caption="A message tagged with a customer" />
+- Tag the first message of a chat with [customer:C1001] for the customer with an open complaint, or [customer:C1002] for the vulnerable customer. Start a new chat to change customer: the repository's current workflow binds the customer to a published chat session. In the editor's chat, n8n does not save that binding, so repeat the tag on follow-ups. <Shot src="/posts/digital-branch-concierge/n8n-steps/09-chat-customer-tag.webp" alt="The n8n chat box with a message ending in [customer:C1001], the tag highlighted." caption="A message tagged with a customer" />
 - To find a run later, open the Executions tab, click Filters and set Highlighted data to key test_id, tick Exact match and enter the test id as the value, for example T05. Identify customer tags every run with customer_id and Assemble facts adds route, so you can also filter by customer or by route, such as review. <Shot src="/posts/digital-branch-concierge/n8n-steps/09-executions-filter.webp" alt="The Executions tab with the Filters panel open, Highlighted data set to key test_id with Exact match ticked and value T05, narrowing the list to a single run." caption="Filter executions by test_id" />
 - A test message pasted as it appears on this page is matched to its test id automatically, while your own messages carry customer_id and route only. If the agent asks you to confirm, add the tag to your reply, for example "Yes, that is correct [test:T06]", so the run that follows keeps the test id. The tag is removed before the agent sees the message.
 - Filtering by highlighted data needs n8n Cloud Pro or Enterprise, or a self-hosted Enterprise or registered Community edition. On other plans, filter by status and start time instead, or note the execution id shown in the logs after each run.
@@ -360,7 +361,7 @@ The repository contains twelve conversations covering answers, actions and human
 
 To try one, open **Workflows** in n8n, then **Concierge: main process**. Click **Open chat** below the canvas and paste one message at a time using the copy button on each card. After each reply, open **Executions** and compare the route, skills and gate reasons with the expected result.
 
-The default customer is C1003. To switch customers, add `[customer:C1001]` or `[customer:C1002]` as shown below. These tags select demo records; they are not a production authentication mechanism.
+The default customer is C1003. To choose another customer, add `[customer:C1001]` or `[customer:C1002]` to the first message, as shown below, and start a new chat for each test. These tags select demo records; they are not a production authentication mechanism.
 
 The <TestId>T01</TestId> to <TestId>T12</TestId> labels are the row identifiers used in the CSV, the Concierge test conversations Data Table and the recorded evidence later on this page. These are the conversations to watch:
 
@@ -528,7 +529,7 @@ These are opportunities to build on a positive result, not reasons to hold back.
 
 These are early observations from initial testing on a limited number of runs on one n8n cloud instance. I may have missed a setting or misread a result, so treat them as things to check on your own instance rather than settled conclusions.
 
-<ScrollCards label="Four potential findings from initial testing" hint="Scroll through the four findings">
+<ScrollCards label="Five potential findings from initial testing" hint="Scroll through the five findings">
 
 <ScrollCard number="01" title="A tool call with missing arguments reached the reviewer">
 
@@ -551,6 +552,12 @@ This one most likely came from my own configuration. The balance question, run s
 <ScrollCard number="04" title="Evaluation runs appeared to share memory">
 
 Also likely my configuration. Evaluation sessions reused the same ids, so run 2 seemed to be partly answering from run 1's memory. They now carry the execution id.
+
+</ScrollCard>
+
+<ScrollCard number="05" title="A code review found gaps the evaluation did not cover">
+
+These were in my workflows, not n8n. After the recorded runs, a review of the Code nodes found boundaries that held for one message but not a conversation. A follow-up could fall back to the default customer, "Yes please" after a closure request could go straight through, an unreadable skill result counted as no risk and a blank account id skipped the ownership check. The workflow files in the repository now fix these, with local tests of the Code nodes, but the fixes have not been run in n8n. The evidence on this page comes from the workflows as they were.
 
 </ScrollCard>
 

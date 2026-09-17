@@ -184,12 +184,31 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     : undefined;
 
   const postUrl = `${SITE_URL}/blog/${slug}`;
+  // A group (an article and its follow-along demos) is linked in structured
+  // data: the lead post (lowest groupOrder) has the others as parts, and each
+  // other post is part of the lead. Unlisted and coming-soon posts are left out.
+  const groupPosts = getGroupSiblings(post.group).filter((p) => !p.unlisted && !p.comingSoon);
+  const groupLead = groupPosts[0];
+  const ldRef = (p: { slug: string; title: string }) => ({
+    "@type": "Article",
+    "@id": `${SITE_URL}/blog/${p.slug}`,
+    url: `${SITE_URL}/blog/${p.slug}`,
+    headline: p.title,
+  });
+  const groupLd =
+    groupLead && groupPosts.length > 1 && !post.unlisted
+      ? groupLead.slug === slug
+        ? { hasPart: groupPosts.filter((p) => p.slug !== slug).map(ldRef) }
+        : { isPartOf: ldRef(groupLead) }
+      : {};
   // Same precedence as generateMetadata: ogImage wins over hero for the
   // structured-data image.
   const ldImagePath = post.ogImage ?? post.hero;
   const articleLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": postUrl,
+    url: postUrl,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date || undefined,
@@ -211,6 +230,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     ...(ldImagePath ? { image: [`${SITE_URL}${ldImagePath}`] } : {}),
     ...(post.canonical ? { isBasedOn: post.canonical } : {}),
+    ...groupLd,
   };
 
   return (
