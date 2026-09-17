@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import "./globals.css";
 import { Header } from "@/components/chrome/Header";
 import { Footer } from "@/components/chrome/Footer";
+import { ScrollToTop } from "@/components/chrome/ScrollToTop";
 import { CookieConsent } from "@/components/consent/CookieConsent";
 import { ConsentedAnalytics } from "@/components/consent/ConsentedAnalytics";
 import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from "@/lib/site";
@@ -84,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <Header />
-        <main id="main-content" className="flex-1">
+        <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
           {/* Page changes are transitions in the App Router, so this boundary
               plays a short fade when the page inside it changes. Only this
               "update" animates: default="none" keeps other transitions still.
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </ViewTransition>
         </main>
         <Footer />
+        <ScrollToTop />
         <CookieConsent />
         <ConsentedAnalytics />
       </body>
