@@ -39,8 +39,8 @@ export function PostTabs({
           const tabName = isDemo ? label.replace(/\s+demo$/i, "") : label;
           const badgeText = post.comingSoon ? "Coming soon" : "Demo";
           const tabClassName = `inline-flex shrink-0 items-center gap-2 whitespace-nowrap py-3 text-sm tracking-wide border-b-2 transition-colors ${
-            post.comingSoon
-              ? "cursor-not-allowed border-transparent text-ink-mute/65"
+            post.comingSoon && !isActive
+              ? "border-transparent text-ink-mute/65 hover:text-ink-mute hover:border-gold/30"
               : isActive
                 ? "border-gold-deep text-ink font-medium"
                 : "border-transparent text-ink-mute hover:text-ink-soft hover:border-gold/40"
@@ -66,19 +66,15 @@ export function PostTabs({
 
           return (
             <li key={post.slug}>
-              {post.comingSoon ? (
-                <span aria-disabled="true" title="Coming soon" className={tabClassName}>
-                  {tabContent}
-                </span>
-              ) : (
-                <Link
-                  href={`/blog/${post.slug}`}
-                  aria-current={isActive ? "page" : undefined}
-                  className={tabClassName}
-                >
-                  {tabContent}
-                </Link>
-              )}
+              {/* Coming-soon tabs still link, to a short page saying what is
+                  on the way; they keep the muted style and badge. */}
+              <Link
+                href={`/blog/${post.slug}`}
+                aria-current={isActive ? "page" : undefined}
+                className={tabClassName}
+              >
+                {tabContent}
+              </Link>
             </li>
           );
         })}

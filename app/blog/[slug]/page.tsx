@@ -262,7 +262,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         ← All writing
       </Link>
 
-      {post.unlisted ? (
+      {/* A coming-soon page is unlisted too, but readers reach it from its
+          tab, so it does not need the Unlisted note. */}
+      {post.unlisted && !post.comingSoon ? (
         <div
           role="note"
           className="ml-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-ink/5 border border-ink/15 text-xs tracking-[0.18em] uppercase text-ink-soft"

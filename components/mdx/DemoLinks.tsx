@@ -7,6 +7,8 @@ import Link from "next/link";
  *
  * Buttons with an `href` link to the demo page. Buttons without one render
  * as "coming soon" placeholders so the reader sees the full set up front.
+ * Add `upcoming` with an `href` to keep the placeholder look but link to a
+ * coming-soon page.
  *
  *   <DemoLinks label="Follow-along demos">
  *     <DemoLink tool="n8n" title="The fastest build" href="/blog/..." blurb="..." />
@@ -50,9 +52,11 @@ type LinkProps = {
   href?: string;
   /** Status text; defaults to "Open demo" when linked, "Coming soon" otherwise. */
   status?: string;
+  /** Not built yet, but has a coming-soon page at `href`. */
+  upcoming?: boolean;
 };
 
-export function DemoLink({ tool, title, blurb, href, status }: LinkProps) {
+export function DemoLink({ tool, title, blurb, href, status, upcoming }: LinkProps) {
   const body = (
     <>
       <p className="text-xs tracking-[0.18em] uppercase font-semibold mb-1 font-sans">
@@ -60,7 +64,7 @@ export function DemoLink({ tool, title, blurb, href, status }: LinkProps) {
       </p>
       <p className="font-serif text-xl leading-tight">{title}</p>
       {blurb ? <p className="mt-2 text-sm font-sans leading-snug opacity-90">{blurb}</p> : null}
-      {href ? (
+      {href && !upcoming ? (
         <p className="mt-auto inline-flex items-center gap-1.5 pt-4 font-sans text-sm font-semibold">
           {status ?? "Open demo"}
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -77,6 +81,17 @@ export function DemoLink({ tool, title, blurb, href, status }: LinkProps) {
       )}
     </>
   );
+
+  if (href && upcoming) {
+    return (
+      <Link
+        href={href}
+        className="flex flex-col rounded-lg border-2 border-dashed border-gold/40 bg-cream-50 text-ink-mute p-6 transition-colors hover:border-gold-deep/60 hover:text-ink-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
+      >
+        {body}
+      </Link>
+    );
+  }
 
   if (href) {
     return (
