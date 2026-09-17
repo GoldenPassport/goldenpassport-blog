@@ -258,6 +258,18 @@ details[open]::details-content {
 ::view-transition-new(post-header) {
   animation: none;
 }
+/* Only hold it still between two posts. Arriving from or leaving for a page
+   without it (the blog index), it fades with the page; otherwise it would sit
+   on top of the old page while that fades out. */
+::view-transition-new(post-header):only-child {
+  animation:
+    220ms ease-out 100ms both page-fade,
+    320ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both page-rise;
+}
+::view-transition-old(post-header):only-child {
+  display: block;
+  animation: 120ms ease-in both page-fade reverse;
+}
 ::view-transition-group(.page-swap) {
   animation-duration: 0s;
 }
