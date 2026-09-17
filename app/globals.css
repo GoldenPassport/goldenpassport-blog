@@ -151,6 +151,54 @@ select:focus-visible {
   to { background-position: -50% 0; }
 }
 
+/* Markdown tables in post content (GFM pipe tables). Components that render
+   their own tables add a class, so only bare <table> elements are styled. */
+main table:not([class]) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: theme("colors.ink.soft");
+}
+main table:not([class]) th {
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  vertical-align: bottom;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: theme("colors.gold.deep");
+  background: rgb(184 137 59 / 0.07);
+  border-bottom: 1px solid rgb(184 137 59 / 0.3);
+  white-space: nowrap;
+}
+main table:not([class]) td {
+  padding: 0.625rem 0.875rem;
+  vertical-align: top;
+  border-bottom: 1px solid rgb(184 137 59 / 0.15);
+}
+main table:not([class]) tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Post images: reserve their space, then fade in once loaded, so the text is
+   readable straight away and nothing pops (see components/mdx/MdxImage.tsx).
+   Without JavaScript the images simply show. */
+.img-fade {
+  transition: opacity 450ms ease-out;
+}
+.img-fade:not([data-loaded]) {
+  opacity: 0;
+}
+@media (scripting: none) {
+  .img-fade:not([data-loaded]) {
+    opacity: 1;
+  }
+}
+
 /* Post lists: each card fades up in turn (see components/blog/PostList.tsx). */
 .list-item-in {
   animation: list-item-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;

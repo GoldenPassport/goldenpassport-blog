@@ -19,7 +19,7 @@
  * `className` overrides the default image styling (full width, rounded, thin
  * gold ring). Registered in `mdx-components.tsx` and the post page's map.
  */
-import { MdxImage } from "./MdxImage";
+import { PostImage } from "./PostImage";
 
 type Props = {
   src: string;
@@ -51,7 +51,7 @@ export function Figure({
   const cap = children ?? caption;
   return (
     <figure className="not-prose my-8">
-      <MdxImage
+      <PostImage
         src={src}
         alt={alt}
         className={className ?? "w-full h-auto rounded-lg ring-1 ring-gold/10"}
@@ -86,7 +86,7 @@ export function FigureAside({ src, alt, caption, className, children }: AsidePro
     <section className="not-prose my-8 grid items-start gap-8 md:grid-cols-[minmax(0,1.25fr)_minmax(15rem,0.75fr)]">
       <div className="prose prose-lg max-w-none font-serif text-ink">{children}</div>
       <figure className="m-0">
-        <MdxImage
+        <PostImage
           src={src}
           alt={alt}
           className={className ?? "h-auto w-full rounded-lg ring-1 ring-gold/10"}

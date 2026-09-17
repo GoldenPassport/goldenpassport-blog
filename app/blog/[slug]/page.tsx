@@ -4,6 +4,7 @@ import { getAllPosts, getGroupSiblings, getPostSlugs } from "@/lib/posts";
 import { getPublicImageSize } from "@/lib/image-size";
 import { CategoryBadge, TagList } from "@/components/blog/PostCard";
 import { MdxImage } from "@/components/mdx/MdxImage";
+import { PostImage } from "@/components/mdx/PostImage";
 import { Figure } from "@/components/mdx/Figure";
 import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
 import { CodeBlock } from "@/components/mdx/CodeBlock";
@@ -44,7 +45,7 @@ import { PostToc } from "@/components/chrome/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
 
 const mdxComponents = {
-  img: MdxImage,
+  img: PostImage,
   h2: HeadingH2,
   h3: HeadingH3,
   MdxImage,

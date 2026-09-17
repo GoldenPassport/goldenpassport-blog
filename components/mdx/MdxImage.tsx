@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusTrap } from "@/lib/use-focus-trap";
+import { useImageReady } from "@/lib/use-image-ready";
 import { usePresence } from "@/lib/use-presence";
 
 /**
@@ -25,13 +26,34 @@ import { usePresence } from "@/lib/use-presence";
 
 type Props = React.ImgHTMLAttributes<HTMLImageElement>;
 
-// Inline post images default to lazy loading so screenshots below the fold
-// (and inside closed <details> steps) are not all fetched on page load.
+// Inline post images default to lazy, low-priority loading: the text renders
+// first, the hero (high priority) is fetched ahead of them, and screenshots
+// below the fold (or inside closed <details> steps) wait until they are near.
+// Each fades in once decoded (`.img-fade` in globals.css); pass width and
+// height (PostImage does) so its space is reserved and the text never jumps.
 // Pass `children` to replace the inline <img> (the hero uses next/image);
 // the lightbox still opens the original `src`.
-export function MdxImage({ src, alt, className, loading = "lazy", decoding = "async", children, ...rest }: Props) {
+export function MdxImage({
+  src,
+  alt,
+  className,
+  loading = "lazy",
+  decoding = "async",
+  fetchPriority = "low",
+  onLoad,
+  onError,
+  children,
+  ...rest
+}: Props) {
   const [open, setOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  // A cached image can finish before hydration, so its load event is missed;
+  // check completion when the element mounts as well.
+  const imgRef = useCallback((node: HTMLImageElement | null) => {
+    if (node?.complete && node.naturalWidth > 0) setLoaded(true);
+  }, []);
   const { mounted, shown } = usePresence(open);
+  const { ready: fullReady, attach: attachFull, markReady: fullLoaded } = useImageReady(mounted && typeof src === "string" ? src : undefined);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -76,11 +98,22 @@ export function MdxImage({ src, alt, className, loading = "lazy", decoding = "as
         {children ?? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
+            ref={imgRef}
             src={typeof src === "string" ? src : undefined}
             alt={alt ?? ""}
-            className={className}
+            className={`img-fade ${className ?? ""}`}
+            data-loaded={loaded ? "" : undefined}
             loading={loading}
             decoding={decoding}
+            fetchPriority={fetchPriority}
+            onLoad={(e) => {
+              setLoaded(true);
+              onLoad?.(e);
+            }}
+            onError={(e) => {
+              setLoaded(true);
+              onError?.(e);
+            }}
             {...rest}
           />
         )}
@@ -95,12 +128,16 @@ export function MdxImage({ src, alt, className, loading = "lazy", decoding = "as
           onClick={close}
           className={`fixed inset-0 z-[60] flex items-center justify-center bg-ink/80 backdrop-blur-sm p-4 sm:p-8 cursor-zoom-out transition-opacity duration-200 ease-out ${shown ? "opacity-100" : "pointer-events-none opacity-0"}`}
         >
+          {shown && !fullReady ? <LightboxSpinner /> : null}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
+            ref={attachFull}
             src={typeof src === "string" ? src : undefined}
             alt={alt ?? ""}
+            onLoad={fullLoaded}
+            onError={fullLoaded}
             onClick={(e) => e.stopPropagation()}
-            className={`max-w-full max-h-full w-auto h-auto rounded-lg shadow-2xl cursor-default transition-transform duration-200 ease-out ${shown ? "scale-100" : "scale-[0.97]"}`}
+            className={`max-w-full max-h-full w-auto h-auto rounded-lg shadow-2xl cursor-default transition-[opacity,transform] duration-300 ease-out ${shown && fullReady ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
           />
           <button
             ref={closeRef}
@@ -127,5 +164,15 @@ export function MdxImage({ src, alt, className, loading = "lazy", decoding = "as
         </div>
       ) : null}
     </>
+  );
+}
+
+/** Shown in a lightbox while a large image is still loading. */
+export function LightboxSpinner() {
+  return (
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute left-1/2 top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-2 border-cream/25 border-t-cream"
+    />
   );
 }

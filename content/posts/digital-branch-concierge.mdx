@@ -35,7 +35,8 @@ ogImage: "/posts/digital-branch-concierge/og.png"
   <DemoLink
     tool="LangGraph"
     title="The engineer's version"
-    blurb="Typed state graph, bound tools with risk ratings, interrupt and checkpointer for the human line."
+    blurb="Typed state graph, agent middleware for authorisation and approval, interrupts resumed in Studio, LangSmith evaluation."
+    href="/blog/digital-branch-concierge-langgraph-demo"
   />
   <DemoLink
     tool="Camunda"
@@ -54,7 +55,7 @@ So why do so many enterprise AI assistants still stop at the greeting?
 
 This article is for architects, business analysts, process owners and engineers across European organisations who are being asked to put an agent inside a real process. The bank branch is the worked example, not the boundary of the argument. Its handovers are visible and its work ranges from routine administration to significant decisions. The same design problem appears in healthcare, employment, education, insurance, utilities, public services and many other sectors.
 
-At heart this is a technical comparison of one service agent built three ways. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n, LangGraph and Camunda because each tool draws the line between workflow and agent in a different place. The n8n build is finished. Its follow-along demo is linked above and its files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). LangGraph and Camunda are still to come, so treat the comparison here as the design argument with one build behind it.
+At heart this is a technical comparison of one service agent built three ways. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n, LangGraph and Camunda because each tool draws the line between workflow and agent in a different place. The n8n and LangGraph builds are finished. Their follow-along demos are linked above and their files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). Camunda is still to come, so treat the comparison here as the design argument with two builds behind it.
 
 It also takes enterprise hesitation seriously. McKinsey's 2026 State of AI survey found that nearly nine in ten organisations use AI somewhere and 47 per cent are scaling chatbots across the enterprise, yet only about two in ten are scaling AI agents. My working hypothesis, and it is an inference rather than a survey finding, is that this gap is more than the normal lag of a new technology. Organisations are comfortable letting AI talk, but far less comfortable letting it act. The survey hints at what unlocks adoption: its small group of high performers is much more likely to redesign workflows around AI and actively manage AI risk. That is the process-orchestration thesis of this article in survey form.
 
@@ -242,13 +243,13 @@ Governance separates doing, challenging and assuring. The agent is a system oper
 
 </ScrollCards>
 
-A deterministic gate is only as trustworthy as the facts it reads, so each fact needs a source the model cannot write to. In the n8n build, identity and the complaint and vulnerability flags come from the customer record found at identification. The risk rating comes from the result each skill returns. Policy keywords are matched against the customer's own message, and the rules live in the gate itself. The model's reply is checked only for being empty. It is never asked whether it needs review.
+A deterministic gate is only as trustworthy as the facts it reads, so each fact needs a source the model cannot write to. In the n8n and LangGraph builds, identity and the complaint and vulnerability flags come from the customer record found at identification. The risk rating comes from the result each skill returns. Policy keywords are matched against the customer's own message, and the rules live in the gate itself. The model's reply is checked only for being empty. It is never asked whether it needs review.
 
 Put together, the principle is short. The agent may be as clever as you like about what to do. It must never be the judge of whether it was allowed to.
 
 ## The pillars of a safe agent
 
-These pillars are the target design. The n8n build tested some of them, and the follow-along page has the evidence.
+These pillars are the target design. The n8n and LangGraph builds tested some of them, and their follow-along pages have the evidence.
 
 <DefinitionGrid>
 
@@ -318,7 +319,7 @@ Tools, MCP and skills are easy to conflate. The run-through of the diagram's ele
 
 ## One concierge, three builds
 
-The three tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph begin with the agent in the middle. Camunda is built for the outer process. All three can express skills, which makes comparing the same concierge across them useful. The n8n follow-along page is linked at the top of this article.
+The three tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph begin with the agent in the middle. Camunda is built for the outer process. All three can express skills, which makes comparing the same concierge across them useful. The n8n and LangGraph follow-along pages are linked at the top of this article.
 
 <ToolComparison>
 
@@ -328,9 +329,9 @@ The AI Agent node runs the loop, with tools attached as sub-workflows, which is 
 
 </ToolCard>
 
-<ToolCard tool="LangGraph" title="The engineer's version, with LangChain underneath" status="Coming soon">
+<ToolCard tool="LangGraph" title="The engineer's version, with LangChain underneath">
 
-The concierge is a typed state graph. Routing is a structured-output call feeding a conditional edge. Tools are bound to the model from an explicit list, each carrying its risk rating. The evaluator-optimiser loop is a conditional edge back to the generator. The human line is an interrupt: when the gate node flags a case for review, the graph stops, saves its state through a checkpointer and waits for a person to resume it with their decision. Tracing goes to LangSmith or any OpenTelemetry backend.
+The concierge is a typed state graph, with a LangChain agent as one of its nodes. Tools come from an explicit registry, each carrying its risk rating, and agent middleware checks every proposed call before it runs and pauses the risky ones for approval. The gate is a plain function feeding a conditional edge. The human line is an interrupt: when the gate flags a case for review, the graph stops, saves its state through a checkpointer and waits for a person to resume it with their decision. LangSmith adds masked tracing, evaluation experiments, prompt environments and a review queue.
 
 </ToolCard>
 
@@ -346,7 +347,7 @@ The process is BPMN, so the fixed paths are literally fixed and every human deci
 
 All three builds run the same scenario so they can be compared like for like. A customer requests a statement for a rental application, mentions that they are considering a mortgage and asks about a complaint opened the previous month. That creates three levels of agency: self-service for the statement, a handover with context for the mortgage enquiry and no automated decision on the complaint.
 
-Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n build's score for each. LangGraph and Camunda scores will be added as those builds are finished.
+Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n and LangGraph builds' scores for each. Camunda's scores will be added when that build is finished.
 
 <NumberedList>
 
@@ -390,44 +391,45 @@ Each build is judged on the same six questions. Their answers roll up into the f
 
 Each demo page records the evidence as its build is completed. The main scorecard stays focused on the business concerns and the technical answers supplied by the sandwich.
 
-<Scorecard plan scoreColumn={{ label: "n8n", href: "/blog/digital-branch-concierge-n8n-demo#what-this-build-shows" }}>
+<Scorecard
+  plan
+  scoreColumns={[
+    { label: "n8n", href: "/blog/digital-branch-concierge-n8n-demo#what-this-build-shows" },
+    { label: "LangGraph", href: "/blog/digital-branch-concierge-langgraph-demo#what-this-build-shows" },
+  ]}
+>
 
 <ScorecardRow
   concern="Accountability."
-  toolLabel="n8n"
-  toolScore={8}
+  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 7 }]}
   question="Who answers when the agent acts?"
   answer="A deterministic process wrapper owns every human task and both gates. A named decision owner can change the outcome before it reaches the affected person."
 />
 
 <ScorecardRow
   concern="Explainability."
-  toolLabel="n8n"
-  toolScore={9}
+  toolScores={[{ label: "n8n", score: 9 }, { label: "LangGraph", score: 9 }]}
   question="Can we reconstruct how the outcome was reached?"
   answer="Lineage and observability on the outer band: every step, tool call, token and gate decision traced, so a reviewer can reconstruct the visit. That is execution lineage rather than an account of the model's reasoning."
 />
 
 <ScorecardRow
   concern="Containment."
-  toolLabel="n8n"
-  toolScore={8}
+  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 8 }]}
   question="What stops it doing something it should not?"
   answer="Guardrails in and out, an allow-listed toolbox, risk-rated tools and skills, pre-action authorisation on every call, writes only through skills and a hard limit on loop iterations."
 />
 
 <ScorecardRow
   concern="The decisions it must never make alone."
-  toolLabel="n8n"
-  toolScore={8}
+  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 8 }]}
   question="For example, employment, education, healthcare, credit, insurance or access to essential services."
   answer="The impact and policy gate reads structured facts, not the model's opinion, and routes anything the law or policy names to a person."
 />
 
 <ScorecardRow
   concern="Drift."
-  toolLabel="n8n"
-  toolScore={7}
+  toolScores={[{ label: "n8n", score: 7 }, { label: "LangGraph", score: 9 }]}
   question="Will it quietly get worse?"
   answer="A fixed evaluation set of realistic conversations, run on every change, asserting the expected route: answered, skill run or sent to a person. New cases come from reviewed traces, and a fixed baseline catches drift that builds up across small changes."
 />
@@ -438,7 +440,7 @@ Each demo page records the evidence as its build is completed. The main scorecar
 
 The branch concierge is a useful test because it is neither a chatbot nor a back-office batch job. In production it would talk to real people, act inside real systems and meet work ranging from routine administration to consequential decisions. Banking supplies the scenario, but the design applies to any European organisation putting an agent between a person and a service.
 
-Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n build is finished and runs on demo customer records, not a live bank. Routine requests went straight through, the higher-impact ones paused for a person and the evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The learning loop, fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with one build behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
+Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n and LangGraph builds are finished and run on demo customer records, not a live bank. In both, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden, and the LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test. Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with two builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
 
 So, who meets you at the door? An agent that can answer, do the small things and hand you over well, inside a process that knows which decisions it may never make. The ones that change a life stay with a rule and a person. That is not a limit on the concierge. It is what makes it safe to let one loose. That is Enterprise Agency.
 

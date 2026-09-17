@@ -3,6 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useFocusTrap } from "@/lib/use-focus-trap";
+import { preloadImage, useImageReady } from "@/lib/use-image-ready";
+import { usePresence } from "@/lib/use-presence";
+import { LightboxSpinner } from "./MdxImage";
 
 /**
  * Compact "view screenshot" chips for process steps. Each chip is a small
@@ -45,6 +48,10 @@ export function StepShots({ shots, label = "Screenshots", inline = false }: { sh
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const open = openIndex !== null;
+  // Keep showing the last screenshot while the lightbox fades out.
+  const [shownIndex, setShownIndex] = useState(0);
+  if (openIndex !== null && openIndex !== shownIndex) setShownIndex(openIndex);
+  const { mounted, shown } = usePresence(open);
 
   useFocusTrap(dialogRef, open);
 
@@ -76,8 +83,9 @@ export function StepShots({ shots, label = "Screenshots", inline = false }: { sh
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  const current = mounted ? (shots[shownIndex] ?? null) : null;
+  const { ready: fullReady, attach: attachFull, markReady: fullLoaded } = useImageReady(current?.src);
   if (!shots.length) return null;
-  const current = openIndex !== null ? shots[openIndex] : null;
 
   return (
     <>
@@ -88,6 +96,8 @@ export function StepShots({ shots, label = "Screenshots", inline = false }: { sh
           }}
           type="button"
           onClick={() => setOpenIndex(0)}
+          onPointerEnter={() => preloadImage(shots[0].src)}
+          onFocus={() => preloadImage(shots[0].src)}
           aria-label={`View screenshot${shots[0].caption ? `: ${shots[0].caption}` : ""}`}
           title={shots[0].caption ?? "View screenshot"}
           className="not-prose ml-1.5 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gold/40 bg-cream text-gold-deep align-middle relative -top-[0.1em] hover:bg-gold/10 hover:border-gold-deep transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
@@ -108,6 +118,8 @@ export function StepShots({ shots, label = "Screenshots", inline = false }: { sh
             }}
             type="button"
             onClick={() => setOpenIndex(i)}
+            onPointerEnter={() => preloadImage(s.src)}
+            onFocus={() => preloadImage(s.src)}
             aria-label={`View screenshot ${i + 1} of ${shots.length}${s.caption ? `: ${s.caption}` : ""}`}
             className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-cream px-3 py-1.5 font-sans text-xs font-semibold text-gold-deep hover:bg-gold/10 hover:border-gold-deep transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
           >
@@ -134,21 +146,26 @@ export function StepShots({ shots, label = "Screenshots", inline = false }: { sh
           aria-modal="true"
           aria-label={current.alt || "Screenshot"}
           onClick={close}
-          className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-ink/85 backdrop-blur-sm p-4 sm:p-8 cursor-zoom-out"
+          className={`fixed inset-0 z-[60] flex flex-col items-center justify-center bg-ink/85 backdrop-blur-sm p-4 sm:p-8 cursor-zoom-out transition-opacity duration-200 ease-out ${shown ? "opacity-100" : "pointer-events-none opacity-0"}`}
         >
+          {shown && !fullReady ? <LightboxSpinner /> : null}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
+            key={current.src}
+            ref={attachFull}
             src={current.src}
             alt={current.alt}
+            onLoad={fullLoaded}
+            onError={fullLoaded}
             onClick={(e) => e.stopPropagation()}
-            className="max-w-full max-h-[80vh] w-auto h-auto rounded-lg shadow-2xl cursor-default ring-1 ring-cream/20"
+            className={`max-w-full max-h-[80vh] w-auto h-auto rounded-lg shadow-2xl cursor-default ring-1 ring-cream/20 transition-[opacity,transform] duration-300 ease-out ${shown && fullReady ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
           />
           {current.caption ? (
             <p
               onClick={(e) => e.stopPropagation()}
               className="mt-4 max-w-2xl text-center font-sans text-sm text-cream cursor-default"
             >
-              {shots.length > 1 ? `${(openIndex ?? 0) + 1} of ${shots.length}. ` : ""}
+              {shots.length > 1 ? `${shownIndex + 1} of ${shots.length}. ` : ""}
               {current.caption}
             </p>
           ) : null}

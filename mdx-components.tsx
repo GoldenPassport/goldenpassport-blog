@@ -1,5 +1,5 @@
 import type { MDXComponents } from "mdx/types";
-import { MdxImage } from "@/components/mdx/MdxImage";
+import { PostImage } from "@/components/mdx/PostImage";
 import { Figure, FigureAside } from "@/components/mdx/Figure";
 import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
 import { CodeBlock } from "@/components/mdx/CodeBlock";
@@ -36,7 +36,7 @@ import { DownloadCallout } from "@/components/mdx/DownloadCallout";
  * Required by @next/mdx in App Router. Exports the components that MDX pages
  * can use. Overrides:
  *
- * - `img`            → MdxImage   (lightbox on click)
+ * - `img`            → PostImage  (reserved size, fade-in, lightbox on click)
  * - `pre`            → CodeBlock  (adds a copy-to-clipboard button)
  * - <TldrCard>       → ink callout used at the top of a post to summarise
  * - <VerdictCard>    → sage-green callout used for end-of-post conclusions
@@ -48,7 +48,7 @@ import { DownloadCallout } from "@/components/mdx/DownloadCallout";
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-    img: MdxImage,
+    img: PostImage,
     h2: HeadingH2,
     h3: HeadingH3,
     Figure,

@@ -14,8 +14,8 @@ unlisted: false
 group: "digital-branch-concierge"
 groupLabel: "n8n demo"
 groupOrder: 2
-hero: "/posts/digital-branch-concierge/n8n-steps/00-canvas-shape.webp"
-heroAlt: "The main process on the n8n canvas. Navy is process orchestration, gold is the agent and teal is where a person decides."
+hero: "/posts/digital-branch-concierge/n8n-steps/00-canvas-shape-key.webp"
+heroAlt: "The main process on the n8n canvas. Navy is process orchestration, gold is the agent loop and teal is human-in-the-loop."
 ---
 
 ## Introduction
@@ -100,7 +100,7 @@ Three Code Tools only read: opening_hours, find_slots and knowledge, which searc
 
 </ScrollCards>
 
-<Figure src="/posts/digital-branch-concierge/n8n-steps/00-canvas-shape.webp" alt="The Concierge main process on the n8n canvas with coloured boxes naming each grouping. Navy boxes mark process orchestration: identify and check input, check output, the impact and policy gate, replies and evaluation. A gold box marks the agent, with dashed sub-boxes for its skills and its tools and knowledge. Teal boxes mark the two human steps: pre-action approval in front of update contact details, and meaningful human review with the Slack decision, the decision record and the approval check." caption="The main process on the n8n canvas. Navy is process orchestration, gold is the agent and teal is where a person decides." />
+<Figure src="/posts/digital-branch-concierge/n8n-steps/00-canvas-shape-key.webp" alt="The Concierge main process on the n8n canvas with coloured boxes naming each grouping. Navy boxes mark process orchestration: identify and check input, check output, the impact and policy gate, replies and evaluation. A gold box marks the agent, with dashed sub-boxes for its skills and its tools and knowledge. Teal boxes mark the two human steps: pre-action approval in front of update contact details, and meaningful human review with the Slack decision, the decision record and the approval check." caption="The main process on the n8n canvas. Navy is process orchestration, gold is the agent loop and teal is human-in-the-loop." />
 
 One detail is worth noticing before you build. Every skill takes a session_customer_id input, and the tool node fills it with an expression over the Identify customer node, not with a value from the model. The skill then refuses if there is no identified customer, or if a requested account belongs to someone else. The process supplies the fact the model cannot be allowed to invent.
 
