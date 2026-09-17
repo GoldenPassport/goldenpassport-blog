@@ -23,9 +23,9 @@ recommend:
 
 ## Introduction
 
-Around a decade ago I modelled a university admissions process for a client in Australia. It took workshops and specialist tooling, and the deliverable was a whole suite of process models that our webMethods team then built. Recently, with that old work as inspiration, I gave n8n's new AI assistant, currently in preview, a brief for a simpler admissions flow and had it running in about two hours.
+Around a decade ago I modelled a university admissions process for a client in Australia. It took workshops and specialist tooling, and the deliverable was a whole suite of process models that our webMethods team then built. Recently, with that work as inspiration, I gave n8n's new AI assistant (currently in preview) a brief for a simpler admissions flow and had it running in about two hours.
 
-I wanted to see how far things have moved in that decade. I had seen and heard a lot about n8n, and it was time to have a look for myself. This is a first-impressions piece, but what stayed with me was less the tool than what it implies for the analyst using it. Rapid prototyping, token costs recorded per step and a business case you can build inside the workflow itself point to a different job: not a business analyst handing over a specification, but what I have started calling an Agentic Analyst.
+I wanted to see how far things have moved in that decade. I had heard a lot about n8n, and it was time to look for myself. This is a first-impressions piece, but what stayed with me was less the tool than what it means for the analyst using it. Rapid prototyping, token costs recorded per step and a business case you can build inside the workflow itself point to a different job: not a business analyst handing over a specification, but what I have started calling an Agentic Analyst.
 
 <TldrCard label="The short version">
 
@@ -35,7 +35,7 @@ n8n's AI assistant turned a one-line brief into a working admissions workflow in
 
 ## What I set out to build
 
-The brief was the same admissions space, application through to enrolment. The original models, every level of them, were drawn out by hand in specialist tooling and reviewed in workshops before the build. The Level 3 view below is one of the models in that suite, included for an overview of the key stages.
+The brief was the same admissions space, application through to enrolment. The original models, at every level, were drawn by hand in specialist tooling and reviewed in workshops before the build. The Level 3 view below is one model from that suite, included as an overview of the key stages.
 
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/original-level3-admissions-process.webp"
@@ -144,7 +144,7 @@ The flow loads the admission rules and matches the application against them: doe
   caption="The offer email, with accept or decline built in."
 >
 
-A simple pre-screen catches the obvious gaps first, missing information and the like. The diagram does not show a correction loop for those, but nobody is turned away for an honest mistake: the team can restart an application from their end, and adding a step that asks for what is missing is a few minutes' work in n8n. Everything substantive goes to the team, who approve or reject with the buttons in the Slack message itself. On approval the applicant gets an offer email with accept or decline built in. Accepting advances the flow into the enrolment subprocess, where the student is registered and confirmed.
+A simple pre-screen catches the obvious gaps first, such as missing information. The diagram has no correction loop for those, but nobody is turned away for an honest mistake: the team can restart an application from their end, and a step that asks for what is missing would take a few minutes to add in n8n. Everything substantive goes to the team, who approve or reject with the buttons in the Slack message itself. On approval the applicant gets an offer email with accept or decline built in. Accepting advances the flow into the enrolment subprocess, where the student is registered and confirmed.
 
 </ProcessStep>
 
@@ -168,7 +168,7 @@ Two things drove it.
 
 <NumberedItem>
 
-**The build experience itself.** It felt like a Figma for workflow design and build: fast, visual and forgiving, where you shape the thing in front of you rather than fight the tool. As someone who has spent years in and around process work, that immediacy is the part that stayed with me.
+**The build experience itself.** It felt like a Figma for workflow design and build: fast, visual and forgiving, where you shape the thing in front of you rather than fight the tool. After years in and around process work, that immediacy is what struck me most.
 
 </NumberedItem>
 
@@ -208,15 +208,15 @@ The skill is still analysis. The deliverable is a live, agentic workflow rather 
 
 </PullQuote>
 
-That points to a role I would call the Agentic Analyst (AA): someone who understands the outcome, the boundaries, the rules and the exceptions, and turns them into something that runs. The analyst who can describe a process clearly and orchestrate AI and human steps into something that actually runs is going to be valuable, and quickly.
+That points to a role I would call the Agentic Analyst (AA): someone who understands the outcome, the boundaries, the rules and the exceptions, and turns them into something that runs. An analyst who can describe a process clearly and orchestrate the AI and human steps within it will be valuable, and soon.
 
 ## You still need to be technical, for now
 
 I would not oversell the assistant. To get a result you would trust, you still need to be technically minded.
 
-Knowing what a good process looks like, how data should flow, where a human belongs in the loop and what an integration or a credential actually needs still matters, and the assistant assumes a fair bit of it. The conversational front door is real, but the room behind it still rewards someone who understands the plumbing.
+Knowing what a good process looks like, how data should flow, where a human belongs in the loop and what an integration or a credential actually needs still matters, and the assistant assumes a fair bit of it. The conversational front door is real, but what sits behind it still rewards someone who understands the plumbing.
 
-It will help you across that plumbing, to be fair. When I hit the Slack credentials, I just asked, and it walked me through OAuth2 versus a bot access token and which one each Slack node needs.
+To be fair, it will help you with the plumbing too. When I hit the Slack credentials, I just asked, and it walked me through OAuth2 versus a bot access token and which one each Slack node needs.
 
 <Figure
   src="/posts/n8n-ai-assistant-first-impressions/using-ai-problem-solve.webp"
@@ -229,17 +229,17 @@ This is a preview, so I expect that bar to keep dropping. For now, it lowers the
 
 ## Non-deterministic processes, and where a human belongs
 
-The talk of the town right now is non-determinism, and alongside it the shift away from pre-defined process definitions towards goal-centric, dynamic flows, where an agent is handed an objective and left to find its own way there. There is real value in that. But the further the shift goes, the sharper the questions get, nowhere more than in a regulated process. Who owns the decision being made? And if the goal is the same for every applicant but the journey to it is not, will people see that as fair and appropriate?
+Everyone is talking about non-determinism right now, and with it the shift from predefined processes towards goal-centric, dynamic flows, where an agent is handed an objective and left to find its own way there. There is real value in that. But the further the shift goes, the sharper the questions get, and nowhere more than in a regulated process. Who owns the decision being made? And if the goal is the same for every applicant but the journey to it is not, will people see that as fair and appropriate?
 
-Set aside for a moment that applicants in the EU are covered by GDPR, whose Article 22 restricts decisions made solely by automated processing where they significantly affect someone, and wherever such decisions are allowed at all demands safeguards, including a right to human intervention. The UK has just rewritten its own version: the Data (Use and Access) Act 2025 replaces Article 22 with Articles 22A to 22D, which permit more automated decision-making but keep those safeguards. Even without the regulation, there is a simpler test.
+Set aside for a moment that applicants in the EU are covered by GDPR. Its Article 22 restricts decisions made solely by automated processing where they significantly affect someone, and where such decisions are allowed at all, it demands safeguards, including a right to human intervention. The UK has just rewritten its own version: the Data (Use and Access) Act 2025 replaces Article 22 with Articles 22A to 22D, which permit more automated decision-making but keep those safeguards. Even without the regulation, there is a simpler test.
 
 Picture yourself as the head of admissions. A mother is in front of you, in tears, asking why her child was declined. In the same breath she tells you her child's best friend, same school, same classes, lower grades, got in, and her own child, after twelve years of hard work, did not. Now try telling her that the AI made the call, and that this is the fairest way to do it. Hard to justify, is it not? Someone has to be able to stand behind that decision, understand it and explain it to the person it lands on.
 
-That is the balance. These tools are ready to take on far more than most people expect: automate the gathering, the checking, the routing and the drudgery, and let a process run goal-first where the stakes are low. But keep a human accountable for the decisions that change a life.
+That is the balance. These tools are ready to take on far more than most people expect. Automate the gathering, the checking, the routing and the drudgery, and let a process run goal-first where the stakes are low. But keep a human accountable for the decisions that change a life.
 
 ## Conclusion
 
-I set out to see how far things had moved in a decade, so go back to the two pictures. The Level 3 overview and its Level 4 sub-processes I drew back then are still a perfectly valid way to capture a process. The running workflow at the top of this post is the simpler flow they inspired, live a couple of hours after I described it. What changed is not the analysis. It is that the analyst can now stress-test the design, build a better business case and ultimately make it run.
+I set out to see how far things had moved in a decade, so go back to the two pictures. The Level 3 overview and the more detailed models beneath it are still a perfectly valid way to capture a process. The running workflow at the top of this post is the simpler flow they inspired, live about two hours after I described it. What changed is not the analysis. It is that the analyst can now stress-test the design, build a better business case and ultimately make it run.
 
 That is what the title is pointing at.
 
@@ -259,13 +259,13 @@ That is what the title is pointing at.
 
 <TickItem>
 
-**A full-lifecycle tool.** Design, build, run, observe and cost in one place, which is exactly what that kind of analyst needs.
+**A full-lifecycle tool.** Design, build, run, observe and cost in one place, which is exactly what an Agentic Analyst needs.
 
 </TickItem>
 
 </TickList>
 
-None of it moves the human line, which is where a human still has to sign. The rules still gate. A person still has to own the decision. And someone still has to be able to explain the outcome to the mother standing in front of them. Get that balance right and the plain-language front door is not a shortcut around good analysis. It is what good analysis produces now.
+None of it moves the line where a human has to sign. The rules still gate. A person still owns the decision. And someone still has to be able to explain the outcome to the mother standing in front of them. Get that balance right and the plain-language front door is not a shortcut around good analysis. It is what good analysis produces now.
 
 A decade on, the map is the same and the job is not. From business analyst to Agentic Analyst, in the space of an afternoon. I will be using n8n again.
 

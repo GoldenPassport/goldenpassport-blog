@@ -6,7 +6,7 @@ unlisted: false
 group: "digital-branch-concierge"
 groupLabel: "Article"
 groupOrder: 1
-excerpt: "One digital service concierge, being built in n8n, LangGraph and Camunda to test how agentic AI can work safely inside a European enterprise process."
+excerpt: "One digital branch concierge, built in n8n and LangGraph with other leading automation platforms to follow, to test how agentic AI can work safely inside a European enterprise process."
 tags:
   - Agentic AI
   - Automated Decision-Making
@@ -85,7 +85,7 @@ A well-built agent is not a free-for-all. Around it sits a deterministic process
 
 </ScrollCards>
 
-My working answer is the headline. Structure at the edges, freedom in the middle. I call the result **Enterprise Agency**: agentic AI an enterprise can stand behind, because it is free to act and still accountable for what it does.
+My working answer is the headline: structure at the edges, freedom in the middle. I call the result **Enterprise Agency**: agentic AI an enterprise can stand behind, because it is free to act and still accountable for what it does.
 
 ## What the "branch concierge" actually does
 
@@ -104,7 +104,7 @@ Strip the role back and it is four jobs:
 
 </FigureAside>
 
-The outcome is warm and personal, and above all fast: people are served more quickly and with less confusion, and specialists only see the cases that need them. That is the bar for the digital version too.
+The result is warm, personal and above all fast: people are served more quickly and with less confusion, and specialists see only the cases that need them. That is the bar for the digital version too.
 
 ## A sandwich, not a dial
 
@@ -165,7 +165,7 @@ The branch concierge makes the boundary visible, but it does not define the audi
 
 **Data protection law applies across sectors.** The EU GDPR uses the term automated decision-making. Article 22 gives people the right not to be subject to a decision based solely on automated processing that has legal or similarly significant effects, with exceptions for contract necessity, explicit consent or a basis in law. Where an exception applies, safeguards include human intervention, the right to express a view and the right to contest the decision. The trigger is the nature and effect of the decision, not whether the organisation calls itself regulated or the software is described as an agent.
 
-**The EU AI Act looks at the use case.** It is cross-industry and risk-based. Annex III lists high-risk uses that include recruitment and promotion, admission to education, creditworthiness, pricing of life and health insurance, access to essential public services and benefits, migration and justice. A high-risk system must be designed for effective human oversight and logging, and the organisation deploying it must assign oversight to competent people. Prohibited practices have applied since February 2025 and general-purpose model rules since August 2025. The high-risk obligations were due in August 2026. Under the Digital Omnibus they now apply from December 2027 for the standalone Annex III uses, and from August 2028 for high-risk AI embedded in products already covered by EU product-safety law. The design direction is already clear.
+**The EU AI Act looks at the use case.** It is cross-industry and risk-based. Annex III lists high-risk uses that include recruitment and promotion, admission to education, creditworthiness, pricing of life and health insurance, access to essential public services and benefits, migration and justice. A high-risk system must be designed for effective human oversight and logging, and the organisation deploying it must assign oversight to competent people. Prohibited practices have applied since February 2025 and general-purpose model rules since August 2025. The high-risk obligations were due in August 2026. Under the Digital Omnibus they now apply from December 2027 for the standalone Annex III uses, and from August 2028 for high-risk AI embedded in products already covered by EU product-safety law. Whatever the final dates, the design direction is already clear.
 
 The practical design test is therefore portable: identify the decisions that affect an individual, classify their impact, decide what automation is permitted and put a named decision owner outside the agent wherever meaningful human judgement is required.
 
@@ -243,7 +243,7 @@ Governance separates doing, challenging and assuring. The agent is a system oper
 
 </ScrollCards>
 
-A deterministic gate is only as trustworthy as the facts it reads, so each fact needs a source the model cannot write to. In the n8n and LangGraph builds, identity and the complaint and vulnerability flags come from the customer record found at identification. The risk rating comes from the result each skill returns. Policy keywords are matched against the customer's own message, and the rules live in the gate itself. The model's reply is checked only for being empty. It is never asked whether it needs review.
+A deterministic gate is only as trustworthy as the facts it reads, so each fact needs a source the model cannot write to. In the n8n and LangGraph builds, identity and the complaint and vulnerability flags come from the customer record found at identification. The risk rating comes from each skill's result in n8n and from the tool registry in LangGraph. Policy keywords are matched against the customer's own messages, and the rules live in the gate itself. The model is never asked whether its reply needs review. n8n checks only that the reply is not empty, and LangGraph also applies a fixed rule that sends a reply claiming an outcome, such as an account closed, to a person.
 
 Put together, the principle is short. The agent may be as clever as you like about what to do. It must never be the judge of whether it was allowed to.
 
@@ -315,11 +315,11 @@ Every change to what the agent knows or does is a controlled change: a new model
 
 </DefinitionGrid>
 
-Tools, MCP and skills are easy to conflate. The run-through of the diagram's elements, in the sandwich section, keeps them apart: tools are the agent's hands, MCP is how the hands are wired and skills are what the agent is actually allowed to do with them.
+Tools, MCP and skills are easy to confuse. The run-through of the diagram's elements, in the sandwich section, keeps them apart: tools are the agent's hands, MCP is how the hands are wired and skills are what the agent is actually allowed to do with them.
 
 ## One concierge, three builds
 
-The three tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph begin with the agent in the middle. Camunda is built for the outer process. All three can express skills, which makes comparing the same concierge across them useful. The n8n and LangGraph follow-along pages are linked at the top of this article.
+The three tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph begin with the agent in the middle. Camunda is built for the outer process. All three can express skills, which is what makes building the same concierge in each a fair comparison. The n8n and LangGraph follow-along pages are linked at the top of this article.
 
 <ToolComparison>
 
@@ -389,7 +389,7 @@ Each build is judged on the same six questions. Their answers roll up into the f
 
 </NumberedList>
 
-Each demo page records the evidence as its build is completed. The main scorecard stays focused on the business concerns and the technical answers supplied by the sandwich.
+Each demo page records the evidence from its build. The scorecard here stays with the business concerns and the answers the sandwich gives them.
 
 <Scorecard
   plan
@@ -440,7 +440,9 @@ Each demo page records the evidence as its build is completed. The main scorecar
 
 The branch concierge is a useful test because it is neither a chatbot nor a back-office batch job. In production it would talk to real people, act inside real systems and meet work ranging from routine administration to consequential decisions. Banking supplies the scenario, but the design applies to any European organisation putting an agent between a person and a service.
 
-Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n and LangGraph builds are finished and run on demo customer records, not a live bank. In both, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden, and the LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test. Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with two builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
+Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n and LangGraph builds are finished and run on demo customer records, not a live bank. In both, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test.
+
+Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with two builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
 
 So, who meets you at the door? An agent that can answer, do the small things and hand you over well, inside a process that knows which decisions it may never make. The ones that change a life stay with a rule and a person. That is not a limit on the concierge. It is what makes it safe to let one loose. That is Enterprise Agency.
 
