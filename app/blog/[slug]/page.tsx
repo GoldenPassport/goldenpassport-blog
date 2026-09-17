@@ -241,7 +241,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         the header and footer. On xl+ the TOC is an in-flow sticky sidebar in
         the second grid column; below xl it collapses to a floating button and
         the article fills the full container width. */}
-    <div className="mx-auto max-w-5xl px-6 pt-16 pb-20 xl:grid xl:grid-cols-[minmax(0,1fr)_14rem] xl:gap-12">
+    {/* A coming-soon page has no contents sidebar, so it takes the full width. */}
+    <div
+      className={`mx-auto max-w-5xl px-6 pt-16 pb-20 ${
+        post.comingSoon ? "" : "xl:grid xl:grid-cols-[minmax(0,1fr)_14rem] xl:gap-12"
+      }`}
+    >
     <article className="min-w-0">
       <script
         type="application/ld+json"
