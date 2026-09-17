@@ -188,6 +188,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   // data: the lead post (lowest groupOrder) has the others as parts, and each
   // other post is part of the lead. Unlisted and coming-soon posts are left out.
   const groupPosts = getGroupSiblings(post.group).filter((p) => !p.unlisted && !p.comingSoon);
+  // What a coming-soon page links to: the parts of its group that are live.
+  const availableSiblings = post.comingSoon ? groupPosts.filter((p) => p.slug !== slug) : [];
   const groupLead = groupPosts[0];
   const ldRef = (p: { slug: string; title: string }) => ({
     "@type": "Article",
@@ -319,6 +321,48 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       ) : null}
 
+      {post.comingSoon ? (
+        // A build that is not published yet: a placeholder panel in the same
+        // dashed style as its "Coming soon" demo card, with links to the
+        // parts of the group readers can open now.
+        <header className="mt-8 rounded-2xl border-2 border-dashed border-gold/40 bg-cream-50 px-6 py-12 text-center sm:px-12 sm:py-16">
+          <span className="inline-flex rounded-full border border-ink/15 bg-ink/5 px-3 py-1.5 font-sans text-xs font-semibold uppercase leading-none tracking-[0.18em] text-ink-mute">
+            Coming soon
+          </span>
+          <h1 className="mx-auto mt-5 max-w-2xl font-serif text-4xl leading-tight text-ink md:text-5xl">{post.title}</h1>
+          {post.excerpt ? (
+            <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">{post.excerpt.replace(/^Coming soon:\s*(.)/i, (_, first: string) => first.toUpperCase())}</p>
+          ) : null}
+          <div className="mx-auto mt-8 max-w-xl rounded-xl bg-white/60 px-5 py-4 ring-1 ring-gold/20">
+            <p className="font-serif text-lg text-ink">Have thoughts on this build?</p>
+            <p className="mt-1 text-sm text-ink-soft">
+              What it should test, how you would draw the boundary or a case from your own work: I would like to hear it before I build it.
+            </p>
+            <Link
+              href="/contact"
+              className="mt-4 inline-flex rounded-full bg-ink px-5 py-2.5 font-sans text-sm font-semibold text-cream transition-colors hover:bg-gold-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
+            >
+              Share your thoughts →
+            </Link>
+          </div>
+          {availableSiblings.length ? (
+            <div className="mt-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-deep">In the meantime</p>
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+                {availableSiblings.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/blog/${p.slug}`}
+                    className="rounded-full border border-ink/15 px-5 py-2.5 font-sans text-sm font-semibold text-ink-soft transition-colors hover:border-gold-deep/50 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep"
+                  >
+                    {p.groupLabel ?? p.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </header>
+      ) : (
       <header className="mt-6">
         <div className="flex items-center flex-wrap gap-3">
           <CategoryBadge category={post.category} />
@@ -352,26 +396,36 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         ) : null}
         <TagList tags={post.tags} linkable truncate />
       </header>
+      )}
 
-      <div className="gold-rule my-10" />
+      {/* A coming-soon page is only its panel: no article body or share. */}
+      {post.comingSoon ? null : (
+        <>
+          <div className="gold-rule my-10" />
 
-      {/* max-w-none overrides the typography plugin's default max-width: 65ch
-          so the body fills the article wrapper (max-w-3xl) and aligns with
-          the header above it. */}
-      <div className="prose prose-lg max-w-none font-serif">
-        <MDXContent components={mdxComponents} />
-      </div>
+          {/* max-w-none overrides the typography plugin's default max-width: 65ch
+              so the body fills the article wrapper (max-w-3xl) and aligns with
+              the header above it. */}
+          <div className="prose prose-lg max-w-none font-serif">
+            <MDXContent components={mdxComponents} />
+          </div>
+        </>
+      )}
 
       {/* Post footer: share + back link. The thin gold rule above mirrors
           the rule between the header and body, bracketing the article. */}
       <div className="gold-rule my-12" />
       <footer className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-col gap-2">
-          <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold">
-            Found this useful?
-          </p>
-          <LinkedInShare url={postUrl} title={post.title} />
-        </div>
+        {post.comingSoon ? (
+          <span />
+        ) : (
+          <div className="flex flex-col gap-2">
+            <p className="text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold">
+              Found this useful?
+            </p>
+            <LinkedInShare url={postUrl} title={post.title} />
+          </div>
+        )}
         <Link
           href="/blog"
           className="text-sm text-ink-mute hover:text-gold-deep transition-colors"
@@ -380,7 +434,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </Link>
       </footer>
     </article>
-    <PostToc />
+    {post.comingSoon ? null : <PostToc />}
     </div>
     </>
   );
