@@ -251,7 +251,7 @@ export function PostToc() {
           height while the tall article column gives it room to stick. */}
       <nav
         aria-label="Table of contents"
-        className="hidden xl:block xl:sticky xl:top-28 xl:self-start w-full max-h-[calc(100vh-9rem)] overflow-y-auto"
+        className="hidden xl:block xl:sticky xl:top-28 xl:self-start xl:mt-8 w-full max-h-[calc(100vh-9rem)] overflow-y-auto"
       >
         <p className="pl-7 text-xs tracking-[0.22em] uppercase text-gold-deep font-semibold mb-4">
           On this page
