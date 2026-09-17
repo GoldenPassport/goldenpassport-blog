@@ -1,5 +1,11 @@
 import Link from "next/link";
-import type { PostMeta } from "@/lib/posts";
+
+export type PostTab = {
+  slug: string;
+  /** Tab label: the post's `groupLabel`, or its title. */
+  label: string;
+  comingSoon?: boolean;
+};
 
 /**
  * Tab navigation rendered above the title on posts that belong to a `group`.
@@ -14,6 +20,9 @@ import type { PostMeta } from "@/lib/posts";
  * SEO-indexable. Posts opt in via `group` + `groupLabel` + `groupOrder`
  * frontmatter.
  *
+ * Rendered by the blog layout (PostHeader), not the post page, so the tabs
+ * stay in place while only the post below them changes.
+ *
  * Returns null if fewer than two siblings exist, so single-tab groups do
  * not render a pointless lone underline.
  */
@@ -21,20 +30,20 @@ export function PostTabs({
   siblings,
   currentSlug,
 }: {
-  siblings: PostMeta[];
+  siblings: PostTab[];
   currentSlug: string;
 }) {
   if (siblings.length < 2) return null;
 
   return (
-    <nav aria-label="Sections of this review" className="not-prose mb-6 border-b border-gold/20">
+    <nav aria-label="Sections of this review" className="not-prose border-b border-gold/20">
       {/* -mb-px pulls each tab's bottom border down 1px so it visually overlaps
           the parent <nav>'s bottom border, giving that clean "tab sits on the
           line" appearance familiar from docs sites. */}
       <ul className="-mb-px flex items-center gap-6 sm:gap-8 overflow-x-auto whitespace-nowrap">
         {siblings.map((post) => {
           const isActive = post.slug === currentSlug;
-          const label = post.groupLabel || post.title;
+          const label = post.label;
           const isDemo = /\s+demo$/i.test(label);
           const tabName = isDemo ? label.replace(/\s+demo$/i, "") : label;
           const badgeText = post.comingSoon ? "Coming soon" : "Demo";

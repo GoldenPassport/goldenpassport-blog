@@ -10,7 +10,6 @@ import { Republished, PullQuote, Callout } from "@/components/mdx/Asides";
 import { CodeBlock } from "@/components/mdx/CodeBlock";
 import { HeroImage } from "@/components/blog/HeroImage";
 import { MarkAsRead } from "@/components/blog/MarkAsRead";
-import { PostTabs } from "@/components/blog/PostTabs";
 import { RecommendModal } from "@/components/blog/RecommendModal";
 import { TldrCard, VerdictCard, CtaCard } from "@/components/mdx/CalloutCard";
 import { Accordion } from "@/components/mdx/Accordion";
@@ -237,13 +236,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <>
-    {/* Article + TOC share one max-w-5xl container so the content aligns with
+    {/* The back link and group tabs above this come from the blog layout
+        (PostHeader), so they stay put when moving between tabs.
+        Article + TOC share one max-w-5xl container so the content aligns with
         the header and footer. On xl+ the TOC is an in-flow sticky sidebar in
         the second grid column; below xl it collapses to a floating button and
         the article fills the full container width. */}
     {/* A coming-soon page has no contents sidebar, so it takes the full width. */}
     <div
-      className={`mx-auto max-w-5xl px-6 pt-16 pb-20 ${
+      className={`mx-auto max-w-5xl px-6 pb-20 ${
         post.comingSoon ? "" : "xl:grid xl:grid-cols-[minmax(0,1fr)_14rem] xl:gap-12"
       }`}
     >
@@ -265,36 +266,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           cta={post.recommend.cta}
         />
       ) : null}
-      <Link href="/blog" className="text-sm text-ink-mute hover:text-gold-deep">
-        ← All writing
-      </Link>
-
-      {/* A coming-soon page is unlisted too, but readers reach it from its
-          tab, so it does not need the Unlisted note. */}
-      {post.unlisted && !post.comingSoon ? (
-        <div
-          role="note"
-          className="ml-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-ink/5 border border-ink/15 text-xs tracking-[0.18em] uppercase text-ink-soft"
-        >
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-            <line x1="1" y1="1" x2="23" y2="23" />
-          </svg>
-          Unlisted
-        </div>
-      ) : null}
-
-      {/* Group tab nav (e.g. Article / Demo) sits above the hero, so every
-          tab in a group opens on the same navigation before its own image.
-          Returns null when there are no siblings, so single posts keep their
-          original layout. */}
-      <div className="mt-6">
-        <PostTabs
-          siblings={getGroupSiblings(post.group)}
-          currentSlug={post.slug}
-        />
-      </div>
-
       {post.hero ? (
         <figure className="mt-8 -mx-6 sm:mx-0">
           {/* Hero is a scene-setting banner, not a captioned figure: the
