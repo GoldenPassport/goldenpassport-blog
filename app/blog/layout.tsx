@@ -21,10 +21,13 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
     ]),
   );
 
+  // One element around the header and the page: the page transition in
+  // app/layout.tsx pairs the old and new page by their top-level elements, so
+  // two siblings here would pair the blog index with the post header alone.
   return (
-    <>
+    <div>
       <PostHeader posts={posts} />
       {children}
-    </>
+    </div>
   );
 }
