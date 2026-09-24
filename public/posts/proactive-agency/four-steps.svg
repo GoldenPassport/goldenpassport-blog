@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">Four steps from history to intervention</title>
-  <desc id="desc">Four steps in a row. One, know what good and bad look like: thousands of past journeys show the typical path, loopbacks and drop-offs, giving a baseline from evidence. Two, spot divergence live: every running journey is compared with those patterns as it happens, finding journeys off their usual path. Three, judge the divergence: some deviations are better and worth learning from, others match known bad patterns such as repeated loopbacks, so learn from it or act on it. Four, expectations and gap analysis: compare what the customer and the business expect by the end with the projected finish, and if it falls short an agent steps in to steer it back, find a new path to the goal or flag it to a person. Underneath, better paths found in step three are validated and fed back into what good looks like in step one.</desc>
+  <desc id="desc">Four steps in a row. One, know what good and bad look like: thousands of past journeys show the typical path, loopbacks and drop-offs, giving a baseline from evidence. Two, spot divergence live: every running journey is compared with those patterns as it happens, finding journeys off their usual path. Three, judge the divergence: some deviations are better and worth learning from, others match known bad patterns such as repeated loopbacks, so learn from it or act on it. Four, expectations and gap analysis: compare what the customer and the business expect by the end with the projected finish, and if it falls short an agent steps in to steer it back, find a new path to the goal or refer it to an authorised person. Underneath, better paths found in step three are validated and fed back into what good looks like in step one.</desc>
   <defs>
     <style>
       .h1 { fill:#0F1B2D; font:600 40px Georgia, serif }
@@ -149,7 +149,8 @@
     <text class="label" x="632" y="532">OUTPUT</text>
     <text class="out" x="632" y="552">Learn from it, or act on it</text>
     <text class="label" x="906" y="532">OUTPUT</text>
-    <text class="out" x="906" y="552" style="fill:#2F7A5A">Steer back, new path or a person</text>
+    <text class="out" x="906" y="552" style="fill:#2F7A5A">Steer back, new path or</text>
+    <text class="out" x="906" y="569" style="fill:#2F7A5A">an authorised person</text>
   </g>
 
   <!-- learning loop -->
