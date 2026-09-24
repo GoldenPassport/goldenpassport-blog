@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Four steps from history to intervention</title>
+  <desc id="desc">Four steps in a row. One, know what good and bad look like: thousands of past journeys show the typical path, loopbacks and drop-offs, giving a baseline from evidence. Two, spot divergence live: every running journey is compared with those patterns as it happens, finding journeys off their usual path. Three, judge the divergence: some deviations are better and worth learning from, others match known bad patterns such as repeated loopbacks, so learn from it or act on it. Four, expectations and gap analysis: compare what the customer and the business expect by the end with the projected finish, and if it falls short an agent steps in to steer it back, find a new path to the goal or flag it to a person. Underneath, better paths found in step three are validated and fed back into what good looks like in step one.</desc>
+  <defs>
+    <style>
+      .h1 { fill:#0F1B2D; font:600 40px Georgia, serif }
+      .h2 { fill:#2A3548; font:400 20px Arial, sans-serif }
+      .tag { fill:#8C661F; font:700 12px Arial, sans-serif; letter-spacing:0.2em }
+      .num { fill:#FEFCF8; font:700 16px Georgia, serif; text-anchor:middle }
+      .title { fill:#0F1B2D; font:600 21px Georgia, serif }
+      .body { fill:#2A3548; font:400 13.5px Arial, sans-serif }
+      .mini { font:italic 400 11.5px Arial, sans-serif }
+      .label { fill:#8C661F; font:700 11px Arial, sans-serif; letter-spacing:0.16em }
+      .out { fill:#0F1B2D; font:600 13.5px Arial, sans-serif }
+      .loop { fill:#2A3548; font:italic 400 14px Arial, sans-serif; text-anchor:middle }
+      .key { fill:#2A3548; font:400 14px Arial, sans-serif }
+      .brand { fill:#8C661F; font:700 15px Arial, sans-serif; letter-spacing:0.05em }
+    </style>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8C661F"/>
+    </marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#B8612A"/>
+    </marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9B3A32"/>
+    </marker>
+    <marker id="gr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2F7A5A"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="675" fill="#FBF7EF"/>
+
+  <text class="h1" x="64" y="68">Four steps from history to intervention</text>
+  <text class="h2" x="64" y="102">Process intelligence gives agents sight: where a journey is likely to fall short, an agent steps in.</text>
+  <line x1="64" y1="126" x2="1136" y2="126" stroke="#B8893B" stroke-width="1.5"/>
+
+  <!-- arrows between cards -->
+  <line x1="316" y1="330" x2="334" y2="330" stroke="#8C661F" stroke-width="2.5" marker-end="url(#g)"/>
+  <line x1="590" y1="330" x2="608" y2="330" stroke="#8C661F" stroke-width="2.5" marker-end="url(#g)"/>
+  <line x1="864" y1="330" x2="882" y2="330" stroke="#8C661F" stroke-width="2.5" marker-end="url(#g)"/>
+
+  <!-- ===== 1 Know good and bad ===== -->
+  <g transform="translate(64 150)">
+    <rect width="250" height="350" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.25"/>
+    <circle cx="36" cy="38" r="16" fill="#8C661F"/><text class="num" x="36" y="44">1</text>
+    <text class="tag" x="62" y="43">HISTORY</text>
+    <text class="title" x="20" y="86">Know what good</text>
+    <text class="title" x="20" y="110">and bad look like</text>
+    <rect x="20" y="126" width="210" height="124" rx="10" fill="#F5EDDC"/>
+    <!-- mini map -->
+    <line x1="70" y1="156" x2="70" y2="179" stroke="#8C661F" stroke-width="4"/>
+    <line x1="70" y1="197" x2="70" y2="220" stroke="#8C661F" stroke-width="4"/>
+    <circle cx="70" cy="147" r="9" fill="#FEFCF8" stroke="#0F1B2D" stroke-width="1.5"/>
+    <circle cx="70" cy="188" r="9" fill="#FEFCF8" stroke="#0F1B2D" stroke-width="1.5"/>
+    <circle cx="70" cy="229" r="9" fill="#FEFCF8" stroke="#0F1B2D" stroke-width="1.5"/>
+    <path d="M61 229 C40 229 40 188 59 188" fill="none" stroke="#B8612A" stroke-width="2.4" marker-end="url(#o)"/>
+    <path d="M79 188 C110 188 116 200 120 214" fill="none" stroke="#9B3A32" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#r)"/>
+    <text class="mini" x="96" y="160" style="fill:#8C661F">typical path</text>
+    <text class="mini" x="128" y="208" style="fill:#9B3A32">drop-off</text>
+    <text class="mini" x="86" y="240" style="fill:#B8612A">loopback</text>
+    <text class="mini" x="224" y="144" style="fill:#5B6577;text-anchor:end">10k journeys</text>
+    <text class="body" x="20" y="282">Thousands of past journeys show</text>
+    <text class="body" x="20" y="300">which paths reach the goal, how</text>
+    <text class="body" x="20" y="318">long they take and where they</text>
+    <text class="body" x="20" y="336">go wrong.</text>
+  </g>
+
+  <!-- ===== 2 Spot divergence ===== -->
+  <g transform="translate(338 150)">
+    <rect width="250" height="350" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.25"/>
+    <circle cx="36" cy="38" r="16" fill="#8C661F"/><text class="num" x="36" y="44">2</text>
+    <text class="tag" x="62" y="43">LIVE</text>
+    <text class="title" x="20" y="86">Spot divergence</text>
+    <text class="title" x="20" y="110">live</text>
+    <rect x="20" y="126" width="210" height="124" rx="10" fill="#F5EDDC"/>
+    <line x1="36" y1="168" x2="214" y2="168" stroke="#8C661F" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="52" cy="168" r="6" fill="#8C661F"/><circle cx="100" cy="168" r="6" fill="#8C661F"/><circle cx="148" cy="168" r="6" fill="#8C661F"/><circle cx="196" cy="168" r="6" fill="#8C661F"/>
+    <text class="mini" x="36" y="152" style="fill:#8C661F">usual path</text>
+    <path d="M100 168 C120 168 128 204 150 214" fill="none" stroke="#9B3A32" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#r)"/>
+    <circle cx="160" cy="218" r="13" fill="none" stroke="#9B3A32" stroke-width="1" opacity="0.45"/>
+    <circle cx="160" cy="218" r="7" fill="#0F1B2D" stroke="#9B3A32" stroke-width="2.5"/>
+    <text class="mini" x="178" y="222" style="fill:#9B3A32">live case</text>
+    <text class="body" x="20" y="282">Compare every running journey</text>
+    <text class="body" x="20" y="300">with those patterns as it</text>
+    <text class="body" x="20" y="318">happens, not in next month's</text>
+    <text class="body" x="20" y="336">report.</text>
+  </g>
+
+  <!-- ===== 3 Judge ===== -->
+  <g transform="translate(612 150)">
+    <rect width="250" height="350" rx="14" fill="#FEFCF8" stroke="#B8893B" stroke-width="1.25"/>
+    <circle cx="36" cy="38" r="16" fill="#8C661F"/><text class="num" x="36" y="44">3</text>
+    <text class="tag" x="62" y="43">JUDGE</text>
+    <text class="title" x="20" y="86">Judge the</text>
+    <text class="title" x="20" y="110">divergence</text>
+    <rect x="20" y="126" width="210" height="124" rx="10" fill="#F5EDDC"/>
+    <g transform="translate(-13 0)">
+    <circle cx="56" cy="188" r="8" fill="#0F1B2D"/>
+    <path d="M64 184 C96 164 110 158 134 158" fill="none" stroke="#2F7A5A" stroke-width="2.5" marker-end="url(#gr)"/>
+    <path d="M64 192 C96 212 110 218 134 218" fill="none" stroke="#B8612A" stroke-width="2.5" marker-end="url(#o)"/>
+    <circle cx="150" cy="158" r="11" fill="#2F7A5A"/>
+    <polyline points="145 158 149 162 156 154" fill="none" stroke="#FEFCF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="150" cy="218" r="11" fill="#9B3A32"/>
+    <line x1="146" y1="214" x2="154" y2="222" stroke="#FEFCF8" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="154" y1="214" x2="146" y2="222" stroke="#FEFCF8" stroke-width="2.2" stroke-linecap="round"/>
+    <text class="mini" x="167" y="155" style="fill:#2F7A5A;font-weight:700">better</text>
+    <text class="mini" x="167" y="169" style="fill:#2F7A5A">learn from it</text>
+    <text class="mini" x="167" y="215" style="fill:#9B3A32;font-weight:700">known bad</text>
+    <text class="mini" x="167" y="229" style="fill:#9B3A32">loopbacks</text>
+    </g>
+    <text class="body" x="20" y="282">Some deviations are better and</text>
+    <text class="body" x="20" y="300">worth learning from. Others</text>
+    <text class="body" x="20" y="318">match known bad patterns, such</text>
+    <text class="body" x="20" y="336">as repeated loopbacks.</text>
+  </g>
+
+  <!-- ===== 4 Expectations and gap ===== -->
+  <g transform="translate(886 150)">
+    <rect width="250" height="350" rx="14" fill="#FEFCF8" stroke="#8C661F" stroke-width="2"/>
+    <circle cx="36" cy="38" r="16" fill="#8C661F"/><text class="num" x="36" y="44">4</text>
+    <text class="tag" x="62" y="43">GOAL</text>
+    <text class="title" x="20" y="86">Expectations and</text>
+    <text class="title" x="20" y="110">gap analysis</text>
+    <rect x="20" y="126" width="210" height="124" rx="10" fill="#F5EDDC"/>
+    <text class="mini" x="112" y="148" style="fill:#9B3A32;font-weight:700;text-anchor:middle">expected</text>
+    <rect x="34" y="158" width="72" height="16" rx="3" fill="#0F1B2D"/>
+    <rect x="106" y="158" width="80" height="16" fill="#B8893B"/>
+    <line x1="126" y1="152" x2="126" y2="180" stroke="#9B3A32" stroke-width="2" stroke-dasharray="3 2"/>
+    <text class="mini" x="34" y="192" style="fill:#0F1B2D">so far</text>
+    <text class="mini" x="186" y="192" style="fill:#8C661F;text-anchor:end">projected</text>
+    <path d="M126 198 L126 203 L186 203 L186 198" fill="none" stroke="#9B3A32" stroke-width="1.6"/>
+    <text class="mini" x="156" y="216" style="fill:#9B3A32;font-weight:700;text-anchor:middle">gap</text>
+    <rect x="54" y="224" width="142" height="20" rx="10" fill="#2F7A5A"/>
+    <text x="125" y="238" style="fill:#FEFCF8;font:700 11.5px Arial, sans-serif;text-anchor:middle">Agent steps in</text>
+    <text class="body" x="20" y="282">Compare what the customer and</text>
+    <text class="body" x="20" y="300">the business expect by the end</text>
+    <text class="body" x="20" y="318">with the projected finish. If it</text>
+    <text class="body" x="20" y="336">falls short, an agent steps in.</text>
+  </g>
+
+  <!-- output row -->
+  <g>
+    <text class="label" x="84" y="532">OUTPUT</text>
+    <text class="out" x="84" y="552">A baseline from evidence</text>
+    <text class="label" x="358" y="532">OUTPUT</text>
+    <text class="out" x="358" y="552">Journeys off their usual path</text>
+    <text class="label" x="632" y="532">OUTPUT</text>
+    <text class="out" x="632" y="552">Learn from it, or act on it</text>
+    <text class="label" x="906" y="532">OUTPUT</text>
+    <text class="out" x="906" y="552" style="fill:#2F7A5A">Steer back, new path or a person</text>
+  </g>
+
+  <!-- learning loop -->
+  <path d="M737 566 L737 588 L189 588 L189 570" fill="none" stroke="#2F7A5A" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#gr)"/>
+  <rect x="270" y="578" width="386" height="22" rx="11" fill="#FBF7EF"/>
+  <text class="loop" x="463" y="594">Validated better paths feed back into what good looks like</text>
+
+  <!-- key and brand -->
+  <line x1="64" y1="646" x2="92" y2="646" stroke="#8C661F" stroke-width="5"/>
+  <text class="key" x="100" y="651">Typical path</text>
+  <line x1="208" y1="646" x2="236" y2="646" stroke="#B8612A" stroke-width="3"/>
+  <text class="key" x="244" y="651">Loopback</text>
+  <line x1="334" y1="646" x2="362" y2="646" stroke="#9B3A32" stroke-width="2" stroke-dasharray="5 4"/>
+  <text class="key" x="370" y="651">Divergence or gap</text>
+  <line x1="514" y1="646" x2="542" y2="646" stroke="#2F7A5A" stroke-width="2.5"/>
+  <text class="key" x="550" y="651">Better path</text>
+  <text class="brand" x="1136" y="651" text-anchor="end">goldenpassport.blog</text>
+</svg>

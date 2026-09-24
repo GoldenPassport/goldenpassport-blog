@@ -349,7 +349,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             {post.readingTime ? ` · ${post.readingTime}` : ""}
           </span>
         </div>
-        <h1 className="mt-3 font-serif text-4xl md:text-5xl text-ink leading-tight">{post.title}</h1>
+        <h1 className="mt-3 font-serif text-4xl md:text-5xl text-ink leading-tight">
+          {post.titleSplit && post.title.includes(": ") ? (
+            // Headline and deck: the part after the colon sits on its own line, a size smaller.
+            <>
+              {post.title.slice(0, post.title.indexOf(": ") + 1)}
+              <span className="mt-1 block text-[0.72em] leading-tight">{post.title.slice(post.title.indexOf(": ") + 2)}</span>
+            </>
+          ) : (
+            post.title
+          )}
+        </h1>
         {post.excerpt ? (
           <p className="mt-4 text-lg text-ink-soft">{post.excerpt}</p>
         ) : null}

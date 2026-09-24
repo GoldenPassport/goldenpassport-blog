@@ -88,6 +88,8 @@ export type PostMeta = {
   /** Slug of a newer post that supersedes this one. Shown as a note in the
    *  post header. Ignored if that post does not exist. */
   supersededBy?: string;
+  /** Show the part of the title after its first colon on its own line, a size smaller. */
+  titleSplit?: boolean;
 };
 
 export type RecommendData = {
@@ -103,8 +105,14 @@ export type RecommendData = {
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 
+/**
+ * Reading time from the prose only: MDX comments and component tags (with
+ * their props, such as long image alt text) are not read, so they are not
+ * counted. A post can override the result with `readingTime` in frontmatter.
+ */
 function estimateReadingTime(body: string): string {
-  const words = body.trim().split(/\s+/).length;
+  const prose = body.replace(/\{\/\*[\s\S]*?\*\/\}/g, " ").replace(/<\/?[A-Za-z][^>]*>/g, " ");
+  const words = prose.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.round(words / 220));
   return `${minutes} min read`;
 }
@@ -165,7 +173,8 @@ export function getAllPosts(): PostMeta[] {
       draft,
       recommend,
       supersededBy: typeof data.supersededBy === "string" ? data.supersededBy : undefined,
-      readingTime: estimateReadingTime(content),
+      titleSplit: data.titleSplit === true,
+      readingTime: typeof data.readingTime === "string" ? data.readingTime : estimateReadingTime(content),
     } satisfies PostMeta;
   });
 
