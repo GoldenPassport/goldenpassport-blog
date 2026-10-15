@@ -39,6 +39,8 @@ import { HeadingH2, HeadingH3 } from "@/components/mdx/HeadingAnchor";
 import { EvidenceRecord } from "@/components/mdx/EvidenceRecord";
 import { ToolComparison, ToolCard } from "@/components/mdx/ToolComparison";
 import { DefinitionGrid, DefinitionItem } from "@/components/mdx/DefinitionGrid";
+import { Prompt } from "@/components/mdx/Prompt";
+import { Guide } from "@/components/mdx/GuideButton";
 import { LinkedInShare } from "@/components/blog/LinkedInShare";
 import { PostToc } from "@/components/chrome/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
@@ -97,6 +99,8 @@ const mdxComponents = {
   EvidenceRecord,
   ToolComparison,
   ToolCard,
+  Prompt,
+  Guide,
   DefinitionGrid,
   DefinitionItem,
 };

@@ -157,7 +157,7 @@ export function ProcessStep({
               {question}
             </p>
           ) : null}
-          <div className="prose prose-lg max-w-none font-serif [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-1.5 [&_li]:pl-1 [&_li::marker]:text-gold-deep">
+          <div className="prose prose-lg max-w-none font-serif [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-1.5 [&_li]:pl-1 [&_li::marker]:text-gold-deep [&_a]:text-gold-deep [&_a]:underline [&_a]:decoration-gold-deep [&_a]:underline-offset-2 [&_a:hover]:text-ink">
             {children}
           </div>
           {shots?.length ? <StepShots shots={shots} /> : null}

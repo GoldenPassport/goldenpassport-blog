@@ -31,6 +31,8 @@ import { EvidenceRecord } from "@/components/mdx/EvidenceRecord";
 import { ToolComparison, ToolCard } from "@/components/mdx/ToolComparison";
 import { DefinitionGrid, DefinitionItem } from "@/components/mdx/DefinitionGrid";
 import { DownloadCallout } from "@/components/mdx/DownloadCallout";
+import { Prompt } from "@/components/mdx/Prompt";
+import { Guide } from "@/components/mdx/GuideButton";
 
 /**
  * Required by @next/mdx in App Router. Exports the components that MDX pages
@@ -103,6 +105,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ToolCard,
     DefinitionGrid,
     DefinitionItem,
+    Prompt,
+    Guide,
     DownloadCallout,
   };
 }
