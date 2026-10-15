@@ -27,6 +27,16 @@ const withMDX = createMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  // The Camunda coming-soon page became a general "more platforms" page.
+  async redirects() {
+    return [
+      {
+        source: "/blog/digital-branch-concierge-camunda-demo",
+        destination: "/blog/digital-branch-concierge-more-platforms",
+        permanent: true,
+      },
+    ];
+  },
   // Ensure the OG-card font (read via fs at runtime) is bundled into the
   // serverless function for the blog post route on Vercel.
   outputFileTracingIncludes: {

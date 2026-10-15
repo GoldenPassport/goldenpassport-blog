@@ -13,7 +13,6 @@ tags:
   - EU AI Act
   - GDPR
   - AI Governance
-  - Camunda
   - n8n
   - LangGraph
   - LangChain
@@ -25,7 +24,7 @@ heroAlt: "Structure at the edges, freedom in the middle: deterministic process o
 ogImage: "/posts/digital-branch-concierge/og.png"
 ---
 
-<DemoLinks label="Follow-along demos: one concierge, three builds">
+<DemoLinks label="Follow-along demos: one concierge, several platforms">
   <DemoLink
     tool="n8n"
     title="The fastest route to a working concierge"
@@ -39,10 +38,10 @@ ogImage: "/posts/digital-branch-concierge/og.png"
     href="/blog/digital-branch-concierge-langgraph-demo"
   />
   <DemoLink
-    tool="Camunda"
-    title="The boundary drawn on the diagram"
-    blurb="BPMN outer process, AI Agent Task inside an ad-hoc sub-process, user tasks for every human decision."
-    href="/blog/digital-branch-concierge-camunda-demo"
+    tool="More platforms"
+    title="Other leading automation platforms"
+    blurb="The same concierge, the same design and the same twelve test conversations on more platforms."
+    href="/blog/digital-branch-concierge-more-platforms"
     upcoming
   />
 </DemoLinks>
@@ -57,7 +56,7 @@ So why do so many enterprise AI assistants still stop at the greeting?
 
 This article is for architects, business analysts, process owners and engineers across European organisations who are being asked to put an agent inside a real process. The bank branch is the worked example, not the boundary of the argument. Its handovers are visible and its work ranges from routine administration to significant decisions. The same design problem appears in healthcare, employment, education, insurance, utilities, public services and many other sectors.
 
-At heart this is a technical comparison of one service agent built three ways. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n, LangGraph and Camunda because each tool draws the line between workflow and agent in a different place. The n8n and LangGraph builds are finished. Their follow-along demos are linked above and their files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). Camunda is still to come, so treat the comparison here as the design argument with two builds behind it.
+At heart this is a technical comparison of one service agent built on several platforms. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n and LangGraph first, with more leading automation platforms to follow, because each tool draws the line between workflow and agent in a different place. The n8n and LangGraph builds are finished. Their follow-along demos are linked above and their files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). More platforms are still to come, so treat the comparison here as the design argument with two builds behind it.
 
 It also takes enterprise hesitation seriously. McKinsey's 2026 State of AI survey found that nearly nine in ten organisations use AI somewhere and 47 per cent are scaling chatbots across the enterprise, yet only about two in ten are scaling AI agents. My working hypothesis, and it is an inference rather than a survey finding, is that this gap is more than the normal lag of a new technology. Organisations are comfortable letting AI talk, but far less comfortable letting it act. The survey hints at what unlocks adoption: its small group of high performers is much more likely to redesign workflows around AI and actively manage AI risk. That is the process-orchestration thesis of this article in survey form.
 
@@ -120,7 +119,7 @@ LangChain's LangGraph documentation, building on Anthropic's guide to effective 
 
 I group the picture slightly differently. The left column is workflows and the right is agents, but the middle is not a halfway house. It belongs to both. Routing, orchestration and evaluation make workflows smarter and help keep agents honest. That shared middle is where the interesting design lives.
 
-The pattern names in that picture are Anthropic's, and every one of the three tools implements them under its own labels. They are collected here for reference, each with its concierge example, so the rest of the article can use the names without stopping to define them.
+The pattern names in that picture are Anthropic's, and every tool in this series implements them under its own labels. They are collected here for reference, each with its concierge example, so the rest of the article can use the names without stopping to define them.
 
 <Accordion title="Enterprise Agency: Anthropic's agent loop and five workflow patterns, applied to the concierge">
 
@@ -319,9 +318,9 @@ Every change to what the agent knows or does is a controlled change: a new model
 
 Tools, MCP and skills are easy to confuse. The run-through of the diagram's elements, in the sandwich section, keeps them apart: tools are the agent's hands, MCP is how the hands are wired and skills are what the agent is actually allowed to do with them.
 
-## One concierge, three builds
+## One concierge, several builds
 
-The three tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph begin with the agent in the middle. Camunda is built for the outer process. All three can express skills, which is what makes building the same concierge in each a fair comparison. The n8n and LangGraph follow-along pages are linked at the top of this article.
+The tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph both begin with the agent in the middle; later builds will include platforms that begin with the outer process. Each can express skills, which is what makes building the same concierge in each a fair comparison. The n8n and LangGraph follow-along pages are linked at the top of this article.
 
 <ToolComparison>
 
@@ -337,19 +336,13 @@ The concierge is a typed state graph, with a LangChain agent as one of its nodes
 
 </ToolCard>
 
-<ToolCard tool="Camunda" title="The boundary drawn on the diagram" status="Coming soon">
-
-The process is BPMN, so the fixed paths are literally fixed and every human decision is a user task. The agentic part lives inside an ad-hoc sub-process: Camunda's AI Agent Task connector runs the reasoning loop, and the ad-hoc sub-process acts as the toolbox, each tool a modelled task the agent may activate in any order but cannot invent. Camunda recommends this shape precisely when tool management and audit trails matter for compliance, which is the regulated case. Observability comes for free in Operate: you can see every tool the agent chose and every point where the process took the decision back.
-
-</ToolCard>
-
 </ToolComparison>
 
 ## What we will focus on and score
 
 Every build is judged against the same scenario and the same twelve test conversations, so they can be compared on the same terms. In the scenario, a customer requests a statement for a rental application, mentions that they are considering a mortgage and asks about a complaint opened the previous month. The test conversations cover each of those moments, plus the actions, handovers and attacks around them. That creates three levels of agency: self-service for the statement, a handover with context for the mortgage enquiry and no automated decision on the complaint.
 
-Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n and LangGraph builds' scores for each. Camunda's scores will be added when that build is finished.
+Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n and LangGraph builds' scores for each. Scores for further platforms will be added as each build is finished.
 
 <NumberedList>
 
@@ -442,7 +435,7 @@ Each demo page records the evidence from its build. The scorecard here stays wit
 
 The branch concierge is a useful test because it is neither a chatbot nor a back-office batch job. In production it would talk to real people, act inside real systems and meet work ranging from routine administration to consequential decisions. Banking supplies the scenario, but the design applies to any European organisation putting an agent between a person and a service.
 
-Building the concierge three times will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, Camunda the outer process. The n8n and LangGraph builds are finished and run on demo customer records, not a live bank. In both, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test.
+Building the concierge on several platforms will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, and later builds will include platforms that favour the outer process. The n8n and LangGraph builds are finished and run on demo customer records, not a live bank. In both, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test.
 
 A later code review of both builds found boundaries that held for one message but not a whole conversation, such as a follow-up that could slip past the gate. They are now fixed and covered by tests in the repository. Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with two builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
 
@@ -451,8 +444,6 @@ So, who meets you at the door? An agent that can answer, do the small things and
 <Terms>
 
 Plain-English definitions for the terms and tooling in this post, listed alphabetically.
-
-**Ad-hoc sub-process.** A BPMN construct, available in Camunda since 8.7, whose tasks can be activated in any order, repeated or skipped at runtime. Camunda uses it as the toolbox for an AI agent: the tools are modelled, the sequence is not.
 
 **Agency.** How much freedom a system has to decide its own next step. In this post, the leeway given to the agent between an outer layer of process orchestration and an inner layer of skills.
 
@@ -486,7 +477,7 @@ Plain-English definitions for the terms and tooling in this post, listed alphabe
 
 **Learning loop.** The reviewed route by which an agent improves over time. Traces reveal step sequences that keep working, tools that are misused and gaps in knowledge. A person reviews each proposed change, it passes the evaluation set and only then is it promoted into skills, tools or knowledge. The agent never changes itself.
 
-**MCP (Model Context Protocol).** An open standard for connecting AI applications to tools and data. An MCP server publishes tools with typed schemas. An MCP-aware client such as n8n, LangGraph or Camunda can discover and call them without bespoke integration.
+**MCP (Model Context Protocol).** An open standard for connecting AI applications to tools and data. An MCP server publishes tools with typed schemas. An MCP-aware client such as n8n or LangGraph can discover and call them without bespoke integration.
 
 **Orchestrator-workers.** A pattern where one model breaks a task into sub-tasks, delegates them to worker calls and synthesises the results.
 
@@ -504,7 +495,7 @@ Plain-English definitions for the terms and tooling in this post, listed alphabe
 
 **Segregation of duties.** The control principle that the party who initiates an action must not be the party who approves it. In banking, the maker-checker or four-eyes rule. Here, the agent proposes and the gate and decision owner approve.
 
-**Skill.** A bounded, governed capability an agent can call but not modify: a defined input, a defined output and a risk rating. Implemented as a sub-workflow in n8n, a modelled task inside an ad-hoc sub-process in Camunda or a typed tool in LangGraph.
+**Skill.** A bounded, governed capability an agent can call but not modify: a defined input, a defined output and a risk rating. Implemented as a sub-workflow in n8n or a typed tool in LangGraph.
 
 **SMCR.** The Senior Managers and Certification Regime, established under the Financial Services and Markets Act 2000 as amended in 2013. Every regulated activity sits within a named senior manager's statement of responsibilities, and the statutory duty of responsibility makes that person accountable for harm in their area, including harm caused through AI, if they did not take reasonable steps to prevent it.
 
@@ -562,8 +553,6 @@ External sources referenced in this post.
 
 **Tooling**
 
-- Camunda: AI agents (Camunda 8 docs). <RefLink href="https://docs.camunda.io/docs/components/agentic-orchestration/ai-agents/" />
-- Camunda: Two connectors, three patterns and one model for designing AI agents. <RefLink href="https://camunda.com/blog/2025/10/two-connectors-three-patterns-one-model-designing-ai-agents-in-camunda/" />
 - LangChain: Interrupts (LangGraph docs). <RefLink href="https://docs.langchain.com/oss/python/langgraph/interrupts" />
 - n8n: Guardrails node (n8n docs). <RefLink href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-langchain.guardrails" />
 
