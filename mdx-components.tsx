@@ -33,6 +33,7 @@ import { DefinitionGrid, DefinitionItem } from "@/components/mdx/DefinitionGrid"
 import { DownloadCallout } from "@/components/mdx/DownloadCallout";
 import { Prompt } from "@/components/mdx/Prompt";
 import { Guide } from "@/components/mdx/GuideButton";
+import { CopyRequest } from "@/components/mdx/CopyRequest";
 
 /**
  * Required by @next/mdx in App Router. Exports the components that MDX pages
@@ -107,6 +108,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     DefinitionItem,
     Prompt,
     Guide,
+    CopyRequest,
     DownloadCallout,
   };
 }

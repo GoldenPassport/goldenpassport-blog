@@ -41,6 +41,7 @@ import { ToolComparison, ToolCard } from "@/components/mdx/ToolComparison";
 import { DefinitionGrid, DefinitionItem } from "@/components/mdx/DefinitionGrid";
 import { Prompt } from "@/components/mdx/Prompt";
 import { Guide } from "@/components/mdx/GuideButton";
+import { CopyRequest } from "@/components/mdx/CopyRequest";
 import { LinkedInShare } from "@/components/blog/LinkedInShare";
 import { PostToc } from "@/components/chrome/PostToc";
 import { SITE_URL, SITE_NAME, AUTHOR } from "@/lib/site";
@@ -101,6 +102,7 @@ const mdxComponents = {
   ToolCard,
   Prompt,
   Guide,
+  CopyRequest,
   DefinitionGrid,
   DefinitionItem,
 };
@@ -359,6 +361,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <>
               {post.title.slice(0, post.title.indexOf(": ") + 1)}
               <span className="mt-1 block text-[0.72em] leading-tight">{post.title.slice(post.title.indexOf(": ") + 2)}</span>
+            </>
+          ) : post.group && (post.groupOrder ?? 1) > 1 && post.title.includes(" concierge ") ? (
+            // Build pages in a group share "Building the digital branch concierge
+            // in <platform>"; from md up they all break after "concierge" so the
+            // siblings wrap the same way.
+            <>
+              <span className="md:block">{post.title.slice(0, post.title.indexOf(" concierge ") + " concierge".length)}</span>{" "}
+              {post.title.slice(post.title.indexOf(" concierge ") + " concierge ".length)}
             </>
           ) : (
             post.title
