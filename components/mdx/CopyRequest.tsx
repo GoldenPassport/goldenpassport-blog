@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * A table cell's short summary of a test request, with a copy button that
- * copies the exact message to paste into a test app. The button shows on
- * hover or keyboard focus, and always on touch screens.
+ * Text the reader pastes somewhere (a test message, a setting value), with a
+ * copy button that copies the exact text. The button shows on hover or
+ * keyboard focus, and always on touch screens.
  *
  *   | T05 | C1003 | <CopyRequest text="What is my balance?">My balance</CopyRequest> | ...
+ *   name the model <CopyRequest text="deepseek-flash">`deepseek-flash`</CopyRequest>
  */
 export function CopyRequest({ text, children }: { text: string; children: React.ReactNode }) {
   const [copied, setCopied] = useState(false);
@@ -33,7 +34,7 @@ export function CopyRequest({ text, children }: { text: string; children: React.
       <button
         type="button"
         onClick={copy}
-        aria-label={`Copy the test message: ${text}`}
+        aria-label={`Copy: ${text}`}
         title={copied ? "Copied" : `Copy: ${text}`}
         className="not-prose mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-gold/25 bg-cream/90 text-ink-mute transition hover:border-gold-deep/50 hover:text-gold-deep focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-focus-within:opacity-100"
       >
