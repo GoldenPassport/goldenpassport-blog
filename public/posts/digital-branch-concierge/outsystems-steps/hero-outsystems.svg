@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">The OutSystems concierge</title>
+  <desc id="desc">A customer request enters the ConciergeRequest workflow, the process orchestration layer. Inside it the agent, with its skills and tools, drafts a reply. The impact and policy gate, deterministic with no model call, sends routine replies straight through to the customer and holds the rest for a decision owner, who approves or rejects within a deadline. The agent then words that decision for the customer. Navy is process orchestration, gold is the agent loop and teal is human-in-the-loop.</desc>
+  <defs>
+    <style>
+      .t { font-family: Inter, Helvetica, Arial, sans-serif }
+      .cap { font-weight: 800; letter-spacing: 0.08em }
+      .sub { font-weight: 500; fill: #3A4458 }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#121C2E"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#1F7A6E"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="#F5F4F0"/>
+
+  <!-- customer request -->
+  <rect x="34" y="250" width="150" height="104" rx="18" fill="#fff" stroke="#121C2E" stroke-width="3"/>
+  <text class="t cap" x="109" y="294" font-size="19" text-anchor="middle" fill="#121C2E">CUSTOMER</text>
+  <text class="t cap" x="109" y="320" font-size="19" text-anchor="middle" fill="#121C2E">REQUEST</text>
+  <line x1="186" y1="302" x2="236" y2="302" stroke="#121C2E" stroke-width="4" marker-end="url(#a)"/>
+
+  <!-- workflow band -->
+  <rect x="240" y="92" width="926" height="438" rx="26" fill="#fff" stroke="#121C2E" stroke-width="5"/>
+  <rect x="270" y="68" width="560" height="48" rx="24" fill="#121C2E"/>
+  <text class="t cap" x="550" y="100" font-size="22" text-anchor="middle" fill="#fff">CONCIERGE REQUEST WORKFLOW</text>
+
+  <!-- agent -->
+  <rect x="276" y="176" width="236" height="250" rx="20" fill="#B8893A" fill-opacity="0.10" stroke="#B8893A" stroke-width="4"/>
+  <text class="t cap" x="394" y="220" font-size="28" text-anchor="middle" fill="#8C661F">AGENT</text>
+  <text class="t sub" x="394" y="252" font-size="18" text-anchor="middle">reason · act · observe</text>
+  <rect x="300" y="276" width="188" height="40" rx="20" fill="#B8893A"/>
+  <text class="t" x="394" y="302" font-size="18" font-weight="700" text-anchor="middle" fill="#fff">4 skills, 3 tools</text>
+  <rect x="300" y="326" width="188" height="40" rx="20" fill="#fff" stroke="#B8893A" stroke-width="3"/>
+  <text class="t" x="394" y="352" font-size="18" font-weight="700" text-anchor="middle" fill="#8C661F">Authorise first</text>
+  <text class="t sub" x="394" y="400" font-size="16" text-anchor="middle">customer bound by the process</text>
+
+  <line x1="514" y1="301" x2="560" y2="301" stroke="#121C2E" stroke-width="4" marker-end="url(#a)"/>
+
+  <!-- gate -->
+  <rect x="564" y="216" width="200" height="170" rx="20" fill="#121C2E"/>
+  <text class="t cap" x="664" y="268" font-size="22" text-anchor="middle" fill="#fff">IMPACT AND</text>
+  <text class="t cap" x="664" y="296" font-size="22" text-anchor="middle" fill="#fff">POLICY GATE</text>
+  <text class="t" x="664" y="330" font-size="16" font-weight="500" text-anchor="middle" fill="#C9CED8">deterministic,</text>
+  <text class="t" x="664" y="352" font-size="16" font-weight="500" text-anchor="middle" fill="#C9CED8">no model call</text>
+
+  <!-- straight through -->
+  <path d="M766 250 L1010 250" stroke="#121C2E" stroke-width="4" fill="none" marker-end="url(#a)"/>
+  <text class="t" x="888" y="238" font-size="18" font-weight="700" text-anchor="middle" fill="#121C2E">straight through</text>
+
+  <!-- held -->
+  <path d="M766 360 L786 360 L786 420 L808 420" stroke="#1F7A6E" stroke-width="4" fill="none" marker-end="url(#ag)"/>
+  <text class="t" x="740" y="414" font-size="18" font-weight="700" text-anchor="end" fill="#1F7A6E">held</text>
+
+  <!-- decision owner -->
+  <rect x="812" y="330" width="250" height="160" rx="20" fill="#1F7A6E" fill-opacity="0.10" stroke="#1F7A6E" stroke-width="4"/>
+  <text class="t cap" x="937" y="372" font-size="20" text-anchor="middle" fill="#1F7A6E">DECISION OWNER</text>
+  <text class="t sub" x="937" y="404" font-size="18" text-anchor="middle">approves or rejects</text>
+  <text class="t sub" x="937" y="430" font-size="18" text-anchor="middle">within a deadline</text>
+  <text class="t sub" x="937" y="462" font-size="15" text-anchor="middle">a named, signed-in person</text>
+
+  <!-- decision to reply -->
+  <path d="M1064 410 L1100 410 L1100 296" stroke="#1F7A6E" stroke-width="4" fill="none" marker-end="url(#ag)"/>
+  <text class="t" x="1090" y="318" font-size="16" font-weight="700" fill="#1F7A6E" text-anchor="end">agent words the decision</text>
+
+  <!-- reply -->
+  <rect x="1014" y="204" width="134" height="88" rx="18" fill="#fff" stroke="#121C2E" stroke-width="4"/>
+  <text class="t cap" x="1081" y="242" font-size="20" text-anchor="middle" fill="#121C2E">REPLY</text>
+  <text class="t sub" x="1081" y="270" font-size="16" text-anchor="middle">to the customer</text>
+
+  <!-- legend -->
+  <g class="t" font-size="20" font-weight="600" fill="#2B2B2B">
+    <rect x="300" y="566" width="26" height="26" rx="6" fill="#121C2E"/><text x="336" y="587">Process orchestration</text>
+    <rect x="590" y="566" width="26" height="26" rx="6" fill="#B8893A"/><text x="626" y="587">Agent loop</text>
+    <rect x="790" y="566" width="26" height="26" rx="6" fill="#1F7A6E"/><text x="826" y="587">Human-in-the-loop</text>
+  </g>
+</svg>

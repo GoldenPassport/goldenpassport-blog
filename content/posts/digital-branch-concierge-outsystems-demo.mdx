@@ -15,6 +15,9 @@ group: "digital-branch-concierge"
 groupLabel: "OutSystems demo"
 groupOrder: 5
 comingSoon: false
+hero: "/posts/digital-branch-concierge/outsystems-steps/hero-outsystems.svg"
+ogImage: "/posts/digital-branch-concierge/outsystems-steps/og.png"
+heroAlt: "A customer request enters the ConciergeRequest workflow. Inside it the agent, with four skills and three tools and Authorise first, drafts a reply. The impact and policy gate, deterministic with no model call, sends routine replies straight through to the customer and holds the rest for a decision owner, a named, signed-in person who approves or rejects within a deadline; the agent then words the decision. Navy is process orchestration, gold is the agent loop and teal is human-in-the-loop."
 ---
 
 {/* DRAFT, 16 Oct 2026. Restructured for import (Setup) rather than build.
@@ -115,7 +118,17 @@ Prompt attack detection is a Portal setting for the whole stage, and it blocks t
 
 </ScrollCards>
 
-<Figure src="/posts/digital-branch-concierge/outsystems-steps/00-shape-key.webp" alt="Three panels labelled with the article diagram's elements. Process orchestration, the ConciergeRequest workflow in ODC: 1 Start as a request starting one instance, 2 RunAgent as the agent loop, 3 RunImpactPolicyGate and GateFlag as the ADM? impact and policy gate, 4 DecideReviewCase and DecidedInTime as human review with a deadline, 5 RunAgentFollowUp as the agent wording the decision, 6 DeliverAgentReply as the outcome. Agent loop, a Portal trace on DeepSeek: 1 the session and customer lookups as identity bound by the process, 2 the first model call as reason, act, observe, 3 FetchBalance with Authorise as authorised skills and tools, 4 the second model call writing the reply. Governance: 1 the prompt attack guardrail setting, 2 evaluation runs, 3 decided review cases with a named decision owner." caption="The article's picture, found in the OutSystems build" />
+The three layers of the article's picture, as this build implements them. Select one to open it larger; each also appears as a real screenshot in the walkthrough: the workflow in [step 9](#follow-the-outer-process), the agent loop in a trace in [step 16](#evidence-for-explainability) and the decision owner's Review cases in [step 12](#run-the-phone-number-change-and-approve-it).
+
+<div className="not-prose my-8 grid gap-4 sm:grid-cols-3">
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/overview-process.svg" alt="Process orchestration, the ConciergeRequest workflow: a request runs the agent, then the impact and policy gate. Straight through goes to the reply to the customer; held goes to the decision owner, with a deadline, and then to the reply." caption="Process orchestration" />
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/overview-agent.svg" alt="Agent loop in Agent Workbench on DeepSeek: reason, act, observe. Act calls Authorise first, which allows the four skills and three tools; a refusal is a result the agent observes. The customer is bound by the process and the loop stops after six calls." caption="Agent loop" />
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/overview-governance.svg" alt="Governance as settings rather than code: a guardrail that blocks prompt attacks before the model, an evaluation of twelve conversations with five judges, a decision owner who is a role in the Portal and a named, signed-in person, and an audit log of every check, gate route and decision." caption="Governance" />
+
+</div>
 
 
 ## Before you start
@@ -282,7 +295,7 @@ Review cases are assigned to a role, not to a named account in the app, so the p
 
 </ProcessStep>
 
-<ProcessStep title="Follow the outer process" outcome="you can trace where the agent, the gate, the person and the reply each sit, and what happens when nobody decides in time.">
+<ProcessStep id="follow-the-outer-process" title="Follow the outer process" outcome="you can trace where the agent, the gate, the person and the reply each sit, and what happens when nobody decides in time.">
 
 The workflow is the article's process orchestration layer. It holds no business rules: it runs the standard steps in order and follows the gate's flag.
 
@@ -316,7 +329,7 @@ The workflow is the article's process orchestration layer. It holds no business 
 
 </ProcessStep>
 
-<ProcessStep title="Run the phone-number change and approve it" badge="Requires review" outcome="a held reply, a decision by a named person and the agent's message telling the customer what was decided.">
+<ProcessStep id="run-the-phone-number-change-and-approve-it" title="Run the phone-number change and approve it" badge="Requires review" outcome="a held reply, a decision by a named person and the agent's message telling the customer what was decided.">
 
 - In the same chat, ask <CopyRequest text="Please change my phone number to +44 7700 900999">"Please change my phone number to +44 7700 900999"</CopyRequest>. The skill is medium risk, so the customer gets a holding message, with Route review and the reason "skill risk medium". <Shot src="/posts/digital-branch-concierge/outsystems-steps/run-t06-review.webp" alt="The test app conversation for customer C1003: Please change my phone number to +44 7700 900999. The agent replies: Thank you. A member of staff will review this and come back to you shortly." caption="T06 held for review" />
 - Select **Review cases** at the top and sign in with your OutSystems account. The case shows the request, the agent's proposed reply, which you can edit before deciding, and the gate's reasons. <Shot src="/posts/digital-branch-concierge/outsystems-steps/run-review-cases.webp" alt="The Review Cases screen in the test app: menu buttons Review cases and Log out, a Show decided cases switch, and a table with Created On, Customer Id, Name, Request, an editable Proposed Reply, Reasons with an amber shield before each reason, a Note box and Approve and Reject buttons. The first rows are Ben Whitfield asking to update his email address, held for a vulnerability flag, and Daniel Reyes asking for a bigger overdraft, held for a policy keyword." caption="Review cases: what the decision owner sees" />
@@ -363,7 +376,7 @@ Who may decide is set in the Portal, not in the app: the DecisionOwner role is a
 
 </ProcessStep>
 
-<ProcessStep title="Evidence for explainability" question="can you reconstruct the run and explain the policy gate's route?" outcome="a trace of every step, from the model calls to the skill and the gate, with timings.">
+<ProcessStep id="evidence-for-explainability" title="Evidence for explainability" question="can you reconstruct the run and explain the policy gate's route?" outcome="a trace of every step, from the model calls to the skill and the gate, with timings.">
 
 - In the Portal, open **Monitor > Traces** and select a run, or open **Agents**, the agentic app and **Go to analytics** for requests, response times, errors and the slowest requests.
 - In the T06 trace on the trial model, the model called `update_contact_details`, which ran Authorise and created the pending request in 50 ms. The two model calls took about 3 seconds each. <Shot src="/posts/digital-branch-concierge/outsystems-steps/obs-trace-agent-loop.webp" alt="A Portal trace of T06: CallTrialClaudeHaiku4_5 6.5 s, containing a model call of 3.0 s, update_contact_details 50 ms with Authorise 27 ms, the session lookup and CreateContactChangeRequest 13 ms, and a second model call of 3.5 s, followed by StoreMemory, GetDecisionLogThisTurn, ImpactPolicyGate 12 ms and CreateReviewCase 15 ms." caption="The agent loop inside the trace" />
