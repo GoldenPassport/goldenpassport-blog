@@ -166,8 +166,8 @@ The OutSystems build, file by file.
 | File | Where | What it is for |
 | --- | --- | --- |
 | README.md | outsystems | Import guide for the OutSystems build |
-| Branch Concierge Demo.oml | outsystems/oml | The agentic app: the agent, the four skills, the three read-only tools, the impact and policy gate, the review cases and the service actions the workflow calls |
-| Branch Concierge Demo test app.oml | outsystems/oml | The chat the customer uses, and the Review cases screen for the decision owner |
+| Branch Concierge Agent.oml | outsystems/apps | The agentic app: the agent, the four skills, the three read-only tools, the impact and policy gate, the review cases and the service actions the workflow calls |
+| Branch Concierge Chatbot App.oml | outsystems/apps | The chat the customer uses, and the Review cases screen for the decision owner |
 | ConciergeRequest.oml | outsystems/workflow | The workflow that runs each request: agent, gate, decision owner, reply |
 | concierge-12.json | outsystems/evaluations | The twelve test conversations as an Agent evaluations dataset |
 | 01 to 12 prompts | outsystems/mentor-prompts | The requests that built the apps with Mentor, in order |
@@ -247,10 +247,10 @@ A custom connection can hold several endpoints with priorities, so a second prov
 
 The agentic app comes first, because the test app uses its public actions, events and role.
 
-- In ODC Studio, choose **Organization > Open Files** and open `Branch Concierge Demo.oml` from `outsystems/oml`. {/* TODO screenshot: Open Files and the imported app in Studio. */}
+- In ODC Studio, choose **Organization > Open Files** and open `Branch Concierge Agent.oml` from `outsystems/apps`. {/* TODO screenshot: Open Files and the imported app in Studio. */}
 - Open the agent, in **Automations > Agents > CallAgent**, and check **AI model** is `deepseek_flash`. If you named the model differently in step 3, or stayed on the trial model, choose it here.
 - Select **1-Click Publish**. Publishing also seeds the four demo customers, the skill registry and the knowledge sections. When it finishes, the panel shows **Test agent in an app**.
-- Open `Branch Concierge Demo test app.oml` the same way. If Studio reports outdated references, open **Manage dependencies**, refresh Branch Concierge Demo and select **Apply**. Then select **1-Click Publish**.
+- Open `Branch Concierge Chatbot App.oml` the same way. If Studio reports outdated references, open **Manage dependencies**, refresh Branch Concierge Demo and select **Apply**. Then select **1-Click Publish**.
 - Studio may say the server holds a newer revision when you publish over an earlier import. Select **Compare** to see the differences before choosing **Merge and publish**.
 
 </ProcessStep>
