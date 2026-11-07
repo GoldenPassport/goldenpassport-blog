@@ -66,7 +66,7 @@ export function Scorecard({
         <span>{answerLabel ?? (plan ? "Technical answer" : "Technical answer in this build")}</span>
         {plan ? null : <span>Position and evidence</span>}
         {columns.map((column) => (
-          <span key={column.label} className="text-center normal-case tracking-[0.08em]">
+          <span key={column.label} className="whitespace-nowrap text-center normal-case tracking-[0.04em]">
             {column.href ? (
               <a href={column.href} className="underline decoration-gold-deep/40 underline-offset-4 hover:decoration-gold-deep">
                 {column.label}
@@ -90,7 +90,9 @@ const PLAN_COLS = "md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)]";
 const PLAN_SCORE_COLS = [
   "md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)_5.5rem]",
   "md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)_5.5rem_5.5rem]",
-  "md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)_5.5rem_5.5rem_5.5rem]",
+  // Three builds: narrower score columns and a floor on the concern column, so
+  // a long concern such as "Explainability." does not break mid-word.
+  "md:grid-cols-[minmax(8.5rem,0.9fr)_minmax(0,2fr)_5rem_5rem_5rem]",
 ];
 
 function scoreCols(count: number) {

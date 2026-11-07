@@ -342,7 +342,7 @@ The concierge is a typed state graph, with a LangChain agent as one of its nodes
 
 Every build is judged against the same scenario and the same twelve test conversations, so they can be compared on the same terms. In the scenario, a customer requests a statement for a rental application, mentions that they are considering a mortgage and asks about a complaint opened the previous month. The test conversations cover each of those moments, plus the actions, handovers and attacks around them. That creates three levels of agency: self-service for the statement, a handover with context for the mortgage enquiry and no automated decision on the complaint.
 
-Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n and LangGraph builds' scores for each. Scores for further platforms will be added as each build is finished.
+Each build is judged on the same six questions. Their answers roll up into the five business concerns in the table below, which shows the n8n, LangGraph and OutSystems builds' scores for each. Scores for further platforms will be added as each build is finished.
 
 <NumberedList>
 
@@ -391,40 +391,41 @@ Each demo page records the evidence from its build. The scorecard here stays wit
   scoreColumns={[
     { label: "n8n", href: "/blog/digital-branch-concierge-n8n-demo#what-this-build-shows" },
     { label: "LangGraph", href: "/blog/digital-branch-concierge-langgraph-demo#what-this-build-shows" },
+    { label: "OutSystems", href: "/blog/digital-branch-concierge-outsystems-demo#what-this-build-shows" },
   ]}
 >
 
 <ScorecardRow
   concern="Accountability."
-  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 7 }]}
+  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 7 }, { label: "OutSystems", score: 8 }]}
   question="Who answers when the agent acts?"
   answer="A deterministic process wrapper owns every human task and both gates. A named decision owner can change the outcome before it reaches the affected person."
 />
 
 <ScorecardRow
   concern="Explainability."
-  toolScores={[{ label: "n8n", score: 9 }, { label: "LangGraph", score: 9 }]}
+  toolScores={[{ label: "n8n", score: 9 }, { label: "LangGraph", score: 9 }, { label: "OutSystems", score: 8 }]}
   question="Can we reconstruct how the outcome was reached?"
   answer="Lineage and observability on the outer band: every step, tool call, token and gate decision traced, so a reviewer can reconstruct the visit. That is execution lineage rather than an account of the model's reasoning."
 />
 
 <ScorecardRow
   concern="Containment."
-  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 8 }]}
+  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 8 }, { label: "OutSystems", score: 8 }]}
   question="What stops it doing something it should not?"
   answer="Guardrails in and out, an allow-listed toolbox, risk-rated tools and skills, pre-action authorisation on every call, writes only through skills and a hard limit on loop iterations."
 />
 
 <ScorecardRow
   concern="The decisions it must never make alone."
-  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 8 }]}
+  toolScores={[{ label: "n8n", score: 8 }, { label: "LangGraph", score: 8 }, { label: "OutSystems", score: 8 }]}
   question="For example, employment, education, healthcare, credit, insurance or access to essential services."
   answer="The impact and policy gate reads structured facts, not the model's opinion, and routes anything the law or policy names to a person."
 />
 
 <ScorecardRow
   concern="Drift."
-  toolScores={[{ label: "n8n", score: 7 }, { label: "LangGraph", score: 9 }]}
+  toolScores={[{ label: "n8n", score: 7 }, { label: "LangGraph", score: 9 }, { label: "OutSystems", score: 8 }]}
   question="Will it quietly get worse?"
   answer="A fixed evaluation set of realistic conversations, run on every change, asserting the expected route: answered, skill run or sent to a person. New cases come from reviewed traces, and a fixed baseline catches drift that builds up across small changes."
 />
