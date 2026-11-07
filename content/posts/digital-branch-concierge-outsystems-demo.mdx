@@ -193,6 +193,8 @@ The workflow itself was drawn in the Portal's workflow editor, not by Mentor.
 
 Mentor has a daily usage limit on the Personal Edition. A large multi-part change reached it partway through, so send bigger requests early in the day and make small fixes by hand in Studio.
 
+The last fixes after the clean run, prompts 71 to 73, were sent to Mentor from Claude Code through the OutSystems MCP server; Mentor made the changes, reported what it found and published them, and each was retested in the browser before the next.
+
 Mentor built the data model, nine server actions and the agent wiring in about twenty minutes. Its output still needed the same review as anyone else's: it switched the agent's tools off with a call condition of `True`, wrote two logic bugs that the evaluation found (Observations), claimed twice that published elements were not published, left a screen that would not compile, and built a login form with a plain-text password field against the wrong identity provider. Each was caught by reading the change against the documentation and the run logs before a customer saw it.
 
 </Accordion>
@@ -424,9 +426,16 @@ The four runs were: the trial model; DeepSeek; DeepSeek after the first fix; and
 
 </ProcessStep>
 
-<ProcessStep title="Evidence for a reviewed learning loop" question="can the service improve without the agent changing itself?" outcome="TODO.">
+<ProcessStep title="Evidence for a reviewed learning loop" question="can the service improve without the agent changing itself?" outcome="a staff correction becomes guidance for the agent only after a named person promotes it, the gate never reads it, and every turn records which learnings it used.">
 
-**TODO.** The Review steps above show changes proposed by an assistant, checked against the documentation and the logs, and only then published.
+The agent does not learn by itself. A decision owner can turn a reviewed case into a lesson, and only a promoted lesson reaches the agent.
+
+- **Flag.** When deciding a case on Review cases, tick **Flag for learning**. The case appears on the **Learnings** tab, not yet promoted, with its **Guidance** prefilled from the staff note. Edit the guidance into a short, general instruction.
+- **Promote.** **Promote** is limited to the DecisionOwner role and refuses guidance that contains the customer's name, an email address, a link, a reference or a number of three or more digits, so another customer's details cannot travel into the prompt. **View prompt** on a promoted row shows exactly the line the agent receives, built by the same logic. **Demote** takes it out again.
+- **Use.** On every turn the agent receives up to five of the newest promoted lessons, introduced as examples that guide tone and approach and "never approve anything". The gate does not read them, so a lesson cannot let a held action through.
+- **Audit.** Each turn that used lessons writes a `learnings_used` row to DecisionLog with the lesson ids, so you can see what influenced a reply.
+
+In testing on 4 November, a promoted lesson asking the agent to end every reply by wishing the customer a lovely day changed the next reply for a different customer, a held phone change stayed held while it was active, and after demoting it the wish was gone (for another customer again, so not a strict control). In the 7 November clean run, flag, promote, demote, promote again and View prompt all worked on the corrected T10 reply, and DecisionLog showed a `learnings_used` row on each turn that followed.
 
 </ProcessStep>
 
@@ -600,7 +609,7 @@ These are opportunities to build on a positive result, not reasons to hold back.
 
 These are early observations from a limited number of runs on an ODC Personal Edition. I may have missed a setting or misread a result, so treat them as things to check in your own setup rather than settled conclusions.
 
-<ScrollCards label="Seven potential findings from initial testing" hint="Scroll through the seven findings">
+<ScrollCards label="Nine potential findings from testing" hint="Scroll through the nine findings">
 
 <ScrollCard number="01" title="Mentor's work needs review like anyone's">
 
@@ -641,6 +650,18 @@ The agent's memory is stored per session, and the dataset gave each case a fixed
 <ScrollCard number="07" title="A daily trace limit can blind the evaluation">
 
 The Personal Edition's Development stage has a daily trace limit, and the asynchronous chat, polling for replies every two seconds, used it up by early afternoon. After that the Tool Trajectory judge saw no tool calls and failed every case that expected one, although the agent had called them. A slower poll, or a push from the workflow, would spend far fewer traces. <Shot src="/posts/digital-branch-concierge/outsystems-steps/obs-trace-limit.webp" alt="ODC Portal Traces with a warning: Your organization reached the daily trace limit in Development stage at 02:03 PM on Oct 16, so traces and analytics data will be incomplete until 01:00 AM, Oct 17. The list below shows PollReplies traces from the chatbot app every few seconds, between RunAgent and RunImpactPolicyGate." caption="The trace limit, and the polling that used it" />
+
+</ScrollCard>
+
+<ScrollCard number="08" title="Per-agent guardrails stay behind on import">
+
+Guardrails are Portal settings, not part of the app file. After deleting and importing the apps again, the stage's prompt attack detection was still on, but harmful content filtering and personal information exposure had to be set again on each of the four agents. Saving each agent before selecting the next kept the settings. The import guide now lists them as a step.
+
+</ScrollCard>
+
+<ScrollCard number="09" title="Looking at data counts as a change in Studio">
+
+Opening an entity's data viewer in ODC Studio marks the app as changed and adds to the Publish count, although nothing in the app changed. Closing the tab offers to discard the changes, which is the safe answer. Combined with an app opened from a file, which saves back into that file, it is easy to overwrite an export by accident, so open apps from Studio's asset list and export deliberately.
 
 </ScrollCard>
 
