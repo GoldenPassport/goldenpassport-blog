@@ -461,9 +461,10 @@ The same run also covered the staff side and the edges:
 - **Learnings.** A corrected reply was flagged, its guidance prefilled from the staff note, then promoted, demoted and promoted again, with the promoted guidance visible in **View prompt**.
 - **Timeout.** Idle cases closed about ten minutes after the last activity.
 
-Three things did not go as expected, and they are this build's to fix rather than the platform's:
+Four things did not go as expected, and they are this build's to fix rather than the platform's:
 
-- **One Enter press sent the message twice**, twice in the run, both times while the chat was still loading the customer's history. Two workflow instances answered one message. Waiting a few seconds after choosing the customer avoided it for the rest of the run; a fix is drafted as prompt 71.
+- **One Enter press sent the message twice**, twice in the run, both times while the chat was still loading the customer's history. Two workflow instances answered one message. Prompt 71 makes the message box bind its Enter key once and ignores an identical send within 15 seconds; a retest with four customers sent straight after choosing them gave one instance per message.
+- **That retest found a quieter issue**: a message sent before the new customer's history has loaded carries the previous customer's session id. Each case, reply and route still followed the right customer, because the workflow binds the customer, but the audit log and the agent's memory share that session. Until the chat clears the session when the customer changes, wait a few seconds after choosing one.
 - **A change plus a question in one message**, for the customer with an open complaint, was approved, but the confirmation fell back to "a member of staff will follow up on the rest of your request" and the balance was not given. The audit log shows the rewritten confirmation failing its check twice before the safe fallback took over, so nothing changed without the customer's yes.
 - **A harmful request was refused, but logged as a prompt attack**, and the refusal renamed the case it joined.
 
