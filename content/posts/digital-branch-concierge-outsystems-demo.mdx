@@ -434,7 +434,7 @@ The four runs were: the trial model; DeepSeek; DeepSeek after the first fix; and
 
 ## Test conversations
 
-> **Before each test**, enter the customer id in **CustomerId** on the left of the chatbot app: the **Customer** column shows which one. Reload the page when the customer changes, and wait a few seconds for the history to load before sending.
+> **Before each test**, enter the customer id in **CustomerId** on the left of the chatbot app: the **Customer** column shows which one. Reload the page when the customer changes.
 
 Results of the clean end-to-end run on 7 November 2026, against version 2 of the shared test set, on DeepSeek. The three assets were deleted, imported again from the repository files following the setup above, and every outcome was checked in the data tables, not only in the chat. The full record is in `outsystems/evaluations/clean-run-2026-11-07.md`.
 
@@ -464,7 +464,7 @@ The same run also covered the staff side and the edges:
 Four things did not go as expected, and they are this build's to fix rather than the platform's:
 
 - **One Enter press sent the message twice**, twice in the run, both times while the chat was still loading the customer's history. Two workflow instances answered one message. Prompt 71 makes the message box bind its Enter key once and ignores an identical send within 15 seconds; a retest with four customers sent straight after choosing them gave one instance per message.
-- **That retest found a quieter issue**: a message sent before the new customer's history has loaded carries the previous customer's session id. Each case, reply and route still followed the right customer, because the workflow binds the customer, but the audit log and the agent's memory share that session. Until the chat clears the session when the customer changes, wait a few seconds after choosing one.
+- **That retest found a quieter issue**: a message sent before the new customer's history had loaded carried the previous customer's session id. Each case, reply and route still followed the right customer, because the workflow binds the customer, but the audit log and the agent's memory shared that session. Prompt 73 fixed it: the server now reuses a session only for its own customer, and a send after a customer change loads that customer first. A retest gave every send its own customer's session.
 - **A change plus a question in one message**, for the customer with an open complaint, was approved, but the confirmation fell back to "a member of staff will follow up on the rest of your request" and the balance was not given. The audit log shows the rewritten confirmation failing its check twice before the safe fallback took over, so nothing changed without the customer's yes.
 - **A harmful request was refused, but logged as a prompt attack**, and the refusal renamed the case it joined.
 
