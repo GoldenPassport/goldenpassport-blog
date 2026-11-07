@@ -20,14 +20,6 @@ ogImage: "/posts/digital-branch-concierge/outsystems-steps/og.png"
 heroAlt: "A customer request enters the Branch Concierge Workflow. Inside it the agent, with four skills and three tools and Authorise first, drafts a reply. The impact and policy gate, deterministic with no model call, sends routine replies straight through to the customer and holds the rest for a decision owner, a named, signed-in person who approves or rejects within a deadline; the agent then words the decision. Navy is process orchestration, gold is the agent loop and teal is human-in-the-loop."
 ---
 
-{/* DRAFT, 16 Oct 2026. Restructured for import (Setup) rather than build.
-    Sections marked TODO wait for prompts 10 to 12 (reply editing, approval
-    and review split with the learning loop, SLAs), the workflow export and
-    fresh OML exports. Every claim
-    about OutSystems is checked against the docs or our own run evidence in
-    build-notes.md before publishing; keep the tone diplomatic. Crop Luke's
-    email and tenant from all screenshots. */}
-
 ## Introduction
 
 > **New to the design?** Start with [the main article](/blog/digital-branch-concierge) for the business case and architecture. This page is the hands-on OutSystems build: import, review, tests and recorded results.
@@ -478,11 +470,6 @@ Four things did not go as expected, and they are this build's to fix rather than
 
 ## What this build shows
 
-{/* DRAFT, updated 7 Nov 2026: evidence from the clean end-to-end run added
-    to each row, minus points and the summary's opportunities brought up to
-    date (approval and review kinds, SLAs and the learning loop are now
-    built). Scores unchanged from the 16 Oct first pass, for Luke to review. */}
-
 Read the results against the enterprise objections from the article. The first two columns follow the article's scorecard, with some questions narrowed to what this build can show. The third is this build's position: whether it passed, a score out of 10, its main strength, its next improvement opportunity and the evidence from the recorded runs behind the button. The scores are my judgement of those runs, not a benchmark.
 
 <Scorecard>
@@ -701,8 +688,6 @@ Opening an entity's data viewer in ODC Studio marks the app as changed and adds 
 
 ## Opportunities for the next build
 
-{/* DRAFT 7 Nov 2026 for Luke's review. */}
-
 What is still open after the clean run, all in this build rather than the platform:
 
 - **Combined requests.** A phone change plus a balance question, approved by staff, ended with a safe fallback line instead of the balance for the customer with an open complaint.
@@ -713,8 +698,6 @@ What is still open after the clean run, all in this build rather than the platfo
 - **A live Authorise refusal.** A test that pushes the model to call a skill for another customer's account, so the refusal is proven rather than inferred.
 
 ## Conclusion
-
-{/* DRAFT for Luke's review. */}
 
 Can a low-code platform give an agent room to act while keeping consequential decisions with people? This build offers a promising answer. Routine requests went straight through, higher-impact requests waited for a named person, and that person's decision, not the agent's, decided what happened.
 
