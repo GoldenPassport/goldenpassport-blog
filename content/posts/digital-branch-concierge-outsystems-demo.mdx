@@ -247,7 +247,7 @@ A custom connection can hold several endpoints with priorities, so a second prov
 
 The agentic app comes first, because the chatbot app uses its public actions, events and role.
 
-- In ODC Studio, choose **Organization > Open Files** and open `Branch Concierge Agent V2.oml` from `outsystems/apps`. {/* TODO screenshot: Open Files and the imported app in Studio. */}
+- In ODC Studio, choose **Organization > Open Files** and open `Branch Concierge Agent V2.oml` from `outsystems/apps`. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-open-files.webp" alt="The Open dialog from ODC Studio's Open Files, in the apps folder of the repository: Branch Concierge Agent V2.oml, 346 KB, selected, and Branch Concierge Chatbot App V2.oml, 2.5 MB, with Cancel and Open buttons." caption="Opening the agentic app first, from the repository's apps folder" />
 - Open the agent, in **Automations > Agents > CallAgent**, and check **AI model** is `deepseek_flash`; Studio shows it as **Calldeepseek_flash**. If you named the model differently in step 3, or stayed on the trial model, choose it here.
 - Select **1-Click Publish**. Publishing also seeds the four demo customers, the skill registry and the knowledge sections. When it finishes, the panel shows **Test agent in an app**.
 - Open `Branch Concierge Chatbot App V2.oml` the same way. If Studio reports outdated references, open **Manage dependencies**, refresh Branch Concierge Agent V2 and select **Apply**. Then select **1-Click Publish**.
