@@ -220,13 +220,7 @@ Guardrails are a Portal setting, not code, so they are not in the app files.
 
 <ProcessStep title="Add DeepSeek as an AI model" outcome="a deepseek-flash AI model in the Portal whose endpoint test passed, ready for the agentic app.">
 
-Models are managed in the Portal and shared by every app in the organisation. The agentic app expects a model named `deepseek-flash`. DeepSeek's API follows the OpenAI chat completions format, so it connects as a custom connection.
-
-- Create an API key at **platform.deepseek.com > API keys** and copy it straight away; it is shown only once.
-- In the Portal, open **Integrate > AI models**, select **Add AI model**, choose **Custom connection** on the Provider tab and name the model <CopyRequest text="deepseek-flash">`deepseek-flash`</CopyRequest>.
-- Under **Endpoints**, select **Add** and fill in the endpoint: **Name** and **Model ID** <CopyRequest text="deepseek-flash">`deepseek-flash`</CopyRequest>, **URL** <CopyRequest text="https://api.deepseek.com">`https://api.deepseek.com`</CopyRequest> (ODC adds `/chat/completions` itself, shown beside the field) and **Priority** 1. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-deepseek-endpoint.webp" alt="The Add endpoint dialog for a custom connection: Name deepseek-flash, Model ID deepseek-flash, URL https://api.deepseek.com with /chat/completions shown after the field, and Priority 1." caption="The DeepSeek endpoint" />
-- Under **Headers**, add <CopyRequest text="Authorization">`Authorization`</CopyRequest> with the value `Bearer ` followed by your key (the word Bearer, one space, then the key), for example `Bearer sk-XXXXXX`, and <CopyRequest text="Content-Type">`Content-Type`</CopyRequest> with the value <CopyRequest text="application/json">`application/json`</CopyRequest>. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-deepseek-headers.webp" alt="The Headers section with two key-value pairs, Authorization and Content-Type, values masked." caption="The two headers, values masked" />
-- Select **Test endpoint**, then **Add**. **Add** only keeps the endpoint in the form: select **Save** on the model page as well, or the model never appears in Studio. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-ai-models.webp" alt="AI models in ODC Portal: deepseek_flash, a custom connection, next to the trial models TrialClaudeHaiku4_5 and TrialAmazonNovaPro on Amazon Bedrock." caption="Saved: the DeepSeek model next to the two trial models (the Portal shows the name as deepseek_flash)" />
+Models are managed in the Portal and shared by every app in the organisation. The agentic app expects a model named `deepseek-flash`. DeepSeek's API follows the OpenAI chat completions format, so it connects as a custom connection. A custom connection can hold several endpoints with priorities, so a second provider can take over when the first fails, and a daily token limit caps what the model can spend. Both are governance settings in the Portal rather than code in the app.
 
 <Guide label="If the endpoint test fails" title="If the DeepSeek endpoint test fails">
 
@@ -236,31 +230,31 @@ Models are managed in the Portal and shared by every app in the organisation. Th
 
 </Guide>
 
-A custom connection can hold several endpoints with priorities, so a second provider can take over when the first fails, and a daily token limit caps what the model can spend. Both are governance settings in the Portal rather than code in the app.
+- Create an API key at **platform.deepseek.com > API keys** and copy it straight away; it is shown only once.
+- In the Portal, open **Integrate > AI models**, select **Add AI model**, choose **Custom connection** on the Provider tab and name the model <CopyRequest text="deepseek-flash">`deepseek-flash`</CopyRequest>.
+- Under **Endpoints**, select **Add** and fill in the endpoint: **Name** and **Model ID** <CopyRequest text="deepseek-flash">`deepseek-flash`</CopyRequest>, **URL** <CopyRequest text="https://api.deepseek.com">`https://api.deepseek.com`</CopyRequest> (ODC adds `/chat/completions` itself, shown beside the field) and **Priority** 1. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-deepseek-endpoint.webp" alt="The Add endpoint dialog for a custom connection: Name deepseek-flash, Model ID deepseek-flash, URL https://api.deepseek.com with /chat/completions shown after the field, and Priority 1." caption="The DeepSeek endpoint" />
+- Under **Headers**, add <CopyRequest text="Authorization">`Authorization`</CopyRequest> with the value `Bearer ` followed by your key (the word Bearer, one space, then the key), for example `Bearer sk-XXXXXX`, and <CopyRequest text="Content-Type">`Content-Type`</CopyRequest> with the value <CopyRequest text="application/json">`application/json`</CopyRequest>. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-deepseek-headers.webp" alt="The Headers section with two key-value pairs, Authorization and Content-Type, values masked." caption="The two headers, values masked" />
+- Select **Test endpoint**, then **Add**. **Add** only keeps the endpoint in the form: select **Save** on the model page as well, or the model never appears in Studio. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-ai-models.webp" alt="AI models in ODC Portal: deepseek_flash, a custom connection, next to the trial models TrialClaudeHaiku4_5 and TrialAmazonNovaPro on Amazon Bedrock." caption="Saved: the DeepSeek model next to the two trial models (the Portal shows the name as deepseek_flash)" />
 
 </ProcessStep>
 
 <ProcessStep title="Import and publish the two apps" outcome="Branch Concierge Agent V2 and Branch Concierge Chatbot App V2 published in your Development stage, with the agent on deepseek-flash.">
 
-The agentic app comes first, because the chatbot app uses its public actions, events and role.
+The agentic app comes first, because the chatbot app uses its public actions, events and role. If you publish over an earlier import, Studio may show **Override revisions**: publishing would override a newer revision on the server. Select **Compare revisions** to see the differences first; choose **Override with this revision** only when your file is the one you want. Opening the apps from Studio's asset list instead of from a file avoids the prompt.
 
 - In ODC Studio, choose **Organization > Open Files** and open `Branch Concierge Agent V2.oml` from `outsystems/apps`. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-open-files.webp" alt="The Open dialog from ODC Studio's Open Files, in the apps folder of the repository: Branch Concierge Agent V2.oml, 346 KB, selected, and Branch Concierge Chatbot App V2.oml, 2.5 MB, with Cancel and Open buttons." caption="Opening the agentic app first, from the repository's apps folder" />
 - Open the agent, in **Automations > Agents > CallAgent**, and check **AI model** is `deepseek_flash`; Studio shows it as **Calldeepseek_flash**. If you named the model differently in step 3, or stayed on the trial model, choose it here.
 - Select **1-Click Publish**. Publishing also seeds the four demo customers, the skill registry and the knowledge sections. When it finishes, the panel shows **Test agent in an app**.
 - Open `Branch Concierge Chatbot App V2.oml` the same way. If Studio reports outdated references, open **Manage dependencies**, refresh Branch Concierge Agent V2 and select **Apply**. Then select **1-Click Publish**. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-apps-published.webp" alt="The two apps in ODC Portal after publishing: Branch Concierge Agent V2, revision 2, published Nov 08, 2026, 12:26 AM, and Branch Concierge Chatbot App V2, revision 4, published Nov 07, 2026, 07:43 PM, both by Luke Audie in the Development stage." caption="Both apps published in the Development stage" />
 
-If you publish over an earlier import, Studio may show **Override revisions**: publishing would override a newer revision on the server. Select **Compare revisions** to see the differences first; choose **Override with this revision** only when your file is the one you want. Opening the apps from Studio's asset list instead of from a file avoids the prompt.
-
 </ProcessStep>
 
 <ProcessStep title="Import and publish the workflow" outcome="the Branch Concierge Workflow published and listening for customer requests.">
 
-The workflow is the process around the agent. It is imported in the Portal, not in Studio.
+The workflow is the process around the agent. It is imported in the Portal, not in Studio. The workflow editor allows one open tab per workflow. If it says the workflow is already open, close the other tab.
 
 - In the Portal, open **Workflows**, select **Import** and choose `Branch Concierge Workflow V2.oml` from `outsystems/workflow`. Import opens the workflow editor in a new tab with an **Import workflow** dialog. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-import-workflow.webp" alt="The Import workflow dialog in the ODC workflow editor: a Browse button, or drag and drop a file, with Cancel and Import buttons." caption="Importing the workflow file" />
 - Open it and select **Publish**. It starts on the `CustomerRequestReceived` event from Branch Concierge Agent V2, so publish the apps first. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-workflow-published.webp" alt="Branch Concierge Workflow in ODC Portal: revision 1, published by Luke Audie, with its description, and the Producers tab listing (System), Branch Concierge Agent V2 (revision 2 deployed in Development) and Branch Concierge Chatbot App V2 (revision 4 deployed in Development)." caption="The workflow published, listening to the two apps it depends on" />
-
-The workflow editor allows one open tab per workflow. If it says the workflow is already open, close the other tab.
 
 </ProcessStep>
 
