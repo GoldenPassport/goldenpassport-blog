@@ -402,7 +402,7 @@ T06 to T10 were all held for review, and T01 to T05 and T12 went straight throug
 
 The same twelve conversations become a regression suite. Every change to the prompt, a skill or the model can be checked against the same cases and the same judges before it is published.
 
-- In the Portal, open **Analyze > Agent evaluations**, create a dataset from the JSON file in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge/tree/main/outsystems/evaluations) (`outsystems/evaluations/concierge-12.json`), then create an evaluation for the agentic app's service action with five judges: Correctness, Safety, Guidelines, Relevance to Query and Tool Trajectory. Each case carries the expected reply, route and reasons, the guidelines it must follow and the tools it should call.
+- In the Portal, open **Analyze > Agent evaluations**, create a dataset from the JSON file in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge/tree/main/outsystems/evaluations) (`outsystems/evaluations/concierge-12-agent.json` for the final build, which judges the agent layer; `concierge-12.json` keeps the route expectations used in October), then create an evaluation for the agentic app's service action with five judges: Correctness, Safety, Guidelines, Relevance to Query and Tool Trajectory. Each case carries the expected reply, route and reasons, the guidelines it must follow and the tools it should call.
 - Select **Run evaluation**, then **Show details** to see each judge's verdict and its reasoning per case. On the trial model a run took nine minutes because of its rate limit; on DeepSeek it took about one. <Shot src="/posts/digital-branch-concierge/outsystems-steps/obs-eval-runs.webp" alt="The concierge-12 baseline evaluation in ODC Portal with four completed runs: 19:12, overall 88.3%, Correctness 83.3%, Safety 100%, Guidelines 83.3%, Relevance to Query 100%, Tool Trajectory 75%; 18:55, overall 85%; 18:46, overall 86.7%; and 17:24, overall 85%, Correctness 66.7%." caption="Four runs of the same twelve cases, newest first" />
 
 The four runs were: the trial model; DeepSeek; DeepSeek after the first fix; and DeepSeek after the second fix, with fresh sessions. Safety passed every case in every run. The details told a more useful story than the overall score:
@@ -596,9 +596,11 @@ The clean run used the twelve conversations by hand, checked in the data tables,
 
 </EvidenceRecord>
 
-<EvidenceRecord label="Run of concierge-12 V2" date="8 November 2026" note="deepseek-flash, final build">
+<EvidenceRecord label="Runs on the final build" date="8 November 2026" note="deepseek-flash">
 
-The October evaluation pointed at the original app, which no longer exists, so the same dataset was loaded again against the final agentic app and run with the same five judges. It scored 73.3%: Safety and Relevance to Query 100%, Tool Trajectory 83.3%, Correctness 50% and Guidelines 33.3%. The judges' reasoning showed why. In the final build the impact and policy gate runs as its own workflow step, and the service action the evaluation calls returns the agent's turn without it, so <TestId>T06</TestId> to <TestId>T10</TestId> came back straight through, where the chat, going through the workflow, held all five. The suite was measuring an entry point that no longer matches the path customers use, which is exactly the kind of drift it exists to expose. It also found a real change in behaviour: in <TestId>T04</TestId> the agent booked an adviser slot without asking first.
+The October evaluation pointed at the original app, which no longer exists, so the same dataset was loaded again against the final agentic app. It scored 73.3%, and the judges' reasoning showed why: in the final build the impact and policy gate runs as its own workflow step, and the service action the evaluation calls returns the agent's turn without it, so <TestId>T06</TestId> to <TestId>T10</TestId> came back straight through where the chat, going through the workflow, held all five. It also caught a real change: in <TestId>T04</TestId> the agent booked an adviser slot without asking.
+
+Both were fixed the same night. The dataset now judges the layer the service action actually runs, the agent's reply and tools, with routing left to the end-to-end runs through the workflow, and the agent's booking tools now say to offer slots and wait for the customer's choice. The rerun scored 91.7%: Safety 100%, every other judge between 83.3% and 91.7%, and <TestId>T04</TestId> passed on every judge. The remaining fails were small: T03 did not offer an adviser slot in so many words, T07 looked at the bank's documents when no tool was expected, and on T11 the judge model declined to judge the jailbreak at all.
 
 </EvidenceRecord>
 
@@ -698,8 +700,8 @@ Still open after the clean run, all in this build rather than the platform:
 - **Guardrail labels.** A harmful request was refused, but logged as a prompt attack, and the refusal renamed the case it joined.
 - **Voice of staff messages.** An approved reply is shown as from a member of staff but can still read as the agent ("isn't something I can arrange myself").
 - **Slot search.** The adviser slot offered for a booking did not exclude a slot the same customer already held.
-- **An evaluation entry point that runs the gate.** The final build's evaluation calls a service action without the impact and policy gate, so routing scored as straight through for the five held cases. Point the suite at a service action that runs the agent and the gate together, as the workflow does, and add a setup action that clears memory.
-- **Booking without asking.** In the 8 November evaluation the agent booked an adviser slot in T04 instead of offering slots and asking. Booking is low risk and not gated, so the confirm-first rule rests on the prompt alone.
+- **Routing in the evaluation suite.** The final build's evaluation judges the agent layer only, because the gate runs in the workflow. A suite that drives the workflow itself would test routing on every change, not only in end-to-end runs.
+- **Confirm-first booking as a rule, not a prompt.** The agent now offers slots and waits for a choice, but booking is low risk and not gated, so that still rests on the prompt and the tool descriptions.
 - **A live Authorise refusal.** A test that pushes the model to call a skill for another customer's account, so the refusal is proven rather than inferred.
 
 ## Conclusion
