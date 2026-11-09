@@ -289,7 +289,8 @@ Review cases are assigned to a role, not to a named account in the app, so the p
 
 - In the Portal, open **Govern > Users**, select your user, then the **End-user access** tab and **Manage roles**. Choose Branch Concierge Agent V2, the **Development** stage and the **DecisionOwner** role, and save. The role then appears on the tab. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-decision-owner-role-v2.webp" alt="A user's End-user access tab in ODC Portal: End-user roles for the Development stage, with a Manage roles button and one row: asset Branch Concierge Agent V2, role DecisionOwner, stage Development, directly assigned." caption="The DecisionOwner role, assigned to your user for the Development stage" />
 - The chatbot app's Review cases screen signs staff in through the stage's identity provider, the same account you use for the Portal. In the Personal Edition that provider is **OutSystems Community**. If yours is different, open **Govern > Identity providers** to see its name and change it in the chatbot app's `DoExternalLogin` action. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-identity-providers.webp" alt="Identity providers in ODC Portal: the Built-in provider, OutSystems Developer Cloud, used by one stage, and OutSystems Community, OpenID Connect with no group mappings, used by the organisation and one stage." caption="The two identity providers in a Personal Edition; staff sign in through OutSystems Community" />
-- Open the chatbot app and sign in with your OutSystems account. Both the chat and **Review cases** need the DecisionOwner role; without it the app returns to the login page. If the login page says no external identity provider is configured, the browser is probably holding an old session for this app, usually after a reinstall: the app's log reads "a user is already authenticated via a different mechanism". Sign out of it or clear that site's data, then sign in again. Select **Review cases** to open the **Inbox**. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-review-cases-signed-in.webp" alt="The Review Cases screen of the chatbot app after signing in: Chats, Review cases and Log out at the top, tiles for open cases, SLA due today, SLA overdue and learnings, and an empty Inbox reading No cases waiting for review. New requests appear here automatically." caption="Signed in as the decision owner, with an empty inbox" />
+- If the login page says no external identity provider is configured, the browser is probably holding an old session for this app, usually after a reinstall. The app's log reads "a user is already authenticated via a different mechanism". Sign out of it or clear that site's data, then sign in again.
+- Open the chatbot app and sign in with your OutSystems account. Both the chat and **Review cases** need the DecisionOwner role; without it the app returns to the login page. Select **Review cases** to open the **Inbox**. <Shot src="/posts/digital-branch-concierge/outsystems-steps/setup-review-cases-signed-in.webp" alt="The Review Cases screen of the chatbot app after signing in: Chats, Review cases and Log out at the top, tiles for open cases, SLA due today, SLA overdue and learnings, and an empty Inbox reading No cases waiting for review. New requests appear here automatically." caption="Signed in as the decision owner, with an empty inbox" />
 
 </ProcessStep>
 
@@ -414,7 +415,7 @@ Who may decide is set in the Portal, not in the app: the DecisionOwner role is a
 
 <ProcessStep title="Evidence for routing at the ADM boundary" question="did the complaint, the closure, the overdraft and the vulnerable customer all reach a person?" outcome="every named decision held for a person and every routine request not.">
 
-T06 to T10 were all held for review, and T01 to T05 and T12 went straight through, in October and again in the 7 November clean run. In the final build the gate is its own workflow step: **RunAgent** runs the agent, then **RunImpactPolicyGate** reads the turn's audit rows, calls `ImpactPolicyGate`, which makes no model call, and creates the review case when it holds the reply. <Shot src="/posts/digital-branch-concierge/outsystems-steps/obs-gate-trace-v2.webp" alt="A Portal trace of RunImpactPolicyGate from Branch Concierge Chatbot App V2 revision 4 on 8 November, 4 s 131 ms in total: lookups of the turn's skill rows, change requests and decision log, then ImpactPolicyGate in 19 ms with its session and customer lookups, then UpsertConciergeSession and LogDecision." caption="The gate as its own workflow step: ImpactPolicyGate runs in 19 ms, after the agent and before the reply" />
+T06 to T10 were all held for review, and T01 to T05 and T12 went straight through, in October and again in the clean runs on 7 and 9 November. In the final build the gate is its own workflow step: **RunAgent** runs the agent, then **RunImpactPolicyGate** reads the turn's audit rows, calls `ImpactPolicyGate`, which makes no model call, and creates the review case when it holds the reply. <Shot src="/posts/digital-branch-concierge/outsystems-steps/obs-gate-trace-v2.webp" alt="A Portal trace of RunImpactPolicyGate from Branch Concierge Chatbot App V2 revision 4 on 8 November, 4 s 131 ms in total: lookups of the turn's skill rows, change requests and decision log, then ImpactPolicyGate in 19 ms with its session and customer lookups, then UpsertConciergeSession and LogDecision." caption="The gate as its own workflow step: ImpactPolicyGate runs in 19 ms, after the agent and before the reply" />
 
 </ProcessStep>
 
@@ -457,7 +458,12 @@ In testing on 4 November, a promoted lesson asking the agent to end every reply 
 
 The table shows the first pass of the clean end-to-end run on 7 November 2026, against version 2 of the shared test set, on DeepSeek. The three assets were deleted, imported again from the repository files following the setup above, and every outcome was checked in the data tables, not only in the chat. After the chat fixes described below, all twelve and the staff decisions were run again that evening on chatbot revision 4 and passed with the same routes. Two details differ from the table: T01 printed statement STM-EIBH, and in T04 the agent offered the slot and asked, but was not told to book. Approval followed by the customer saying no, the harmful request, the combined request, learnings and timeout were not repeated on revision 4, because the fixes did not touch those paths. The full record is in `outsystems/evaluations/clean-run-2026-11-07.md`.
 
-**Repeated on 9 November with the final files.** The three assets were deleted and imported from the repository again, including the booking rule from prompt 75. All twelve routes matched and the outcomes were confirmed in the data tables. T04 offered 14:00 or 15:30 and asked, and booked APT-GGAJ only after the customer chose; Appointment holds that one row. T06 changed the customer's number only after approval and the customer's yes, approval followed by no left the number alone, and flag, promote, demote and promote again all worked, with a `learnings_used` row on the next turn. It also found one new fault: in T06 the agent called the contact change skill twice in one turn, so two requests were created, and one stayed pending after the other was applied. Prompt 76 fixed it the same day: the skill now reuses a pending request for the same change. See Opportunities for what is still to prove.
+**Repeated on 9 November with the final files.** The three assets were deleted and imported from the repository again, including the booking rule from prompt 75. All twelve routes matched and the outcomes were confirmed in the data tables.
+
+- **Booking.** T04 offered 14:00 or 15:30 and asked, and booked APT-GGAJ only after the customer chose. Appointment holds that one row.
+- **Approval.** T06 changed the customer's number only after approval and the customer's yes. Approval followed by no left the number alone.
+- **Learnings.** Flag, promote, demote and promote again all worked, with a `learnings_used` row on the next turn.
+- **One new fault.** In T06 the agent called the contact change skill twice in one turn, so two requests were created and one stayed pending after the other was applied. Prompt 76 fixed it the same day: the skill now reuses a pending request for the same change. Opportunities says what is still to prove.
 
 | Test | Customer | Request | Expected | Result |
 | --- | --- | --- | --- | --- |
@@ -607,7 +613,7 @@ The same five were held and the same six went straight through, on the fresh ins
 
 <EvidenceRecord label="Runs of concierge-12" date="15 and 16 October 2026" note="deepseek-flash">
 
-**Rerun, 16 October:** two runs with fresh sessions scored 85% and 86.7%, with Tool Trajectory at 50%. The judge reported no tool calls for T01 to T06, although the replies show the tools ran: a statement reference, the exact balance and a hold for "skill risk medium". The cause was the stage's daily trace limit, reached at 14:03, before both runs; the trajectory judge reads the traces. 
+**Rerun, 16 October:** two runs with fresh sessions scored 85% and 86.7%, with Tool Trajectory at 50%. The judge reported no tool calls for T01 to T06, although the replies show the tools ran: a statement reference, the exact balance and a hold for "skill risk medium". The cause was the stage's daily trace limit, reached at 14:03, before both runs; the trajectory judge reads the traces.
 
 **Bug 1:** the opening hours action never matched Saturday, so weekends fell through to weekday hours. **Bug 2:** the gate rated any turn without a skill as high risk, so the agent's correct refusal in T12 was being held. **Skill description:** the agent asked the customer to confirm the phone number before calling the skill, so nothing reached the gate; the description now says to call it as soon as the value is given. The one remaining fail across runs is the Guidelines judge on T03, which passed in two runs and failed in three: model judges vary too.
 
@@ -647,7 +653,7 @@ OutSystems put the article's outer process somewhere a business reader can see i
 
 The build was also a test of AI-assisted development. Mentor built most of the two apps from plain-language prompts in hours, not days. Its work needed the same review as anyone else's, and the evaluation and the audit log were what caught the bugs it introduced.
 
-Since the first runs in October, held cases have been split into approval and review, SLAs run in UK working hours, and a reviewed learning loop lets a decision owner promote a lesson the agent receives. A clean run on a fresh install, from the files in the repository, passed the twelve conversations and the staff decisions.
+Since the first runs in October, held cases have been split into approval and review, SLAs run in UK working hours, and a reviewed learning loop lets a decision owner promote a lesson the agent receives. Clean runs on fresh installs, from the files in the repository, passed the twelve conversations and the staff decisions on 7 and 9 November.
 
 Three opportunities could make that foundation stronger for enterprise teams:
 
@@ -723,7 +729,7 @@ Opening an entity's data viewer in ODC Studio marks the app as changed and adds 
 
 ## Opportunities for the next build
 
-Still open after the clean run, all in this build rather than the platform:
+Still open after the clean runs, all in this build rather than the platform:
 
 - **Combined requests.** A phone change plus a balance question, approved by staff, ended with a safe fallback line instead of the balance for the customer with an open complaint.
 - **Guardrail labels.** A harmful request was refused, but logged as a prompt attack, and the refusal renamed the case it joined.
@@ -732,13 +738,14 @@ Still open after the clean run, all in this build rather than the platform:
 - **Routing in the evaluation suite.** The final build's evaluation judges the agent layer only, because the gate runs in the workflow. A suite that drives the workflow itself would test routing on every change, not only in end-to-end runs.
 - **Confirm-first booking as a rule, not a prompt.** The agent now offers slots and waits for a choice, but booking is low risk and not gated, so that still rests on the prompt and the tool descriptions.
 - **Duplicate change requests.** On the 9 November run the agent called the contact change skill twice in one turn, and one request stayed pending after the other was applied. Prompt 76 makes the skill reuse a pending request for the same customer, field and value. The check is not atomic, so two truly simultaneous calls could still both create a row, and the reuse path has not yet been exercised in a recorded run.
+- **Change request housekeeping.** Reference codes are built from the time with no uniqueness check, and nothing expires a pending request, so an abandoned one stays pending.
 - **A live Authorise refusal.** A test that pushes the model to call a skill for another customer's account, so the refusal is proven rather than inferred.
 
 ## Conclusion
 
 Can a low-code platform give an agent room to act while keeping consequential decisions with people? This build offers a promising answer. Routine requests went straight through, higher-impact requests waited for a named person, and that person's decision, not the agent's, decided what happened.
 
-The final check was a clean run: everything deleted, imported again from the repository files following this guide, and tested end to end, with each outcome confirmed in the data tables. It passed. The faults it found in the chat app were fixed through Mentor and retested, and the rest are listed under Opportunities. On 9 November the whole exercise was repeated with the final files, including the booking rule in prompt 75. It passed again, and found one new fault, which was fixed the same day.
+The final check was a clean run, done twice: everything deleted, imported again from the repository files following this guide, and tested end to end, with each outcome confirmed in the data tables. Both runs passed. The faults they found in the apps were fixed through Mentor and retested, and the rest are listed under Opportunities.
 
 What stayed with me was how much of the governance is a setting rather than code: who may decide, which model runs, what the guardrails block and which judges score each change. That suits an organisation where the people accountable for those choices are not the people writing the app.
 
