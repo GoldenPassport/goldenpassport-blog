@@ -124,6 +124,28 @@ The three layers of the article's picture, as this build implements them. Select
 
 </div>
 
+### The chatbot app
+
+Mentor built more than the agent. The chatbot app is a working front end for both sides of the service, the customer's chat and the staff screens, generated from plain-language prompts and running on the same data as the workflow.
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/app-chat.webp" alt="The chat screen for a demo customer, with numbered callouts: the Gen AI case headline at the top right, the customer's cases on the left, the route and reasons under each reply, the staff member's initials on a reply after a decision, and a link to the event log." caption="The customer's chat, with what the workflow decided shown under each reply for the demo" />
+
+Every case has one view that tells its whole story. An agent writes the summary and headline, and the event log shows who did what, whether that was the customer, the gate, the workflow or a named member of staff.
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/app-case.webp" alt="The case view with numbered callouts: a Gen AI summary of the whole case, key facts such as customer, status and outcome, the conversation flow, and an event log listing each step with its actor and time, including replies classified by a model and holds recorded by the gate." caption="One case, from the AI summary down to every step in the event log" />
+
+Staff work from **Review cases**, which only opens for someone with the DecisionOwner role. Three tabs follow a decision through its life. Held requests arrive in the **Inbox**, where a person edits the proposed reply, adds a note and approves or rejects.
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/app-inbox.webp" alt="The Inbox tab with numbered callouts: counts of open, due and overdue cases, a held request with its Gen AI headline and deadline, then the review form with an editable proposed reply, a note, a Flag for learning box and Approve and Reject buttons." caption="Inbox: where a held request is reviewed and decided" />
+
+**Decided** is the history. A manager can see every decision, its outcome and whether it met its deadline, then open any case to see who decided and why.
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/app-decided.webp" alt="The Decided tab with numbered callouts: a searchable list of decided cases showing kind, an Approved or Rejected badge, the time of the decision and whether the SLA was met, with a link to open each case." caption="Decided: the record of every decision" />
+
+**Learnings** are the key cases staff choose to teach from. A flagged decision becomes guidance, and once a named person promotes it the agent receives it as context in its prompt, which shapes the tone and approach of later replies. The gate never reads it, so a lesson cannot change what gets held.
+
+<Figure src="/posts/digital-branch-concierge/outsystems-steps/app-learnings.webp" alt="The Learnings tab with numbered callouts: a flagged case, its short guidance for the agent, its promoted status with a Demote button, and a View prompt button that shows the exact line the agent receives." caption="Learnings: reviewed cases that give the agent better context" />
+
 ## Before you start
 
 - **An ODC Personal Edition**, which is free. It gives you one Development stage, up to eight active components (apps, agents, workflows and timers together) and sleeps after 72 hours without use. This build uses three: the agentic app, the chatbot app and the workflow.
