@@ -30,7 +30,7 @@ You do not build it from scratch. The two apps and the workflow are in the compa
 
 The comparison is controlled rather than identical. The same four demo customers, knowledge documents, skills, risk ratings, baseline system prompt and twelve test conversations are used; the two OutSystems-specific changes to the prompt and tool descriptions, both prompted by an evaluation run, are described under Observations. The model is the same too: the agent runs on DeepSeek, connected to ODC as a custom AI model. The free Personal Edition also includes a trial Claude Haiku 4.5, which is enough to follow the build without a key.
 
-**Versions tested.** The repository holds the apps exported from Branch Concierge Agent V2 revision 2 and Chatbot App V2 revision 4, and the workflow at revision 1. On 9 November all three were deleted and imported again from those files, which makes each one revision 1 on the new install, and the twelve conversations were run end to end on that install.
+**Versions tested.** The repository holds the apps exported from Branch Concierge Agent V2 revision 2 and Chatbot App V2 revision 4, and the workflow at revision 1. On 9 November all three were deleted and imported again from those files, which makes each one revision 1 on the new install, and the twelve conversations were run end to end on that install. One fix followed that run, prompt 76, published as Agent V2 revision 2 on the new install and exported to the repository.
 
 ## What you'll build
 
@@ -165,7 +165,7 @@ The OutSystems build, file by file.
 | concierge-12-agent.json | outsystems/evaluations | The twelve test conversations as an Agent evaluations dataset for the final build, judging the agent's reply and tools |
 | concierge-12.json | outsystems/evaluations | The October version of the dataset, with the expected route and reasons |
 | clean-run-2026-11-07.md | outsystems/evaluations | Results of the clean end-to-end run on a fresh install, checked in the data tables |
-| 01 to 75 prompts | outsystems/mentor-prompts | The requests that built and refined the apps with Mentor, in order |
+| 01 to 76 prompts | outsystems/mentor-prompts | The requests that built and refined the apps with Mentor, in order |
 | customers.csv | shared/data | The four demo customers, the same as in the other builds |
 | fees-and-product-terms.md, branch-policies-and-faqs.md | shared/knowledge | What the concierge may answer from |
 
@@ -189,7 +189,7 @@ Mentor has a daily usage limit on the Personal Edition. A large multi-part chang
 
 Mentor built the data model, nine server actions and the agent wiring in about twenty minutes. Its output still needed the same review as anyone else's: it switched the agent's tools off with a call condition of `True`, wrote two logic bugs that the evaluation found (Observations), claimed twice that published elements were not published, left a screen that would not compile, and built a login form with a plain-text password field against the wrong identity provider. Each was caught by reading the change against the documentation and the run logs before a customer saw it.
 
-The fixes after the clean run, prompts 71 to 75, were sent to Mentor from Claude Code through the OutSystems MCP server. Mentor reported what it found, made the changes and published them, and each was retested before the next. Prompt 74 chased a fault that turned out to be in the test, not the app, so its changes were discarded.
+The fixes after the clean run, prompts 71 to 76, were sent to Mentor from Claude Code through the OutSystems MCP server. Mentor reported what it found, made the changes and published them, and each was retested before the next. Prompt 74 chased a fault that turned out to be in the test, not the app, so its changes were discarded.
 
 </Accordion>
 
@@ -435,7 +435,7 @@ In testing on 4 November, a promoted lesson asking the agent to end every reply 
 
 The table shows the first pass of the clean end-to-end run on 7 November 2026, against version 2 of the shared test set, on DeepSeek. The three assets were deleted, imported again from the repository files following the setup above, and every outcome was checked in the data tables, not only in the chat. After the chat fixes described below, all twelve and the staff decisions were run again that evening on chatbot revision 4 and passed with the same routes. Two details differ from the table: T01 printed statement STM-EIBH, and in T04 the agent offered the slot and asked, but was not told to book. Approval followed by the customer saying no, the harmful request, the combined request, learnings and timeout were not repeated on revision 4, because the fixes did not touch those paths. The full record is in `outsystems/evaluations/clean-run-2026-11-07.md`.
 
-**Repeated on 9 November with the final files.** The three assets were deleted and imported from the repository again, including the booking rule from prompt 75. All twelve routes matched and the outcomes were confirmed in the data tables. T04 offered 14:00 or 15:30 and asked, and booked APT-GGAJ only after the customer chose; Appointment holds that one row. T06 changed the customer's number only after approval and the customer's yes, approval followed by no left the number alone, and flag, promote, demote and promote again all worked, with a `learnings_used` row on the next turn. It also found one new fault: in T06 the agent called the contact change skill twice in one turn, so two requests were created and the second, CCR-EHAJ, is still pending after the first was applied. It is listed under Opportunities.
+**Repeated on 9 November with the final files.** The three assets were deleted and imported from the repository again, including the booking rule from prompt 75. All twelve routes matched and the outcomes were confirmed in the data tables. T04 offered 14:00 or 15:30 and asked, and booked APT-GGAJ only after the customer chose; Appointment holds that one row. T06 changed the customer's number only after approval and the customer's yes, approval followed by no left the number alone, and flag, promote, demote and promote again all worked, with a `learnings_used` row on the next turn. It also found one new fault: in T06 the agent called the contact change skill twice in one turn, so two requests were created, and one stayed pending after the other was applied. Prompt 76 fixed it the same day: the skill now reuses a pending request for the same change. See Opportunities for what is still to prove.
 
 | Test | Customer | Request | Expected | Result |
 | --- | --- | --- | --- | --- |
@@ -709,14 +709,14 @@ Still open after the clean run, all in this build rather than the platform:
 - **Slot search.** The adviser slot offered for a booking did not exclude a slot the same customer already held.
 - **Routing in the evaluation suite.** The final build's evaluation judges the agent layer only, because the gate runs in the workflow. A suite that drives the workflow itself would test routing on every change, not only in end-to-end runs.
 - **Confirm-first booking as a rule, not a prompt.** The agent now offers slots and waits for a choice, but booking is low risk and not gated, so that still rests on the prompt and the tool descriptions.
-- **Duplicate change requests.** On the 9 November run the agent called the contact change skill twice in one turn. The trace shows both calls, and the second request stayed pending after the first was applied. The skill could reuse an existing pending request for the same field and value.
+- **Duplicate change requests.** On the 9 November run the agent called the contact change skill twice in one turn, and one request stayed pending after the other was applied. Prompt 76 makes the skill reuse a pending request for the same customer, field and value. The check is not atomic, so two truly simultaneous calls could still both create a row, and the reuse path has not yet been exercised in a recorded run.
 - **A live Authorise refusal.** A test that pushes the model to call a skill for another customer's account, so the refusal is proven rather than inferred.
 
 ## Conclusion
 
 Can a low-code platform give an agent room to act while keeping consequential decisions with people? This build offers a promising answer. Routine requests went straight through, higher-impact requests waited for a named person, and that person's decision, not the agent's, decided what happened.
 
-The final check was a clean run: everything deleted, imported again from the repository files following this guide, and tested end to end, with each outcome confirmed in the data tables. It passed. The faults it found in the chat app were fixed through Mentor and retested, and the rest are listed under Opportunities. On 9 November the whole exercise was repeated with the final files, including the booking rule in prompt 75. It passed again, and found one new fault, listed under Opportunities.
+The final check was a clean run: everything deleted, imported again from the repository files following this guide, and tested end to end, with each outcome confirmed in the data tables. It passed. The faults it found in the chat app were fixed through Mentor and retested, and the rest are listed under Opportunities. On 9 November the whole exercise was repeated with the final files, including the booking rule in prompt 75. It passed again, and found one new fault, which was fixed the same day.
 
 What stayed with me was how much of the governance is a setting rather than code: who may decide, which model runs, what the guardrails block and which judges score each change. That suits an organisation where the people accountable for those choices are not the people writing the app.
 
