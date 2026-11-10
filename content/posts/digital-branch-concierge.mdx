@@ -6,7 +6,7 @@ unlisted: false
 group: "digital-branch-concierge"
 groupLabel: "Article"
 groupOrder: 1
-excerpt: "One digital branch concierge, built in n8n and LangGraph with other leading automation platforms to follow, to test how agentic AI can work safely inside a European enterprise process."
+excerpt: "One digital branch concierge, built in n8n, LangGraph and OutSystems with other leading automation platforms to follow, to test how agentic AI can work safely inside a European enterprise process."
 tags:
   - Agentic AI
   - Automated Decision-Making
@@ -16,6 +16,7 @@ tags:
   - n8n
   - LangGraph
   - LangChain
+  - OutSystems
   - Guardrails
   - Process Orchestration
   - Banking
@@ -38,6 +39,12 @@ ogImage: "/posts/digital-branch-concierge/og.png"
     href="/blog/digital-branch-concierge-langgraph-demo"
   />
   <DemoLink
+    tool="OutSystems"
+    title="The process comes first"
+    blurb="A workflow runs every request, a deterministic gate holds the risky ones for a named decision owner, and the Portal traces and evaluates each run."
+    href="/blog/digital-branch-concierge-outsystems-demo"
+  />
+  <DemoLink
     tool="More platforms"
     title="Other leading automation platforms"
     blurb="The same concierge, the same design and the same twelve test conversations on more platforms."
@@ -56,7 +63,7 @@ So why do so many enterprise AI assistants still stop at the greeting?
 
 This article is for architects, business analysts, process owners and engineers across European organisations who are being asked to put an agent inside a real process. The bank branch is the worked example, not the boundary of the argument. Its handovers are visible and its work ranges from routine administration to significant decisions. The same design problem appears in healthcare, employment, education, insurance, utilities, public services and many other sectors.
 
-At heart this is a technical comparison of one service agent built on several platforms. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n and LangGraph first, with more leading automation platforms to follow, because each tool draws the line between workflow and agent in a different place. The n8n and LangGraph builds are finished. Their follow-along demos are linked above and their files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). More platforms are still to come, so treat the comparison here as the design argument with two builds behind it.
+At heart this is a technical comparison of one service agent built on several platforms. The branch concierge acts on a person's behalf inside the bank, and I am building it in n8n, LangGraph and OutSystems first, with more leading automation platforms to follow, because each tool draws the line between workflow and agent in a different place. The n8n, LangGraph and OutSystems builds are finished. Their follow-along demos are linked above and their files are in the [companion repository](https://github.com/GoldenPassport/digital-branch-concierge). More platforms are still to come, so treat the comparison here as the design argument with three builds behind it.
 
 It also takes enterprise hesitation seriously. McKinsey's 2026 State of AI survey found that nearly nine in ten organisations use AI somewhere and 47 per cent are scaling chatbots across the enterprise, yet only about two in ten are scaling AI agents. My working hypothesis, and it is an inference rather than a survey finding, is that this gap is more than the normal lag of a new technology. Organisations are comfortable letting AI talk, but far less comfortable letting it act. The survey hints at what unlocks adoption: its small group of high performers is much more likely to redesign workflows around AI and actively manage AI risk. That is the process-orchestration thesis of this article in survey form.
 
@@ -320,7 +327,7 @@ Tools, MCP and skills are easy to confuse. The run-through of the diagram's elem
 
 ## One concierge, several builds
 
-The tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph both begin with the agent in the middle; OutSystems begins with the outer process, a workflow that runs every request. Each can express skills, which is what makes building the same concierge in each a fair comparison. The n8n and LangGraph follow-along pages are linked at the top of this article.
+The tools agree on the pillars but differ in which layer they make easiest. n8n and LangGraph both begin with the agent in the middle; OutSystems begins with the outer process, a workflow that runs every request. Each can express skills, which is what makes building the same concierge in each a fair comparison. The n8n, LangGraph and OutSystems follow-along pages are linked at the top of this article.
 
 <ToolComparison>
 
@@ -438,7 +445,7 @@ The branch concierge is a useful test because it is neither a chatbot nor a back
 
 Building the concierge on several platforms will test that claim. Each tool favours a different layer: n8n and LangGraph the agent in the middle, OutSystems the outer process. The n8n, LangGraph and OutSystems builds are finished and run on demo customer records, not a live bank. In all three, routine requests went straight through and the higher-impact ones paused for a person. The n8n evaluation set caught memory configuration faults that a smooth demonstration would have hidden. The LangGraph build ran a first reviewed learning loop: a proposed prompt change was staged, evaluated and rolled back, and a human review corrected a test. The OutSystems build put the process in a workflow a business reader can follow, with the decision owner as a role set in the Portal, and its evaluation suite found two logic bugs in apps its AI assistant had built.
 
-A later code review of both builds found boundaries that held for one message but not a whole conversation, such as a follow-up that could slip past the gate. They are now fixed and covered by tests in the repository. Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with three builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
+A later code review of the n8n and LangGraph builds found boundaries that held for one message but not a whole conversation, such as a follow-up that could slip past the gate. They are now fixed and covered by tests in the repository. Fairness monitoring, compensation for half-completed skills and review under real queue pressure are not yet tested, so what stands here is a design argument with three builds behind it rather than a settled comparison. The implementation will change with each tool. The safe shape should not: structure at the edges, freedom in the middle, with the consequential decisions owned by the process.
 
 So, who meets you at the door? An agent that can answer, do the small things and hand you over well, inside a process that knows which decisions it may never make. The ones that change a life stay with a rule and a person. That is not a limit on the concierge. It is what makes it safe to let one loose. That is Enterprise Agency.
 
