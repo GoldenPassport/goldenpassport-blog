@@ -2,11 +2,103 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "blog-dev",
+      "name": "blog",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": [
+        "dev"
+      ],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "blog-storybook",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "storybook"
+      ],
+      "port": 6006
+    },
+    {
+      "name": "gp-ai-app",
+      "runtimeExecutable": "/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-app/scripts/serve.sh",
+      "runtimeArgs": [],
+      "port": 3200
+    },
+    {
+      "name": "gp-ai-app-server",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-app/server\" && uv run uvicorn pmp_app.main:app --port 8100 --reload --reload-dir src"
+      ],
+      "port": 8100
+    },
+    {
+      "name": "gp-ai-app-browser-storage",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-app/web\" && GP_API=http://127.0.0.1:8110 GP_WEB_PORT=3210 pnpm dev"
+      ],
+      "port": 3210
+    },
+    {
+      "name": "gp-ai-app-browser-storage-server",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-app/server\" && GP_STORAGE=browser uv run uvicorn pmp_app.main:app --port 8110 --reload --reload-dir src"
+      ],
+      "port": 8110
+    },
+    {
+      "name": "kev",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/kev\" && P=\"../process-motion-planner-app/docs/kev-generate.patch\"; git apply --check \"$P\" 2>/dev/null && git apply \"$P\"; uv run --extra serve python -m kev.serve --run jaredpalmer/kev-4b --port 8009"
+      ],
+      "port": 8009
+    },
+    {
+      "name": "kev-playground",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/kev/playground\" && npm run dev -- -p 3001"
+      ],
+      "port": 3001
+    },
+    {
+      "name": "cloud",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-cloud/web\" && pnpm dev"
+      ],
+      "port": 3100
+    },
+    {
+      "name": "cloud-api",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-cloud/api\" && uv run uvicorn pmp_cloud.main:app --port 8000 --reload"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "mailpit",
+      "runtimeExecutable": "mailpit",
+      "runtimeArgs": [
+        "--listen",
+        "127.0.0.1:8025",
+        "--smtp",
+        "127.0.0.1:1025",
+        "--database",
+        "/Users/lukeaudie/Projects/Golden Passport/process-motion-planner-cloud/api/data/mailpit.db"
+      ],
+      "port": 8025
     }
   ]
 }
